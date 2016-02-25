@@ -49,14 +49,14 @@
 	    'use strict';
 
 	    /**
-	     * Teste
-	     * @constructor
+	     * <p>No-Reload main namespace</p>
+	     * 
+	     * @module NR
+	     * @namespace
 	     */
-	    var NR = {
+	    window.NR = module.exports = {
 	        Promise: __webpack_require__(1)
 	    };
-
-	    window.NR = module.exports = NR;
 	}());
 
 /***/ },
@@ -74,7 +74,8 @@
 	     * <p>No-Reload uses the {@link http://docs.ractivejs.org/latest/promises|Ractive.Promise} 
 	     * implementation. </p>
 	     *
-	     * @module utils/promise
+	     * @module Promise
+	     * @memberof NR
 	     * @class
 	     * @see {@link http://docs.ractivejs.org/latest/promises|Ractive Promises}
 	     */

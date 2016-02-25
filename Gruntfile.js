@@ -98,8 +98,7 @@ module.exports = function (grunt) {
             }
         },
         clean: {
-            doc: ['doc'],
-            dist: ['dist']
+            doc: ['doc']
         },
         watch: {
             gruntfile: {
@@ -133,7 +132,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-webpack');
 
     // Default task.
-    grunt.registerTask('package', ['clean:dist', 'concat', 'webpack']);
+    grunt.registerTask('package', ['concat', 'webpack']);
     grunt.registerTask('minify', ['cssmin', 'uglify']);
     grunt.registerTask('doc', ['clean:doc', 'jsdoc']);
     grunt.registerTask('default', ['jshint', 'package', 'qunit', 'minify', 'doc']);

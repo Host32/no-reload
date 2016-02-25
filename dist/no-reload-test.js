@@ -48,10 +48,15 @@
 	(function () {
 	    'use strict';
 
-	    var NRTest = __webpack_require__(1);
-	    NRTest.start();
-
-	    window.NRTest = module.exports = NRTest;
+	    /**
+	     * <p>No-Reload test namespace</p>
+	     * <p>No-Reload uses {@link http://qunitjs.com/|QUnit} as default test suite.</p>
+	     * 
+	     * @module NRT
+	     * @namespace
+	     * @see {@link http://qunitjs.com/|QUnit}
+	     */
+	    window.NRT = module.exports = __webpack_require__(1);
 	}());
 
 /***/ },

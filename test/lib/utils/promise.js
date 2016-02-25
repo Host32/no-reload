@@ -1,9 +1,9 @@
-(function (NR, NRTest) {
+(function (NR, NRT) {
     'use strict';
 
-    NRTest.module("Utils.Promise");
+    NRT.module("Utils.Promise");
 
-    NRTest.test("Promise must be accept", function (assert) {
+    NRT.test("Promise must be accept", function (assert) {
         var done = assert.async(),
             promise = new NR.Promise(function (accept) {
                 setTimeout(function () {
@@ -20,7 +20,7 @@
         });
     });
 
-    NRTest.test("Promise must be rejected", function (assert) {
+    NRT.test("Promise must be rejected", function (assert) {
         var done = assert.async(),
             promise = new NR.Promise(function (accept, reject) {
                 setTimeout(function () {
@@ -36,4 +36,4 @@
             done();
         });
     });
-}(window.NR, window.NRTest));
+}(window.NR, window.NRT));
