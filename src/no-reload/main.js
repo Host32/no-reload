@@ -3,7 +3,7 @@
     'use strict';
 
     /**
-     * <p>No-Reload main namespace</p>
+     * @classdesc <p>No-Reload main namespace</p>
      * 
      * @module NR
      * @namespace

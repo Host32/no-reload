@@ -3,7 +3,7 @@
     'use strict';
 
     /**
-     * <p>No-Reload test namespace</p>
+     * @classdesc <p>No-Reload test namespace</p>
      * <p>No-Reload uses {@link http://qunitjs.com/|QUnit} as default test suite.</p>
      * 
      * @module NRT
