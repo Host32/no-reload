@@ -7,15 +7,15 @@
         var done = assert.async(),
             promise = new NR.Promise(function (accept) {
                 setTimeout(function () {
-                    accept();
+                    accept(true);
                 }, 200);
             });
 
-        promise.then(function () {
-            assert.ok(true, "Promise accepted");
+        promise.then(function (ret) {
+            assert.ok(ret, "Promise accepted");
             done();
-        }, function () {
-            assert.ok(false, "Promise rejected");
+        }, function (ret) {
+            assert.ok(ret, "Promise rejected");
             done();
         });
     });
@@ -24,15 +24,15 @@
         var done = assert.async(),
             promise = new NR.Promise(function (accept, reject) {
                 setTimeout(function () {
-                    reject();
+                    reject(true);
                 }, 200);
             });
 
-        promise.then(function () {
-            assert.ok(false, "Promise accepted");
+        promise.then(function (ret) {
+            assert.ok(ret, "Promise accepted");
             done();
-        }, function () {
-            assert.ok(true, "Promise rejected");
+        }, function (ret) {
+            assert.ok(ret, "Promise rejected");
             done();
         });
     });
