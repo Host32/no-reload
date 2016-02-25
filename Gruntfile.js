@@ -18,17 +18,49 @@ module.exports = function (grunt) {
                 stripBanners: true
             },
             dist: {
-                src: ['lib/<%= pkg.name %>.js'],
-                dest: 'dist/<%= pkg.name %>.js'
+                src: ['src/<%= pkg.name %>-test/style.css'],
+                dest: 'dist/<%= pkg.name %>-test.css'
+            }
+        },
+        webpack: {
+            main: {
+                entry: './src/<%= pkg.name %>/main.js',
+                output: {
+                    path: './dist/',
+                    filename: '<%= pkg.name %>.js'
+                },
+                target: 'web'
+            },
+            test: {
+                entry: './src/<%= pkg.name %>-test/main.js',
+                output: {
+                    path: './dist/',
+                    filename: '<%= pkg.name %>-test.js'
+                },
+                target: 'web'
+            }
+        },
+        cssmin: {
+            target: {
+                files: {
+                    './dist/<%= pkg.name %>-test.min.css': ['./src/<%= pkg.name %>-test/style.css']
+                }
             }
         },
         uglify: {
             options: {
                 banner: '<%= banner %>'
             },
-            dist: {
-                src: '<%= concat.dist.dest %>',
-                dest: 'dist/<%= pkg.name %>.min.js'
+            build: {
+                files: [
+                    {
+                        src: 'dist/<%= pkg.name %>.js',
+                        dest: 'dist/<%= pkg.name %>.min.js'
+                    }, {
+                        src: 'dist/<%= pkg.name %>-test.js',
+                        dest: 'dist/<%= pkg.name %>-test.min.js'
+                    }
+                ]
             }
         },
         jshint: {
@@ -51,7 +83,7 @@ module.exports = function (grunt) {
                 src: 'Gruntfile.js'
             },
             lib_test: {
-                src: ['lib/**/*.js', 'test/lib/**/*.js']
+                src: ['src/**/*.js', 'test/lib/**/*.js']
             }
         },
         qunit: {
@@ -62,6 +94,10 @@ module.exports = function (grunt) {
                 files: '<%= jshint.gruntfile.src %>',
                 tasks: ['jshint:gruntfile']
             },
+            webpack: {
+                files: 'src/**/*.js',
+                tasks: ['webpack']
+            },
             lib_test: {
                 files: '<%= jshint.lib_test.src %>',
                 tasks: ['jshint:lib_test', 'qunit']
@@ -70,13 +106,17 @@ module.exports = function (grunt) {
     });
 
     // These plugins provide necessary tasks.
-    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-webpack');
 
     // Default task.
-    grunt.registerTask('default', ['jshint', 'qunit', 'concat', 'uglify']);
+    grunt.registerTask('package', ['concat', 'webpack']);
+    grunt.registerTask('minify', ['cssmin', 'uglify']);
+    grunt.registerTask('default', ['jshint', 'concat', 'webpack', 'qunit', 'cssmin', 'uglify']);
 
 };

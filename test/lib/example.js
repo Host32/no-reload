@@ -1,5 +1,3 @@
-window.QUnit.test("a basic test example", function (assert) {
-    var value = "hello";
-    assert.equal(value, "hello", "We expect value to be hello");
-    assert.ok(true, "Deu certo");
+window.NRTest.test("a basic test example", function (assert) {
+    assert.equal(window.NR.hello, "world", "We expect hello to be world");
 });
