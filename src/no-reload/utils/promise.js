@@ -9,7 +9,8 @@
      * <p>No-Reload uses the {@link http://docs.ractivejs.org/latest/promises|Ractive.Promise} 
      * implementation. </p>
      *
-     * @module utils/promise
+     * @module Promise
+     * @memberof NR
      * @class
      * @see {@link http://docs.ractivejs.org/latest/promises|Ractive Promises}
      */

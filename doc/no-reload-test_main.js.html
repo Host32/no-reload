@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: no-reload-test/main.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,36 +17,31 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: no-reload-test/main.js</h1>
 
     
 
 
 
     
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
     <section>
-        <article><h1>No-Reload</h1><p>Framework for single-page web applications focused on the code loading on demand</p></article>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*global window, module, require*/
+(function () {
+    'use strict';
+
+    /**
+     * &lt;p>No-Reload test namespace&lt;/p>
+     * &lt;p>No-Reload uses {@link http://qunitjs.com/|QUnit} as default test suite.&lt;/p>
+     * 
+     * @module NRTest
+     * @namespace
+     * @see {@link http://qunitjs.com/|QUnit}
+     */
+    window.NRTest = module.exports = require('qunitjs');
+}());</code></pre>
+        </article>
     </section>
-
-
 
 
 

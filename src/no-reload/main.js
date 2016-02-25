@@ -3,12 +3,12 @@
     'use strict';
 
     /**
-     * Teste
-     * @constructor
+     * <p>No-Reload main namespace</p>
+     * 
+     * @module NR
+     * @namespace
      */
-    var NR = {
+    window.NR = module.exports = {
         Promise: require('./utils/promise')
     };
-
-    window.NR = module.exports = NR;
 }());

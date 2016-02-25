@@ -2,8 +2,13 @@
 (function () {
     'use strict';
 
-    var NRTest = require('qunitjs');
-    NRTest.start();
-
-    window.NRTest = module.exports = NRTest;
+    /**
+     * <p>No-Reload test namespace</p>
+     * <p>No-Reload uses {@link http://qunitjs.com/|QUnit} as default test suite.</p>
+     * 
+     * @module NRTest
+     * @namespace
+     * @see {@link http://qunitjs.com/|QUnit}
+     */
+    window.NRTest = module.exports = require('qunitjs');
 }());
