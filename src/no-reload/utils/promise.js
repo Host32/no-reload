@@ -3,7 +3,7 @@
     'use strict';
 
     /**
-     * Instantiate a new Promise that will be resolved or rejected in a asynchronous proccess. 
+     * <p>Instantiate a new Promise that will be resolved or rejected in a asynchronous proccess.</p>
      *
      * @classdesc <p>Promises are a way to deal with asynchronous operations - that is, 
      * operations that don't complete immediately. 

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: no-reload/utils/helpers.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: no-reload/utils/helpers.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*global module*/
+(function () {
+    'use strict';
+
+    module.exports = {
+        /**
+         * &lt;p>Convets a string to integer&lt;/p>
+         * 
+         * @function
+         * @memberof NR
+         * @param {string} str Value to be converted
+         */
+        toInt: function (str) {
+            return parseInt(str, 10);
+        },
+
+        /**
+         * &lt;p>Convets a string to float&lt;/p>
+         * 
+         * @function
+         * @memberof NR
+         * @param {string} str Value to be converted
+         */
+        toFloat: function (str) {
+            return parseFloat(str);
+        },
+
+        /**
+         * &lt;p>Checks if the value is a string&lt;/p>
+         * 
+         * @function
+         * @memberof NR
+         * @param {*} value Value to be checked
+         */
+        isString: function (value) {
+            return typeof value === 'string';
+        },
+
+        /**
+         * &lt;p>Checks if the value is a number&lt;/p>
+         * 
+         * @param {*} value Value to be checked
+         */
+        isNumber: function (value) {
+            return typeof value === 'number';
+        },
+
+        /**
+         * &lt;p>Checks if the value is defined&lt;/p>
+         * 
+         * @function
+         * @memberof NR
+         * @param {*} value Value to be checked
+         */
+        isDefined: function (value) {
+            return typeof value !== 'undefined';
+        },
+
+        /**
+         * &lt;p>Checks if the value is undefined&lt;/p>
+         * 
+         * @param {*} value Value to be checked
+         */
+        isUndefined: function (value) {
+            return typeof value === 'undefined';
+        },
+
+        /**
+         * &lt;p>Checks if the value is an object&lt;/p>
+         * 
+         * @param {*} value Value to be checked
+         */
+        isObject: function (value) {
+            return value !== null &amp;&amp; typeof value === 'object';
+        },
+
+        /**
+         * &lt;p>Checks if the value is null&lt;/p>
+         * 
+         * @param {*} value Value to be checked
+         */
+        isNull: function (value) {
+            return value === null;
+        },
+
+        /**
+         * &lt;p>Checks if the value is not null&lt;/p>
+         * 
+         * @function
+         * @memberof NR
+         * @param {*} value Value to be checked
+         */
+        isNotNull: function (value) {
+            return value !== null;
+        },
+
+        /**
+         * &lt;p>Checks if the value is a function&lt;/p>
+         * 
+         * @param {*} value Value to be checked
+         */
+        isFunction: function (value) {
+            return typeof value === 'function';
+        },
+
+        /**
+         * &lt;p>Checks if the value is a boolean&lt;/p>
+         * 
+         * @function
+         * @memberof NR
+         * @param {*} value Value to be checked
+         */
+        isBoolean: function (value) {
+            return typeof value === 'boolean';
+        },
+
+        /**
+         * &lt;p>Checks if the value is an array&lt;/p>
+         * 
+         * @function
+         * @memberof NR
+         * @param {*} value Value to be checked
+         */
+        isArray: function (value) {
+            return Array.isArray(value);
+        },
+
+        /**
+         * &lt;p>Makes an object extends to other&lt;/p>
+         * 
+         * @function
+         * @memberof NR
+         * @param {Object} child Child object
+         * @param {...Object} parents Parents objects
+         */
+        extend: function () {
+            //TODO
+            throw 'Extend is not implemented yet';
+        },
+
+
+        /**
+         * &lt;p>Makes a clone of an object&lt;/p>
+         * 
+         * @function
+         * @memberof NR
+         * @param {Object} object Object to be cloned
+         */
+        clone: function () {
+            //TODO
+            throw 'clone is not implemented yet';
+        }
+    };
+
+}());
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="NR.Promise.html">Promise</a></li></ul><h3>Namespaces</h3><ul><li><a href="NR.html">NR</a></li><li><a href="NRT.html">NRT</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Feb 25 2016 20:18:20 GMT-0300 (Hora oficial do Brasil)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
