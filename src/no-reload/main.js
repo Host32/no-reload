@@ -1,8 +1,8 @@
-/*global window, module*/
+/*global window, module, require*/
 (function () {
     'use strict';
     var NR = {
-        hello: "world"
+        Promise: require('./utils/promise')
     };
 
     window.NR = module.exports = NR;

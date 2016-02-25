@@ -94,6 +94,10 @@ module.exports = function (grunt) {
                 files: '<%= jshint.gruntfile.src %>',
                 tasks: ['jshint:gruntfile']
             },
+            concat: {
+                files: 'src/**/*.css',
+                tasks: ['concat']
+            },
             webpack: {
                 files: 'src/**/*.js',
                 tasks: ['webpack']
