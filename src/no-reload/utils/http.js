@@ -36,6 +36,58 @@
          */
         request: function (params) {
 
+        },
+
+        /**
+         * <p>Shortcut method to perform GET request.</p>
+         *
+         * @param {string} url Relative or absolute URL specifying the destination of the request
+         * @param {HTTPParams=} config Optional configuration object
+         */
+        get: function (url, config) {
+
+        },
+
+        /**
+         * <p>Shortcut method to perform POST request.</p>
+         *
+         * @param {string} url Relative or absolute URL specifying the destination of the request
+         * @param {*} data Request content
+         * @param {HTTPParams=} config Optional configuration object
+         */
+        post: function (url, data, config) {
+
+        },
+
+        /**
+         * <p>Shortcut method to perform PUT request.</p>
+         *
+         * @param {string} url Relative or absolute URL specifying the destination of the request
+         * @param {*} data Request content
+         * @param {HTTPParams=} config Optional configuration object
+         */
+        put: function (url, data, config) {
+
+        },
+
+        /**
+         * <p>Shortcut method to perform HEAD request.</p>
+         *
+         * @param {string} url Relative or absolute URL specifying the destination of the request
+         * @param {HTTPParams=} config Optional configuration object
+         */
+        head: function (url, config) {
+
+        },
+
+        /**
+         * <p>Shortcut method to perform DELETE request.</p>
+         *
+         * @param {string} url Relative or absolute URL specifying the destination of the request
+         * @param {HTTPParams=} config Optional configuration object
+         */
+        'delete': function (url, config) {
+
         }
     };
 }());
