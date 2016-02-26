@@ -17,15 +17,15 @@
          * 
          * @typedef {Object} HTTPParams
          * @property {String} url Url to request
-         * @property {String} method Method to request with
-         * @property {Boolean} cors Is CORS request (only needed for IE)
-         * @property {Boolean} cache Set to false to explicitly break cache
-         * @property {Object} data Data to be sent with request
-         * @property {String} dataType Type of expected response
-         * @property {String} contentType If JSON will try to parse response data
-         * @property {String} requestedWith Defaults to XMLHttpRequest
-         * @property {String} auth Used to set the Authorization header
-         * @property {String} headers Custom headers object
+         * @property {String} [method=get] Method to request with
+         * @property {Boolean} [cors=false] Is CORS request (only needed for IE)
+         * @property {Boolean} [cache=true] Set to false to explicitly break cache
+         * @property {*} [data] Data to be sent with request
+         * @property {String} [dataType=json] Type of expected response
+         * @property {String} [contentType=application/json; charset=utf-8] If JSON will try to parse response data
+         * @property {String} [requestedWith=XMLHttpRequest] Defaults to XMLHttpRequest
+         * @property {String} [auth] Used to set the Authorization header
+         * @property {String} [headers] Custom headers object
          */
 
         /**
@@ -42,7 +42,7 @@
          * <p>Shortcut method to perform GET request.</p>
          *
          * @param {string} url Relative or absolute URL specifying the destination of the request
-         * @param {HTTPParams=} config Optional configuration object
+         * @param {HTTPParams} [config] Optional configuration object
          */
         get: function (url, config) {
 
@@ -53,7 +53,7 @@
          *
          * @param {string} url Relative or absolute URL specifying the destination of the request
          * @param {*} data Request content
-         * @param {HTTPParams=} config Optional configuration object
+         * @param {HTTPParams} [config] Optional configuration object
          */
         post: function (url, data, config) {
 
@@ -64,7 +64,7 @@
          *
          * @param {string} url Relative or absolute URL specifying the destination of the request
          * @param {*} data Request content
-         * @param {HTTPParams=} config Optional configuration object
+         * @param {HTTPParams} [config] Optional configuration object
          */
         put: function (url, data, config) {
 
@@ -84,7 +84,7 @@
          * <p>Shortcut method to perform DELETE request.</p>
          *
          * @param {string} url Relative or absolute URL specifying the destination of the request
-         * @param {HTTPParams=} config Optional configuration object
+         * @param {HTTPParams} [config] Optional configuration object
          */
         'delete': function (url, config) {
 
