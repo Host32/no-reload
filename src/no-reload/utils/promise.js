@@ -12,7 +12,7 @@
      * implementation. </p>
      * <p>Usage examples:</p>
      * <pre>
-     * var p = new Promise( function ( resolve, reject ) {
+     * var p = new NR.Promise( function ( resolve, reject ) {
      *     doSomethingAsync( function ( error, result ) {
      *         if ( error ) {
      *              reject( error );
@@ -30,9 +30,8 @@
      *
      * @param {callback} resolve Function called when the promise is resolved with success.
      * @param {callback} reject Fnction called when the primise is rejected because a error or something else.
-     * @module Promise
      * @memberof NR
-     * @class
+     * @class Promise
      * @see {@link http://docs.ractivejs.org/latest/promises|Ractive Promises}
      */
     module.exports = require('Ractive').Promise;
