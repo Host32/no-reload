@@ -69,7 +69,7 @@
 
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="no-reload_module-provider.js.html">no-reload/module-provider.js</a>, <a href="no-reload_module-provider.js.html#line8">line 8</a>
+        <a href="no-reload_module-provider.js.html">no-reload/module-provider.js</a>, <a href="no-reload_module-provider.js.html#line159">line 159</a>
     </li></ul></dd>
 
 
@@ -105,137 +105,6 @@
 
 
 
-    <h4 class="name" id=".clear"><span class="type-signature">(static) </span>clear<span class="signature">(name)</span><span class="type-signature"></span></h4>
-
-
-
-
-
-<div class="description">
-    <p></p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-
-
-<table class="params">
-    <thead>
-    <tr>
-
-        <th>Name</th>
-
-
-        <th>Type</th>
-
-
-
-
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-
-
-        <tr>
-
-                <td class="name"><code>name</code></td>
-
-
-            <td class="type">
-
-
-<span class="param-type">string</span>
-
-
-
-            </td>
-
-
-
-
-
-            <td class="description last">Name of the module that will be removed</td>
-        </tr>
-
-
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="no-reload_module-provider.js.html">no-reload/module-provider.js</a>, <a href="no-reload_module-provider.js.html#line52">line 52</a>
-    </li></ul></dd>
-
-
-
-
-
-
-
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <h4 class="name" id=".define"><span class="type-signature">(static) </span>define<span class="signature">(name, info, scope<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
 
@@ -243,7 +112,8 @@
 
 
 <div class="description">
-    <p></p>
+    <p>Declare a module executing the dependency injection for it and saving
+the module return in ModuleProvider as a new dependency that can be injected</p>
 </div>
 
 
@@ -339,7 +209,9 @@
 
 
 
-            <td class="description last">Module declaration</td>
+            <td class="description last">Module declaration, can be a function when the
+                             deps is the arguments names or a array when the firsts
+                             arguments are the deps and the last argument is the function</td>
         </tr>
 
 
@@ -413,7 +285,7 @@
 
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="no-reload_module-provider.js.html">no-reload/module-provider.js</a>, <a href="no-reload_module-provider.js.html#line33">line 33</a>
+        <a href="no-reload_module-provider.js.html">no-reload/module-provider.js</a>, <a href="no-reload_module-provider.js.html#line188">line 188</a>
     </li></ul></dd>
 
 
@@ -444,14 +316,14 @@
 
 
 
-    <h4 class="name" id=".getModule"><span class="type-signature">(static) </span>getModule<span class="signature">(name)</span><span class="type-signature"> &rarr; {Module}</span></h4>
+    <h4 class="name" id=".getModule"><span class="type-signature">(static) </span>getModule<span class="signature">(name)</span><span class="type-signature"> &rarr; {Object}</span></h4>
 
 
 
 
 
 <div class="description">
-    <p></p>
+    <p>Return a declared module by their name</p>
 </div>
 
 
@@ -503,7 +375,7 @@
 
 
 
-            <td class="description last">Name of the module that will be removed</td>
+            <td class="description last">Name of the module</td>
         </tr>
 
 
@@ -544,7 +416,7 @@
 
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="no-reload_module-provider.js.html">no-reload/module-provider.js</a>, <a href="no-reload_module-provider.js.html#line62">line 62</a>
+        <a href="no-reload_module-provider.js.html">no-reload/module-provider.js</a>, <a href="no-reload_module-provider.js.html#line230">line 230</a>
     </li></ul></dd>
 
 
@@ -570,10 +442,6 @@
 <h5>Returns:</h5>
 
 
-<div class="param-desc">
-    The Module especification saved in ModuleProvider
-</div>
-
 
 
 <dl>
@@ -582,7 +450,7 @@
     </dt>
     <dd>
 
-<span class="param-type">Module</span>
+<span class="param-type">Object</span>
 
 
     </dd>
@@ -597,14 +465,14 @@
 
 
 
-    <h4 class="name" id=".invoke"><span class="type-signature">(static) </span>invoke<span class="signature">(info, scope<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".invoke"><span class="type-signature">(static) </span>invoke<span class="signature">(info, scope<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
 
 
 
 
 
 <div class="description">
-    <p></p>
+    <p>Execute the dependency injection for a function</p>
 </div>
 
 
@@ -669,7 +537,9 @@
 
 
 
-            <td class="description last">Function that will be invoked</td>
+            <td class="description last">Function that will be invoked, can be a function when the
+                             deps is the arguments names or a array when the firsts
+                             arguments are the deps and the last argument is the function</td>
         </tr>
 
 
@@ -743,7 +613,7 @@
 
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="no-reload_module-provider.js.html">no-reload/module-provider.js</a>, <a href="no-reload_module-provider.js.html#line43">line 43</a>
+        <a href="no-reload_module-provider.js.html">no-reload/module-provider.js</a>, <a href="no-reload_module-provider.js.html#line219">line 219</a>
     </li></ul></dd>
 
 
@@ -764,6 +634,29 @@
 
 
 
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A Promisse that will be resolved when all the dependencies has be resolved
+                   and the function returns will be passed to the resolve function
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
 
 
 
@@ -917,6 +810,29 @@
         </tr>
 
 
+
+        <tr>
+
+                <td class="name"><code>obj</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+
+
+
+            <td class="description last">Declared Module</td>
+        </tr>
+
+
     </tbody>
 </table>
 
@@ -952,7 +868,7 @@
 
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="no-reload_module-provider.js.html">no-reload/module-provider.js</a>, <a href="no-reload_module-provider.js.html#line16">line 16</a>
+        <a href="no-reload_module-provider.js.html">no-reload/module-provider.js</a>, <a href="no-reload_module-provider.js.html#line167">line 167</a>
     </li></ul></dd>
 
 
@@ -988,7 +904,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Feb 26 2016 16:00:32 GMT-0300 (Hora oficial do Brasil)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Feb 26 2016 17:56:39 GMT-0300 (Hora oficial do Brasil)
 </footer>
 
 <script> prettyPrint(); </script>

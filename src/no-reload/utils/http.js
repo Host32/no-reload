@@ -1,8 +1,6 @@
-/*global module, require*/
+/*global module*/
 (function () {
     'use strict';
-    var Ajax = require('simple-ajax'),
-        Promise = require('promise');
 
     /**
      * <p>Generate HTTP requests.</p>
@@ -35,7 +33,7 @@
          * @param {HTTPParams} params Request settings
          * @returns {NR.Promise}
          */
-        request: function (params) {
+        request: function () {
 
         },
 
@@ -46,7 +44,7 @@
          * @param {HTTPParams} [config] Optional configuration object
          * @returns {NR.Promise}
          */
-        get: function (url, config) {
+        get: function () {
 
         },
 
@@ -58,7 +56,7 @@
          * @param {HTTPParams} [config] Optional configuration object
          * @returns {NR.Promise}
          */
-        post: function (url, data, config) {
+        post: function () {
 
         },
 
@@ -70,7 +68,7 @@
          * @param {HTTPParams} [config] Optional configuration object
          * @returns {NR.Promise}
          */
-        put: function (url, data, config) {
+        put: function () {
 
         },
 
@@ -81,7 +79,7 @@
          * @param {HTTPParams=} config Optional configuration object
          * @returns {NR.Promise}
          */
-        head: function (url, config) {
+        head: function () {
 
         },
 
@@ -92,7 +90,7 @@
          * @param {HTTPParams} [config] Optional configuration object
          * @returns {NR.Promise}
          */
-        'delete': function (url, config) {
+        'delete': function () {
 
         }
     };
