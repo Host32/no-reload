@@ -126,16 +126,80 @@
         },
 
         /**
-         * <p>Makes an object extends to other</p>
+         * <p>Retrieve all the names of the object's own enumerable properties.</p>
+         *
+         * @function
+         * @memberof NR
+         * @param {Object} obj Object to be retrieved the keys
+         */
+        keys: function (obj) {
+            if (!this.isObject(obj)) {
+                return [];
+            }
+            if (Object.keys) {
+                return Object.keys(obj);
+            }
+            var keys = [],
+                key;
+            for (key in obj) {
+                /*jslint forin: true*/
+                if (Object.hasOwnProperty.call(obj, key)) {
+                    keys.push(key);
+                }
+            }
+            return keys;
+        },
+
+        /**
+         * <p>Retrieve all the names of object's own and inherited properties.</p>
+         *
+         * @function
+         * @memberof NR
+         * @param {Object} obj Object to be retrieved the keys
+         */
+        allKeys: function (obj) {
+            if (!this.isObject(obj) && !this.isFunction(obj)) {
+                return [];
+            }
+            var keys = [],
+                key;
+            /*jslint forin: true*/
+            for (key in obj) {
+                keys.push(key);
+            }
+            return keys;
+        },
+
+        /**
+         * <p>Copy all of the properties in the parents objects over to the child object,
+         * and return the child object. It's in-order, so the last parents will override
+         * properties of the same name in previous arguments.</p>
          * 
          * @function
          * @memberof NR
          * @param {Object} child Child object
          * @param {...Object} parents Parents objects
          */
-        extend: function () {
-            //TODO
-            throw 'Extend is not implemented yet';
+        extend: function (obj) {
+            var length = arguments.length,
+                index,
+                source,
+                i,
+                key,
+                keys;
+
+            if (length < 2 || obj === null || this.isUndefined(obj)) {
+                return obj;
+            }
+            for (index = 1; index < length; index += 1) {
+                source = arguments[index];
+                keys = this.allKeys(source);
+                for (i = 0; i < keys.length; i += 1) {
+                    key = keys[i];
+                    obj[key] = source[key];
+                }
+            }
+            return obj;
         },
 
 
@@ -144,11 +208,40 @@
          * 
          * @function
          * @memberof NR
-         * @param {Object} object Object to be cloned
+         * @param {Object} obj Object to be cloned
          */
-        clone: function () {
-            //TODO
-            throw 'clone is not implemented yet';
+        clone: function (obj) {
+            var copy, attr, len, i;
+
+            // Handle the 3 simple types, and null or undefined
+            if (!this.isObject(obj)) {
+                return obj;
+            }
+
+            // Handle Date
+            if (obj instanceof Date) {
+                copy = new Date();
+                copy.setTime(obj.getTime());
+                return copy;
+            }
+
+            // Handle Array
+            if (this.isArray(obj)) {
+                copy = [];
+                for (i = 0, len = obj.length; i < len; i += 1) {
+                    copy[i] = this.clone(obj[i]);
+                }
+                return copy;
+            }
+
+            // Handle Object
+            copy = {};
+            for (attr in obj) {
+                if (obj.hasOwnProperty(attr)) {
+                    copy[attr] = this.clone(obj[attr]);
+                }
+            }
+            return copy;
         }
     };
 
