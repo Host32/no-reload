@@ -28,8 +28,8 @@
      * });
      * </pre>
      *
-     * @param {callback} resolve Function called when the promise is resolved with success.
-     * @param {callback} reject Fnction called when the primise is rejected because a error or something else.
+     * @param {function} func Function that will execute something asynchronously and be
+     *                        responsible for resolving or rejecting promise
      * @memberof NR
      * @class Promise
      * @see {@link http://docs.ractivejs.org/latest/promises|Ractive Promises}

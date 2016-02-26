@@ -33,6 +33,7 @@
          * HTTP request and returns a promise.</p>
          * 
          * @param {HTTPParams} params Request settings
+         * @returns {NR.Promise}
          */
         request: function (params) {
 
@@ -43,6 +44,7 @@
          *
          * @param {string} url Relative or absolute URL specifying the destination of the request
          * @param {HTTPParams} [config] Optional configuration object
+         * @returns {NR.Promise}
          */
         get: function (url, config) {
 
@@ -54,6 +56,7 @@
          * @param {string} url Relative or absolute URL specifying the destination of the request
          * @param {*} data Request content
          * @param {HTTPParams} [config] Optional configuration object
+         * @returns {NR.Promise}
          */
         post: function (url, data, config) {
 
@@ -65,6 +68,7 @@
          * @param {string} url Relative or absolute URL specifying the destination of the request
          * @param {*} data Request content
          * @param {HTTPParams} [config] Optional configuration object
+         * @returns {NR.Promise}
          */
         put: function (url, data, config) {
 
@@ -75,6 +79,7 @@
          *
          * @param {string} url Relative or absolute URL specifying the destination of the request
          * @param {HTTPParams=} config Optional configuration object
+         * @returns {NR.Promise}
          */
         head: function (url, config) {
 
@@ -85,6 +90,7 @@
          *
          * @param {string} url Relative or absolute URL specifying the destination of the request
          * @param {HTTPParams} [config] Optional configuration object
+         * @returns {NR.Promise}
          */
         'delete': function (url, config) {
 

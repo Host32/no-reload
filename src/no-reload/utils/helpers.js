@@ -9,6 +9,7 @@
          * @function
          * @memberof NR
          * @param {string} str Value to be converted
+         * @returns {Number}
          */
         toInt: function (str) {
             return parseInt(str, 10);
@@ -20,6 +21,7 @@
          * @function
          * @memberof NR
          * @param {string} str Value to be converted
+         * @returns {Number}
          */
         toFloat: function (str) {
             return parseFloat(str);
@@ -31,6 +33,7 @@
          * @function
          * @memberof NR
          * @param {*} value Value to be checked
+         * @returns {Boolean}
          */
         isString: function (value) {
             return typeof value === 'string';
@@ -40,6 +43,7 @@
          * <p>Checks if the value is a number</p>
          * 
          * @param {*} value Value to be checked
+         * @returns {Boolean}
          */
         isNumber: function (value) {
             return typeof value === 'number';
@@ -51,6 +55,7 @@
          * @function
          * @memberof NR
          * @param {*} value Value to be checked
+         * @returns {Boolean}
          */
         isDefined: function (value) {
             return typeof value !== 'undefined';
@@ -60,6 +65,7 @@
          * <p>Checks if the value is undefined</p>
          * 
          * @param {*} value Value to be checked
+         * @returns {Boolean}
          */
         isUndefined: function (value) {
             return typeof value === 'undefined';
@@ -69,6 +75,7 @@
          * <p>Checks if the value is an object</p>
          * 
          * @param {*} value Value to be checked
+         * @returns {Boolean}
          */
         isObject: function (value) {
             return value !== null && typeof value === 'object';
@@ -78,6 +85,7 @@
          * <p>Checks if the value is null</p>
          * 
          * @param {*} value Value to be checked
+         * @returns {Boolean}
          */
         isNull: function (value) {
             return value === null;
@@ -89,6 +97,7 @@
          * @function
          * @memberof NR
          * @param {*} value Value to be checked
+         * @returns {Boolean}
          */
         isNotNull: function (value) {
             return value !== null;
@@ -98,6 +107,8 @@
          * <p>Checks if the value is a function</p>
          * 
          * @param {*} value Value to be checked
+         * @returns {Boolean}
+         * @returns {Boolean}
          */
         isFunction: function (value) {
             return typeof value === 'function';
@@ -109,6 +120,7 @@
          * @function
          * @memberof NR
          * @param {*} value Value to be checked
+         * @returns {Boolean}
          */
         isBoolean: function (value) {
             return typeof value === 'boolean';
@@ -120,6 +132,7 @@
          * @function
          * @memberof NR
          * @param {*} value Value to be checked
+         * @returns {Boolean}
          */
         isArray: function (value) {
             return Array.isArray(value);
@@ -131,6 +144,7 @@
          * @function
          * @memberof NR
          * @param {Object} obj Object to be retrieved the keys
+         * @returns {string[]} obj keys
          */
         keys: function (obj) {
             if (!this.isObject(obj)) {
@@ -156,6 +170,7 @@
          * @function
          * @memberof NR
          * @param {Object} obj Object to be retrieved the keys
+         * @returns {string[]} obj keys
          */
         allKeys: function (obj) {
             if (!this.isObject(obj) && !this.isFunction(obj)) {
@@ -179,6 +194,7 @@
          * @memberof NR
          * @param {Object} child Child object
          * @param {...Object} parents Parents objects
+         * @returns {Object}
          */
         extend: function (obj) {
             var length = arguments.length,
@@ -209,6 +225,7 @@
          * @function
          * @memberof NR
          * @param {Object} obj Object to be cloned
+         * @returns {Object}
          */
         clone: function (obj) {
             var copy, attr, len, i;
