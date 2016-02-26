@@ -83,7 +83,7 @@ module.exports = function (grunt) {
                 src: 'Gruntfile.js'
             },
             lib_test: {
-                src: ['src/**/*.js', 'test/lib/**/*.js']
+                src: ['src/**/*.js']
             }
         },
         qunit: {
@@ -114,8 +114,8 @@ module.exports = function (grunt) {
                 tasks: ['webpack']
             },
             lib_test: {
-                files: '<%= jshint.lib_test.src %>',
-                tasks: ['jshint:lib_test', 'qunit']
+                files: ['src/**/*.js', 'test/lib/**/*.js'],
+                tasks: ['qunit']
             }
         }
     });
