@@ -82,7 +82,7 @@ module.exports = function (grunt) {
             gruntfile: {
                 src: 'Gruntfile.js'
             },
-            lib_test: {
+            src: {
                 src: ['src/**/*.js']
             }
         },
@@ -113,9 +113,9 @@ module.exports = function (grunt) {
                 files: 'src/**/*.js',
                 tasks: ['webpack']
             },
-            lib_test: {
+            src_test: {
                 files: ['src/**/*.js', 'test/lib/**/*.js'],
-                tasks: ['qunit']
+                tasks: ['jshint:src', 'qunit']
             }
         }
     });

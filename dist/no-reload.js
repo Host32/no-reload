@@ -359,6 +359,7 @@
 	     * @see {@link http://docs.ractivejs.org/latest/promises|Ractive Promises}
 	     */
 	    module.exports = __webpack_require__(3).Promise;
+
 	}());
 
 
