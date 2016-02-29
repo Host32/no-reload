@@ -1,6 +1,22 @@
-/*global module*/
+/*global module, require*/
 (function () {
     'use strict';
+
+    var Promise = require('promise'),
+        Ajax = require('simple-ajax');
+
+    function request(params) {
+        return new Promise(function (resolve, reject) {
+            var ajax = new Ajax(params);
+            ajax.on('success', function (event) {
+                resolve(event);
+            });
+            ajax.on('error', function (event) {
+                reject(event);
+            });
+            ajax.send();
+        });
+    }
 
     /**
      * <p>Generate HTTP requests.</p>
@@ -33,9 +49,7 @@
          * @param {HTTPParams} params Request settings
          * @returns {NR.Promise}
          */
-        request: function () {
-
-        },
+        request: request,
 
         /**
          * <p>Shortcut method to perform GET request.</p>
@@ -44,8 +58,12 @@
          * @param {HTTPParams} [config] Optional configuration object
          * @returns {NR.Promise}
          */
-        get: function () {
+        get: function (url, params) {
+            params = params || {};
+            params.url = url;
+            params.method = 'get';
 
+            return request(params);
         },
 
         /**
@@ -56,8 +74,13 @@
          * @param {HTTPParams} [config] Optional configuration object
          * @returns {NR.Promise}
          */
-        post: function () {
+        post: function (url, data, params) {
+            params = params || {};
+            params.url = url;
+            params.method = 'post';
+            params.data = data;
 
+            return request(params);
         },
 
         /**
@@ -68,8 +91,13 @@
          * @param {HTTPParams} [config] Optional configuration object
          * @returns {NR.Promise}
          */
-        put: function () {
+        put: function (url, data, params) {
+            params = params || {};
+            params.url = url;
+            params.method = 'put';
+            params.data = data;
 
+            return request(params);
         },
 
         /**
@@ -79,8 +107,12 @@
          * @param {HTTPParams=} config Optional configuration object
          * @returns {NR.Promise}
          */
-        head: function () {
+        head: function (url, params) {
+            params = params || {};
+            params.url = url;
+            params.method = 'head';
 
+            return request(params);
         },
 
         /**
@@ -90,8 +122,12 @@
          * @param {HTTPParams} [config] Optional configuration object
          * @returns {NR.Promise}
          */
-        'delete': function () {
+        'delete': function (url, params) {
+            params = params || {};
+            params.url = url;
+            params.method = 'delete';
 
+            return request(params);
         }
     };
 }());
