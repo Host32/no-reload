@@ -135,6 +135,6 @@ module.exports = function (grunt) {
     grunt.registerTask('package', ['concat', 'webpack']);
     grunt.registerTask('minify', ['cssmin', 'uglify']);
     grunt.registerTask('doc', ['clean:doc', 'jsdoc']);
-    grunt.registerTask('default', ['jshint', 'package', 'qunit', 'minify']);
+    grunt.registerTask('build', ['jshint', 'package', 'qunit', 'minify']);
 
 };
