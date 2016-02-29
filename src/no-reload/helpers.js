@@ -2,54 +2,159 @@
 (function () {
     'use strict';
 
+    /**
+     * <p>Convets a string to integer</p>
+     *
+     * @function
+     * @memberof NR
+     * @param {string} str Value to be converted
+     * @returns {Number}
+     */
     function toInt(str) {
         return parseInt(str, 10);
     }
 
+    /**
+     * <p>Convets a string to float</p>
+     *
+     * @function
+     * @memberof NR
+     * @param {string} str Value to be converted
+     * @returns {Number}
+     */
     function toFloat(str) {
         return parseFloat(str);
     }
 
+    /**
+     * <p>Checks if the value is a string</p>
+     *
+     * @function
+     * @memberof NR
+     * @param {*} value Value to be checked
+     * @returns {Boolean}
+     */
     function isString(value) {
         return typeof value === 'string';
     }
 
+    /**
+     * <p>Checks if the value is a number</p>
+     *
+     * @function
+     * @memberof NR
+     * @param {*} value Value to be checked
+     * @returns {Boolean}
+     */
     function isNumber(value) {
         return typeof value === 'number';
     }
 
+    /**
+     * <p>Checks if the value is defined</p>
+     *
+     * @function
+     * @memberof NR
+     * @param {*} value Value to be checked
+     * @returns {Boolean}
+     */
     function isDefined(value) {
         return typeof value !== 'undefined';
     }
 
+    /**
+     * <p>Checks if the value is undefined</p>
+     *
+     * @function
+     * @memberof NR
+     * @param {*} value Value to be checked
+     * @returns {Boolean}
+     */
     function isUndefined(value) {
         return typeof value === 'undefined';
     }
 
+    /**
+     * <p>Checks if the value is an object</p>
+     *
+     * @function
+     * @memberof NR
+     * @param {*} value Value to be checked
+     * @returns {Boolean}
+     */
     function isObject(value) {
         return value !== null && typeof value === 'object';
     }
 
+    /**
+     * <p>Checks if the value is null</p>
+     *
+     * @function
+     * @memberof NR
+     * @param {*} value Value to be checked
+     * @returns {Boolean}
+     */
     function isNull(value) {
         return value === null;
     }
 
+    /**
+     * <p>Checks if the value is not null</p>
+     *
+     * @function
+     * @memberof NR
+     * @param {*} value Value to be checked
+     * @returns {Boolean}
+     */
     function isNotNull(value) {
         return value !== null;
     }
 
+    /**
+     * <p>Checks if the value is a function</p>
+     *
+     * @function
+     * @memberof NR
+     * @param {*} value Value to be checked
+     * @returns {Boolean}
+     * @returns {Boolean}
+     */
     function isFunction(value) {
         return typeof value === 'function';
     }
 
+    /**
+     * <p>Checks if the value is a boolean</p>
+     *
+     * @function
+     * @memberof NR
+     * @param {*} value Value to be checked
+     * @returns {Boolean}
+     */
     function isBoolean(value) {
         return typeof value === 'boolean';
     }
 
+    /**
+     * <p>Checks if the value is an array</p>
+     *
+     * @function
+     * @memberof NR
+     * @param {*} value Value to be checked
+     * @returns {Boolean}
+     */
     function isArray(value) {
         return Array.isArray(value);
     }
 
+    /**
+     * <p>Retrieve all the names of the object's own enumerable properties.</p>
+     *
+     * @function
+     * @memberof NR
+     * @param {Object} obj Object to be retrieved the keys
+     * @returns {string[]} obj keys
+     */
     function keys(obj) {
         if (!isObject(obj)) {
             return [];
@@ -68,6 +173,14 @@
         return objKeys;
     }
 
+    /**
+     * <p>Retrieve all the names of object's own and inherited properties.</p>
+     *
+     * @function
+     * @memberof NR
+     * @param {Object} obj Object to be retrieved the keys
+     * @returns {string[]} obj keys
+     */
     function allKeys(obj) {
         if (!isObject(obj) && !isFunction(obj)) {
             return [];
@@ -81,6 +194,17 @@
         return keys;
     }
 
+    /**
+     * <p>Copy all of the properties in the parents objects over to the child object,
+     * and return the child object. It's in-order, so the last parents will override
+     * properties of the same name in previous arguments.</p>
+     *
+     * @function
+     * @memberof NR
+     * @param {Object} child Child object
+     * @param {...Object} parents Parents objects
+     * @returns {Object}
+     */
     function extend(obj) {
         var length = arguments.length,
             index,
@@ -103,6 +227,14 @@
         return obj;
     }
 
+    /**
+     * <p>Makes a clone of an object</p>
+     *
+     * @function
+     * @memberof NR
+     * @param {Object} obj Object to be cloned
+     * @returns {Object}
+     */
     function clone(obj) {
         var copy, attr, len, i;
 
@@ -139,169 +271,21 @@
 
 
     module.exports = {
-        /**
-         * <p>Convets a string to integer</p>
-         *
-         * @function
-         * @memberof NR
-         * @param {string} str Value to be converted
-         * @returns {Number}
-         */
         toInt: toInt,
-
-        /**
-         * <p>Convets a string to float</p>
-         *
-         * @function
-         * @memberof NR
-         * @param {string} str Value to be converted
-         * @returns {Number}
-         */
         toFloat: toFloat,
-
-        /**
-         * <p>Checks if the value is a string</p>
-         *
-         * @function
-         * @memberof NR
-         * @param {*} value Value to be checked
-         * @returns {Boolean}
-         */
         isString: isString,
-
-        /**
-         * <p>Checks if the value is a number</p>
-         *
-         * @function
-         * @memberof NR
-         * @param {*} value Value to be checked
-         * @returns {Boolean}
-         */
         isNumber: isNumber,
-
-        /**
-         * <p>Checks if the value is defined</p>
-         *
-         * @function
-         * @memberof NR
-         * @param {*} value Value to be checked
-         * @returns {Boolean}
-         */
         isDefined: isDefined,
-
-        /**
-         * <p>Checks if the value is undefined</p>
-         *
-         * @function
-         * @memberof NR
-         * @param {*} value Value to be checked
-         * @returns {Boolean}
-         */
         isUndefined: isUndefined,
-
-        /**
-         * <p>Checks if the value is an object</p>
-         *
-         * @function
-         * @memberof NR
-         * @param {*} value Value to be checked
-         * @returns {Boolean}
-         */
         isObject: isObject,
-
-        /**
-         * <p>Checks if the value is null</p>
-         *
-         * @function
-         * @memberof NR
-         * @param {*} value Value to be checked
-         * @returns {Boolean}
-         */
         isNull: isNull,
-
-        /**
-         * <p>Checks if the value is not null</p>
-         *
-         * @function
-         * @memberof NR
-         * @param {*} value Value to be checked
-         * @returns {Boolean}
-         */
         isNotNull: isNotNull,
-
-        /**
-         * <p>Checks if the value is a function</p>
-         *
-         * @function
-         * @memberof NR
-         * @param {*} value Value to be checked
-         * @returns {Boolean}
-         * @returns {Boolean}
-         */
         isFunction: isFunction,
-
-        /**
-         * <p>Checks if the value is a boolean</p>
-         *
-         * @function
-         * @memberof NR
-         * @param {*} value Value to be checked
-         * @returns {Boolean}
-         */
         isBoolean: isBoolean,
-
-        /**
-         * <p>Checks if the value is an array</p>
-         *
-         * @function
-         * @memberof NR
-         * @param {*} value Value to be checked
-         * @returns {Boolean}
-         */
         isArray: isArray,
-
-        /**
-         * <p>Retrieve all the names of the object's own enumerable properties.</p>
-         *
-         * @function
-         * @memberof NR
-         * @param {Object} obj Object to be retrieved the keys
-         * @returns {string[]} obj keys
-         */
         keys: keys,
-
-        /**
-         * <p>Retrieve all the names of object's own and inherited properties.</p>
-         *
-         * @function
-         * @memberof NR
-         * @param {Object} obj Object to be retrieved the keys
-         * @returns {string[]} obj keys
-         */
         allKeys: allKeys,
-
-        /**
-         * <p>Copy all of the properties in the parents objects over to the child object,
-         * and return the child object. It's in-order, so the last parents will override
-         * properties of the same name in previous arguments.</p>
-         *
-         * @function
-         * @memberof NR
-         * @param {Object} child Child object
-         * @param {...Object} parents Parents objects
-         * @returns {Object}
-         */
         extend: extend,
-
-
-        /**
-         * <p>Makes a clone of an object</p>
-         *
-         * @function
-         * @memberof NR
-         * @param {Object} obj Object to be cloned
-         * @returns {Object}
-         */
         clone: clone
     };
 
