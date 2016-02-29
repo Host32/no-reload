@@ -111,6 +111,8 @@
 	        /**
 	         * <p>Checks if the value is a number</p>
 	         *
+	         * @function
+	         * @memberof NR
 	         * @param {*} value Value to be checked
 	         * @returns {Boolean}
 	         */
@@ -133,6 +135,8 @@
 	        /**
 	         * <p>Checks if the value is undefined</p>
 	         *
+	         * @function
+	         * @memberof NR
 	         * @param {*} value Value to be checked
 	         * @returns {Boolean}
 	         */
@@ -143,6 +147,8 @@
 	        /**
 	         * <p>Checks if the value is an object</p>
 	         *
+	         * @function
+	         * @memberof NR
 	         * @param {*} value Value to be checked
 	         * @returns {Boolean}
 	         */
@@ -153,6 +159,8 @@
 	        /**
 	         * <p>Checks if the value is null</p>
 	         *
+	         * @function
+	         * @memberof NR
 	         * @param {*} value Value to be checked
 	         * @returns {Boolean}
 	         */
@@ -175,6 +183,8 @@
 	        /**
 	         * <p>Checks if the value is a function</p>
 	         *
+	         * @function
+	         * @memberof NR
 	         * @param {*} value Value to be checked
 	         * @returns {Boolean}
 	         * @returns {Boolean}
