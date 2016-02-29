@@ -2,10 +2,10 @@
 (function () {
     'use strict';
 
-    var helpers = require('./utils/helpers'),
+    var helpers = require('./helpers'),
         NR = helpers.clone(helpers);
 
-    NR.Promise = require('./utils/promise');
+    NR.Promise = require('./promise');
 
     /**
      * @classdesc <p>No-Reload main namespace</p>

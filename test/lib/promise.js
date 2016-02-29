@@ -1,7 +1,7 @@
 (function (NR, NRT) {
     'use strict';
 
-    NRT.module("Utils.Promise");
+    NRT.module("Promise");
 
     NRT.test("Promise must be accept", function (assert) {
         var done = assert.async(),

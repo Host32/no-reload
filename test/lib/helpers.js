@@ -1,7 +1,7 @@
 (function (NR, NRT) {
     'use strict';
 
-    NRT.module("Utils.Helpers");
+    NRT.module("Helpers");
 
     NRT.test("toInt", function (assert) {
         assert.strictEqual(NR.toInt("10"), 10, "a lonely number has be converted");

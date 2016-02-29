@@ -1,6 +1,6 @@
 (function (NR, NRT) {
     'use strict';
 
-    NRT.module("Utils.Http");
+    NRT.module("Http");
 
 }(window.NR, window.NRT));

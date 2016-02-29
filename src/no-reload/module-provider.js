@@ -1,7 +1,7 @@
 /*global module, require*/
 (function () {
     'use strict';
-    var Promise = require('promise'),
+    var Promise = require('./promise'),
 
         modules = {},
 

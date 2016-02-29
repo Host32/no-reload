@@ -1,46 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Source: no-reload/utils/http.js</title>
-
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
-</head>
-
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Source: no-reload/utils/http.js</h1>
-
-    
-
-
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/*global module*/
+/*global module, require*/
 (function () {
     'use strict';
 
+    var Promise = require('promise'),
+        Ajax = require('simple-ajax');
+
+    function request(params) {
+        return new Promise(function (resolve, reject) {
+            var ajax = new Ajax(params);
+            ajax.on('success', function (event) {
+                resolve(event);
+            });
+            ajax.on('error', function (event) {
+                reject(event);
+            });
+            ajax.send();
+        });
+    }
+
     /**
-     * &lt;p>Generate HTTP requests.&lt;/p>
-     * 
+     * <p>Generate HTTP requests.</p>
+     *
      * @module $http
      * @memberof NR
      */
     module.exports = {
 
         /**
-         * &lt;p>Available options to create a request&lt;/p>
-         * 
+         * <p>Available options to create a request</p>
+         *
          * @typedef {Object} HTTPParams
          * @property {String} url Url to request
          * @property {String} [method=get] Method to request with
@@ -55,94 +43,91 @@
          */
 
         /**
-         * &lt;p>Takes a single argument — a configuration object — that is used to generate an 
-         * HTTP request and returns a promise.&lt;/p>
-         * 
+         * <p>Takes a single argument — a configuration object — that is used to generate an
+         * HTTP request and returns a promise.</p>
+         *
          * @param {HTTPParams} params Request settings
          * @returns {NR.Promise}
          */
-        request: function () {
-
-        },
+        request: request,
 
         /**
-         * &lt;p>Shortcut method to perform GET request.&lt;/p>
+         * <p>Shortcut method to perform GET request.</p>
          *
          * @param {string} url Relative or absolute URL specifying the destination of the request
          * @param {HTTPParams} [config] Optional configuration object
          * @returns {NR.Promise}
          */
-        get: function () {
+        get: function (url, params) {
+            params = params || {};
+            params.url = url;
+            params.method = 'get';
 
+            return request(params);
         },
 
         /**
-         * &lt;p>Shortcut method to perform POST request.&lt;/p>
-         *
-         * @param {string} url Relative or absolute URL specifying the destination of the request
-         * @param {*} data Request content
-         * @param {HTTPParams} [config] Optional configuration object
-         * @returns {NR.Promise}
-         */
-        post: function () {
-
-        },
-
-        /**
-         * &lt;p>Shortcut method to perform PUT request.&lt;/p>
+         * <p>Shortcut method to perform POST request.</p>
          *
          * @param {string} url Relative or absolute URL specifying the destination of the request
          * @param {*} data Request content
          * @param {HTTPParams} [config] Optional configuration object
          * @returns {NR.Promise}
          */
-        put: function () {
+        post: function (url, data, params) {
+            params = params || {};
+            params.url = url;
+            params.method = 'post';
+            params.data = data;
 
+            return request(params);
         },
 
         /**
-         * &lt;p>Shortcut method to perform HEAD request.&lt;/p>
+         * <p>Shortcut method to perform PUT request.</p>
+         *
+         * @param {string} url Relative or absolute URL specifying the destination of the request
+         * @param {*} data Request content
+         * @param {HTTPParams} [config] Optional configuration object
+         * @returns {NR.Promise}
+         */
+        put: function (url, data, params) {
+            params = params || {};
+            params.url = url;
+            params.method = 'put';
+            params.data = data;
+
+            return request(params);
+        },
+
+        /**
+         * <p>Shortcut method to perform HEAD request.</p>
          *
          * @param {string} url Relative or absolute URL specifying the destination of the request
          * @param {HTTPParams=} config Optional configuration object
          * @returns {NR.Promise}
          */
-        head: function () {
+        head: function (url, params) {
+            params = params || {};
+            params.url = url;
+            params.method = 'head';
 
+            return request(params);
         },
 
         /**
-         * &lt;p>Shortcut method to perform DELETE request.&lt;/p>
+         * <p>Shortcut method to perform DELETE request.</p>
          *
          * @param {string} url Relative or absolute URL specifying the destination of the request
          * @param {HTTPParams} [config] Optional configuration object
          * @returns {NR.Promise}
          */
-        'delete': function () {
+        'delete': function (url, params) {
+            params = params || {};
+            params.url = url;
+            params.method = 'delete';
 
+            return request(params);
         }
     };
 }());
-</code></pre>
-        </article>
-    </section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="NR.module_$http.html">$http</a></li><li><a href="NR.module_$moduleProvider.html">$moduleProvider</a></li></ul><h3>Classes</h3><ul><li><a href="NR.Promise.html">Promise</a></li></ul><h3>Namespaces</h3><ul><li><a href="NR.html">NR</a></li><li><a href="NRT.html">NRT</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon Feb 29 2016 08:32:04 GMT-0300 (Hora oficial do Brasil)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
-</body>
-</html>

@@ -5,7 +5,7 @@
     module.exports = {
         /**
          * <p>Convets a string to integer</p>
-         * 
+         *
          * @function
          * @memberof NR
          * @param {string} str Value to be converted
@@ -17,7 +17,7 @@
 
         /**
          * <p>Convets a string to float</p>
-         * 
+         *
          * @function
          * @memberof NR
          * @param {string} str Value to be converted
@@ -29,7 +29,7 @@
 
         /**
          * <p>Checks if the value is a string</p>
-         * 
+         *
          * @function
          * @memberof NR
          * @param {*} value Value to be checked
@@ -41,7 +41,7 @@
 
         /**
          * <p>Checks if the value is a number</p>
-         * 
+         *
          * @function
          * @memberof NR
          * @param {*} value Value to be checked
@@ -53,7 +53,7 @@
 
         /**
          * <p>Checks if the value is defined</p>
-         * 
+         *
          * @function
          * @memberof NR
          * @param {*} value Value to be checked
@@ -65,7 +65,7 @@
 
         /**
          * <p>Checks if the value is undefined</p>
-         * 
+         *
          * @function
          * @memberof NR
          * @param {*} value Value to be checked
@@ -77,7 +77,7 @@
 
         /**
          * <p>Checks if the value is an object</p>
-         * 
+         *
          * @function
          * @memberof NR
          * @param {*} value Value to be checked
@@ -89,7 +89,7 @@
 
         /**
          * <p>Checks if the value is null</p>
-         * 
+         *
          * @function
          * @memberof NR
          * @param {*} value Value to be checked
@@ -101,7 +101,7 @@
 
         /**
          * <p>Checks if the value is not null</p>
-         * 
+         *
          * @function
          * @memberof NR
          * @param {*} value Value to be checked
@@ -113,7 +113,7 @@
 
         /**
          * <p>Checks if the value is a function</p>
-         * 
+         *
          * @function
          * @memberof NR
          * @param {*} value Value to be checked
@@ -126,7 +126,7 @@
 
         /**
          * <p>Checks if the value is a boolean</p>
-         * 
+         *
          * @function
          * @memberof NR
          * @param {*} value Value to be checked
@@ -138,7 +138,7 @@
 
         /**
          * <p>Checks if the value is an array</p>
-         * 
+         *
          * @function
          * @memberof NR
          * @param {*} value Value to be checked
@@ -199,7 +199,7 @@
          * <p>Copy all of the properties in the parents objects over to the child object,
          * and return the child object. It's in-order, so the last parents will override
          * properties of the same name in previous arguments.</p>
-         * 
+         *
          * @function
          * @memberof NR
          * @param {Object} child Child object
@@ -231,7 +231,7 @@
 
         /**
          * <p>Makes a clone of an object</p>
-         * 
+         *
          * @function
          * @memberof NR
          * @param {Object} obj Object to be cloned
