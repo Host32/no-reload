@@ -34,6 +34,6 @@
      * @class Promise
      * @see {@link http://docs.ractivejs.org/latest/promises|Ractive Promises}
      */
-    module.exports = require('Ractive').Promise;
+    module.exports = require('ractive').Promise;
 
 }());
