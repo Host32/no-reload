@@ -10,6 +10,7 @@
 
     require('./promises');
     require('./http');
+    require('./confs');
 
     NR.Promise = require('./promise');
 
