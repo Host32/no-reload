@@ -44,20 +44,27 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = __webpack_require__(1);
+
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/*global window, module, require*/
 	(function () {
 	    'use strict';
 
-	    var helpers = __webpack_require__(1),
+	    var helpers = __webpack_require__(2),
 
 	        NR = helpers.clone(helpers),
 
-	        $moduleProvider = __webpack_require__(2);
+	        $moduleProvider = __webpack_require__(3);
 
-	    __webpack_require__(5);
 	    __webpack_require__(6);
+	    __webpack_require__(7);
 
-	    NR.Promise = __webpack_require__(3);
+	    NR.Promise = __webpack_require__(4);
 
 	    /**
 	     * <p>Execute the dependency injection for a function</p>
@@ -114,7 +121,7 @@
 
 
 /***/ },
-/* 1 */
+/* 2 */
 /***/ function(module, exports) {
 
 	/*global module*/
@@ -411,13 +418,13 @@
 
 
 /***/ },
-/* 2 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*global module, require*/
 	(function () {
 	    'use strict';
-	    var Promise = __webpack_require__(3),
+	    var Promise = __webpack_require__(4),
 
 	        modules = {},
 
@@ -674,7 +681,7 @@
 
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*global module, require*/
@@ -713,13 +720,13 @@
 	     * @class Promise
 	     * @see {@link http://docs.ractivejs.org/latest/promises|Ractive Promises}
 	     */
-	    module.exports = __webpack_require__(4).Promise;
+	    module.exports = __webpack_require__(5).Promise;
 
 	}());
 
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -17344,16 +17351,16 @@
 
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*global module, require*/
 	(function () {
 	    'use strict';
 
-	    var Promise = __webpack_require__(3),
+	    var Promise = __webpack_require__(4),
 	        $promises,
-	        $moduleProvider = __webpack_require__(2);
+	        $moduleProvider = __webpack_require__(3);
 
 	    /**
 	     * <p>Injectable wrapper for Promise class</p>
@@ -17405,16 +17412,16 @@
 
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*global module, require*/
 	(function () {
 	    'use strict';
 
-	    var Promise = __webpack_require__(3),
-	        Ajax = __webpack_require__(7),
-	        $moduleProvider = __webpack_require__(2),
+	    var Promise = __webpack_require__(4),
+	        Ajax = __webpack_require__(8),
+	        $moduleProvider = __webpack_require__(3),
 	        $http;
 
 	    function request(params) {
@@ -17554,11 +17561,11 @@
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var EventEmitter = __webpack_require__(8).EventEmitter,
-	    queryString = __webpack_require__(9);
+	var EventEmitter = __webpack_require__(9).EventEmitter,
+	    queryString = __webpack_require__(10);
 
 	function tryParseJson(data){
 	    try{
@@ -17699,7 +17706,7 @@
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -18003,7 +18010,7 @@
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!

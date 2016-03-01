@@ -1,6 +1,13 @@
-/*! no-reload - v0.1.0 - 2016-03-01
-* https://github.com/Host32/No-Reload
-* Copyright (c) 2016 ; Licensed  */
+/**
+ * QUnit Ninja Theme by Jamie Hoover v1.1.0
+ *
+ * https://github.com/Krinkle/qunit-theme-ninja
+ *
+ * Copyright 2013 jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * https://jquery.org/license/
+ */
+
 body {
     background: #111 no-repeat -webkit-gradient(linear, left top, left bottom, color-stop(0, #222), color-stop(1, #111));
     background: #111 no-repeat -webkit-linear-gradient(top, #222 0%, #111 100%);
