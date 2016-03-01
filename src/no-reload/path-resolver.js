@@ -20,7 +20,7 @@
     /**
      * <p></p>
      *
-     * @module $nameResolver
+     * @module $pathResolver
      * @memberof NR
      */
     module.exports = {

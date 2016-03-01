@@ -67,7 +67,7 @@
 
 	        $http = __webpack_require__(9),
 
-	        $nameResolver = __webpack_require__(7),
+	        $pathResolver = __webpack_require__(7),
 
 	        $scriptLoader = __webpack_require__(8);
 
@@ -82,8 +82,8 @@
 	    $moduleProvider.define('$http', function () {
 	        return $http;
 	    });
-	    $moduleProvider.define('$nameResolver', function () {
-	        return $nameResolver;
+	    $moduleProvider.define('$pathResolver', function () {
+	        return $pathResolver;
 	    });
 	    $moduleProvider.define('$scriptLoader', function () {
 	        return $scriptLoader;
@@ -548,7 +548,7 @@
 
 	        $confs = __webpack_require__(3),
 
-	        $nameResolver = __webpack_require__(7),
+	        $pathResolver = __webpack_require__(7),
 
 	        $scriptLoader = __webpack_require__(8),
 
@@ -618,7 +618,7 @@
 
 	                    putOnQueue(name, resolve);
 
-	                    $scriptLoader.load($nameResolver.modulePath(name));
+	                    $scriptLoader.load($pathResolver.modulePath(name));
 	                } else {
 	                    if (modules[name].obj !== undefined) {
 	                        resolve(modules[name].obj);
@@ -17488,7 +17488,7 @@
 	    /**
 	     * <p></p>
 	     *
-	     * @module $nameResolver
+	     * @module $pathResolver
 	     * @memberof NR
 	     */
 	    module.exports = {
@@ -17587,8 +17587,6 @@
 	                    return loadByScriptDomElement(url);
 	                case LOAD_TECHNIQUES.WRITE_SCRIPT_TAG:
 	                    return loadByWriteScriptTag(url);
-	                default:
-	                    break;
 	            }
 	        }
 	    };

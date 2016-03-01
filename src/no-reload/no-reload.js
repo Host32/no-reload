@@ -14,7 +14,7 @@
 
         $http = require('./http'),
 
-        $nameResolver = require('./name-resolver'),
+        $pathResolver = require('./path-resolver'),
 
         $scriptLoader = require('./script-loader');
 
@@ -29,8 +29,8 @@
     $moduleProvider.define('$http', function () {
         return $http;
     });
-    $moduleProvider.define('$nameResolver', function () {
-        return $nameResolver;
+    $moduleProvider.define('$pathResolver', function () {
+        return $pathResolver;
     });
     $moduleProvider.define('$scriptLoader', function () {
         return $scriptLoader;

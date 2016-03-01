@@ -5,7 +5,7 @@
 
         $confs = require('./confs'),
 
-        $nameResolver = require('./name-resolver'),
+        $pathResolver = require('./path-resolver'),
 
         $scriptLoader = require('./script-loader'),
 
@@ -75,7 +75,7 @@
 
                     putOnQueue(name, resolve);
 
-                    $scriptLoader.load($nameResolver.modulePath(name));
+                    $scriptLoader.load($pathResolver.modulePath(name));
                 } else {
                     if (modules[name].obj !== undefined) {
                         resolve(modules[name].obj);
