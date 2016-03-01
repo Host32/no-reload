@@ -1,8 +1,9 @@
-/*global require*/
+/*global require, console,  process*/
 (function () {
     'use strict';
 
     var gulp = require('gulp'),
+        gulpUtil = require('gulp-util'),
         clean = require('gulp-rimraf'),
         concat = require('gulp-concat'),
         webpack = require('webpack-stream'),
@@ -12,7 +13,15 @@
         uglify = require('gulp-uglify'),
         qunit = require('gulp-qunit'),
         jshint = require('gulp-jshint'),
-        rename = require("gulp-rename");
+        rename = require("gulp-rename"),
+        map = require('map-stream'),
+
+        exitOnJshintError = map(function (file, cb) {
+            if (!file.jshint.success) {
+                console.error('jshint failed');
+                process.exit(1);
+            }
+        });
 
     gulp.task('clean-doc', function () {
         return gulp.src('docs/', {
@@ -70,11 +79,23 @@
     gulp.task('jshint', function () {
         return gulp.src('src/no-reload/*.js')
             .pipe(jshint())
-            .pipe(jshint.reporter('default', {
-                verbose: true
-            }))
-            .pipe(jshint.reporter('fail'));
+            .pipe(jshint.reporter('jshint-stylish'))
+            .pipe(exitOnJshintError);
+    });
+
+    gulp.task('jshint-watch', function () {
+        return gulp.src('src/no-reload/*.js')
+            .pipe(jshint())
+            .pipe(jshint.reporter('jshint-stylish'));
     });
 
     gulp.task('build', ['jshint', 'package', 'qunit', 'minify'], function () {});
+
+
+    gulp.task('watch', function () {
+        gulp.watch('src/**/*', ['jshint-watch', 'package', 'qunit']);
+
+        gulp.watch('test/**/*', ['qunit']);
+
+    });
 }());
