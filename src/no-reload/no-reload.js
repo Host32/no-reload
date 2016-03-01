@@ -4,15 +4,33 @@
 
     var helpers = require('./helpers'),
 
+        $confs = require('./confs'),
+
         NR = helpers.clone(helpers),
 
         $moduleProvider = require('./module-provider');
 
     require('./promises');
     require('./http');
-    require('./confs');
 
     NR.Promise = require('./promise');
+
+    /**
+     * <p>Define and return the app version</p>
+     *
+     * @function
+     * @memberof NR
+     * @param   {string} [version] App version to set
+     * @returns {string} Current app version
+     */
+    NR.appVersion = function (version) {
+        if (helpers.isDefined(version)) {
+            $confs.set('appVersion', version);
+            return version;
+        } else {
+            return $confs.get('appVersion');
+        }
+    };
 
     /**
      * <p>Execute the dependency injection for a function</p>
