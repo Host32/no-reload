@@ -17,6 +17,11 @@
 
     $confs.set('scriptLoadTechnique', LOAD_TECHNIQUES.XHR_INJECTION);
 
+    /**
+     * Use eval
+     *
+     * @param {string} url
+     */
     function loadByXhrEval(url) {
         $http.request({
             url: url,
@@ -29,6 +34,11 @@
         });
     }
 
+    /**
+     * Create a script element and insert the script content inside it
+     *
+     * @param {string} url
+     */
     function loadByXhrInjection(url) {
         $http.request({
             url: url,
@@ -42,33 +52,78 @@
         });
     }
 
+    /**
+     * Create a script element and set the src attribute as the url
+     *
+     * @param {string} url
+     */
     function loadByScriptDomElement(url) {
         var scriptElement = document.createElement('script');
         scriptElement.src = url;
         document.getElementsByTagName('head')[0].appendChild(scriptElement);
     }
 
+    /**
+     * Use document.write()
+     *
+     * @param {string} url
+     */
     function loadByWriteScriptTag(url) {
         /*jslint evil: true */
         document.write('<script type="text/javascript" src="' + url + '"></script>');
     }
 
     /**
-     * <p></p>
+     * <p>Responsible for dynamic load of script files.</p>
      *
      * @module $scriptLoader
      * @memberof NR
      */
     module.exports = {
 
+        /**
+         * <p>Load a script using `xhr_eval` thecnique</p>
+         * <p>This thecnique oly run an `eval` call on the script content</p>
+         *
+         * @method
+         * @param {string} url Script url
+         */
         loadByXhrEval: loadByXhrEval,
 
+        /**
+         * <p>Load a script using `xhr_injection` thecnique</p>
+         * <p>This thecnique create a `script` tag and insert the script content inside it</p>
+         *
+         * @method
+         * @param {string} url Script url
+         */
         loadByXhrInjection: loadByXhrInjection,
 
+        /**
+         * <p>Load a script using `script_dom_element` thecnique</p>
+         * <p>This thecnique create a `script` tag and set they `src` attribute as the url required.</p>
+         *
+         * @method
+         * @param {string} url Script url
+         */
         loadByScriptDomElement: loadByScriptDomElement,
 
+        /**
+         * <p>Load a script using `write_script_tag` thecnique</p>
+         * <p>This thecnique use `document.write()` with the script content</p>
+         *
+         * @method
+         * @param {string} url Script url
+         */
         loadByWriteScriptTag: loadByWriteScriptTag,
 
+        /**
+         * <p>Load a remote script using the thecnique defined in `scriptLoadTechnique` config.</p>
+         * <p>The default thecnique is `xhr_injection`</p>
+         *
+         * @method
+         * @param {string} url Script url
+         */
         load: function (url) {
             var thecnique = $confs.get('scriptLoadTechnique');
 
