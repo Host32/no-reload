@@ -49,12 +49,12 @@
             .pipe(gulp.dest('dist/'));
     });
 
-    gulp.task('qunit', ['package-js'], function () {
+    gulp.task('test', ['package-js'], function () {
         return gulp.src('test/index.html')
             .pipe(qunit());
     });
 
-    gulp.task('js-min', ['qunit'], function () {
+    gulp.task('js-min', ['test'], function () {
         gulp.src('dist/no-reload.js')
             .pipe(uglify())
             .pipe(rename('no-reload.min.js'))
