@@ -59,13 +59,75 @@
 
 	        NR = helpers.clone(helpers),
 
-	        $moduleProvider = __webpack_require__(3);
+	        $confs = __webpack_require__(3),
 
-	    __webpack_require__(6);
-	    __webpack_require__(7);
-	    __webpack_require__(11);
+	        $moduleProvider = __webpack_require__(4),
 
-	    NR.Promise = __webpack_require__(4);
+	        $promises = __webpack_require__(13),
+
+	        $http = __webpack_require__(9),
+
+	        $nameResolver = __webpack_require__(7),
+
+	        $scriptLoader = __webpack_require__(8);
+
+
+	    // Define the modules on Dependecy Injector
+	    $moduleProvider.define('$confs', function () {
+	        return $confs;
+	    });
+	    $moduleProvider.define('$promises', function () {
+	        return $promises;
+	    });
+	    $moduleProvider.define('$http', function () {
+	        return $http;
+	    });
+	    $moduleProvider.define('$nameResolver', function () {
+	        return $nameResolver;
+	    });
+	    $moduleProvider.define('$scriptLoader', function () {
+	        return $scriptLoader;
+	    });
+	    $moduleProvider.define('$moduleProvider', function () {
+	        return $moduleProvider;
+	    });
+
+
+	    NR.Promise = __webpack_require__(5);
+
+	    /**
+	     * <p>Define and return the app version</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param   {string} [version] App version to set
+	     * @returns {string} Current app version
+	     */
+	    NR.appVersion = function (version) {
+	        if (helpers.isDefined(version)) {
+	            $confs.set('appVersion', version);
+	            return version;
+	        } else {
+	            return $confs.get('appVersion');
+	        }
+	    };
+
+	    /**
+	     * <p>Define and return the current enviroment</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param   {string} [version] App enviroment to set
+	     * @returns {string} Current app enviroment
+	     */
+	    NR.enviroment = function (env) {
+	        if (helpers.isDefined(env)) {
+	            $confs.set('enviroment', env);
+	            return env;
+	        } else {
+	            return $confs.get('enviroment');
+	        }
+	    };
 
 	    /**
 	     * <p>Execute the dependency injection for a function</p>
@@ -119,6 +181,7 @@
 	     */
 	    window.NR = module.exports = NR;
 	}());
+
 
 /***/ },
 /* 2 */
@@ -419,20 +482,81 @@
 
 /***/ },
 /* 3 */
+/***/ function(module, exports) {
+
+	/*global module, require*/
+	(function () {
+	    'use strict';
+
+	    // Defaults
+	    var configs = {
+	        enviroment: 'dev',
+
+	        appFolder: 'app/',
+	        modulesFolder: 'app/modules/',
+	        controllersFolder: 'app/controllers',
+	        templatesFolder: 'app/templates',
+	        componentsFolder: 'app/components',
+	        assetsFolder: 'assets',
+	        cssFolder: 'assets/css',
+	        imagesFolder: 'assets/images',
+
+	        routeFile: 'app/routes.js',
+	        helpersFile: 'app/helpers.js',
+	        constantsFile: 'app/constants.js'
+	    };
+
+	    /**
+	     * <p>Handles configurations and conventions of the framework</p>
+	     *
+	     * @module $configs
+	     * @memberof NR
+	     */
+	    module.exports = {
+	        /**
+	         * <p>Return a registred configuration</p>
+	         *
+	         * @param   {string} configName The name of the configuration
+	         * @returns {*} The value of the configuration
+	         */
+	        get: function (configName) {
+	            return configs[configName];
+	        },
+
+	        /**
+	         * <p>Register a configuration</p>
+	         *
+	         * @param {string} configName The name of the configuration
+	         * @param {*} value The value of the configuration
+	         */
+	        set: function (configName, value) {
+	            configs[configName] = value;
+	        }
+	    };
+
+	}());
+
+
+/***/ },
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*global module, require*/
 	(function () {
 	    'use strict';
-	    var Promise = __webpack_require__(4),
+	    var Promise = __webpack_require__(5),
+
+	        $confs = __webpack_require__(3),
+
+	        $nameResolver = __webpack_require__(7),
+
+	        $scriptLoader = __webpack_require__(8),
 
 	        modules = {},
 
-	        queues = {},
+	        queues = {};
 
-	        load = null,
-
-	        $moduleProvider;
+	    $confs.set('lazyLoadDeps', true);
 
 	    function forEach(arr, func) {
 	        var length = arr ? arr.length : 0,
@@ -486,22 +610,15 @@
 	        return new Promise(function (resolve) {
 	            task(function () {
 	                if (!modules[name]) {
-	                    if (!load) {
-	                        throw "Module Loader has not defined";
+	                    if (!$confs.get('lazyLoadDeps')) {
+	                        throw "The dependency" + name + " has not defined";
 	                    }
 
 	                    modules[name] = {};
 
 	                    putOnQueue(name, resolve);
 
-	                    load(name, function (obj) {
-	                        if (obj) {
-	                            modules[name] = {
-	                                obj: obj
-	                            };
-	                            resolve(modules[name].obj);
-	                        }
-	                    });
+	                    $scriptLoader.load($nameResolver.modulePath(name));
 	                } else {
 	                    if (modules[name].obj !== undefined) {
 	                        resolve(modules[name].obj);
@@ -586,7 +703,7 @@
 	     * @module $moduleProvider
 	     * @memberof NR
 	     */
-	    $moduleProvider = module.exports = {
+	    module.exports = {
 
 	        /**
 	         * <p></p>
@@ -672,16 +789,11 @@
 	            delete modules[name];
 	        }
 	    };
-
-	    // Define this module on Dependecy Injector
-	    $moduleProvider.define('$moduleProvider', [function () {
-	        return $moduleProvider;
-	    }]);
 	}());
 
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*global module, require*/
@@ -720,13 +832,13 @@
 	     * @class Promise
 	     * @see {@link http://docs.ractivejs.org/latest/promises|Ractive Promises}
 	     */
-	    module.exports = __webpack_require__(5).Promise;
+	    module.exports = __webpack_require__(6).Promise;
 
 	}());
 
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -17351,67 +17463,6 @@
 
 
 /***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*global module, require*/
-	(function () {
-	    'use strict';
-
-	    var Promise = __webpack_require__(4),
-	        $promises,
-	        $moduleProvider = __webpack_require__(3);
-
-	    /**
-	     * <p>Injectable wrapper for Promise class</p>
-	     *
-	     * @module $promises
-	     * @memberof NR
-	     */
-	    $promises = module.exports = {
-
-	        /**
-	         * <p>Create a new Promise</p>
-	         *
-	         * @param {function} func Function that will execute something asynchronously and be
-	         *                        responsible for resolving or rejecting promise
-	         * @returns {NR.Promise}
-	         * @see {@link http://docs.ractivejs.org/latest/promises|Ractive Promises}
-	         */
-	        create: function (callback) {
-	            return new Promise(callback);
-	        },
-
-	        /**
-	         * <p>Returns a Promise that will be resolved when all of the promises passed as paramethers
-	         * has be resolved</p>
-	         * <pre>
-	         * $promises.all([
-	         *   ajax.get( 'list.json' ),       // loads our app data
-	         *   new Promise(someFunc)          // another async process
-	         * ]).then( function ( results ) {
-	         *   var ajaxData = results[0];
-	         *   //...
-	         * });
-	         * </pre>
-	         *
-	         * @param   {Array|Object} promises Async tasks
-	         * @returns {Promise}
-	         */
-	        all: function (promises) {
-	            return Promise.all(promises);
-	        }
-	    };
-
-	    // Define this module on Dependecy Injector
-	    $moduleProvider.define('$promises', function () {
-	        return $promises;
-	    });
-
-	}());
-
-
-/***/ },
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -17419,10 +17470,142 @@
 	(function () {
 	    'use strict';
 
-	    var Promise = __webpack_require__(4),
-	        Ajax = __webpack_require__(8),
-	        $moduleProvider = __webpack_require__(3),
-	        $http;
+	    var $confs = __webpack_require__(3);
+
+	    function safeFolderName(folder) {
+	        return folder.endsWith('/') ? folder : (folder + '/');
+	    }
+
+	    function unpackName(name) {
+	        return name.replace('.', '/');
+	    }
+
+	    function versione(url) {
+	        var appVersion = $confs.get('appVersion');
+	        return url + (appVersion ? ('?version=' + appVersion) : '');
+	    }
+
+	    /**
+	     * <p></p>
+	     *
+	     * @module $nameResolver
+	     * @memberof NR
+	     */
+	    module.exports = {
+	        modulePath: function (name) {
+	            return versione(safeFolderName($confs.get('modulesFolder')) + unpackName(name) + '.js');
+	        }
+	    };
+
+	}());
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*global module, require*/
+	(function () {
+	    'use strict';
+
+	    var Promise = __webpack_require__(5),
+
+	        $http = __webpack_require__(9),
+
+	        $confs = __webpack_require__(3),
+
+	        LOAD_TECHNIQUES = {
+	            XHR_EVAL: 'xhr_eval',
+	            XHR_INJECTION: 'xhr_injection',
+	            SCRIPT_DOM_ELEMENT: 'script_dom_element',
+	            WRITE_SCRIPT_TAG: 'write_script_tag'
+	        };
+
+	    $confs.set('scriptLoadTechnique', LOAD_TECHNIQUES.XHR_INJECTION);
+
+	    function loadByXhrEval(url) {
+	        $http.request({
+	            url: url,
+	            dataType: 'text/javascript'
+	        }).then(function (response) {
+	            /*jslint evil: true */
+	            eval(response);
+	        }, function () {
+	            // TODO
+	        });
+	    }
+
+	    function loadByXhrInjection(url) {
+	        $http.request({
+	            url: url,
+	            dataType: 'text/javascript'
+	        }).then(function (response) {
+	            var scriptElement = document.createElement('script');
+	            document.getElementsByTagName('head')[0].appendChild(scriptElement);
+	            scriptElement.text = response;
+	        }, function () {
+	            // TODO
+	        });
+	    }
+
+	    function loadByScriptDomElement(url) {
+	        var scriptElement = document.createElement('script');
+	        scriptElement.src = url;
+	        document.getElementsByTagName('head')[0].appendChild(scriptElement);
+	    }
+
+	    function loadByWriteScriptTag(url) {
+	        /*jslint evil: true */
+	        document.write('<script type="text/javascript" src="' + url + '"></script>');
+	    }
+
+	    /**
+	     * <p></p>
+	     *
+	     * @module $scriptLoader
+	     * @memberof NR
+	     */
+	    module.exports = {
+
+	        loadByXhrEval: loadByXhrEval,
+
+	        loadByXhrInjection: loadByXhrInjection,
+
+	        loadByScriptDomElement: loadByScriptDomElement,
+
+	        loadByWriteScriptTag: loadByWriteScriptTag,
+
+	        load: function (url) {
+	            var thecnique = $confs.get('scriptLoadTechnique');
+
+	            switch (thecnique) {
+	                case LOAD_TECHNIQUES.XHR_EVAL:
+	                    return loadByXhrEval(url);
+	                case LOAD_TECHNIQUES.XHR_INJECTION:
+	                    return loadByXhrInjection(url);
+	                case LOAD_TECHNIQUES.SCRIPT_DOM_ELEMENT:
+	                    return loadByScriptDomElement(url);
+	                case LOAD_TECHNIQUES.WRITE_SCRIPT_TAG:
+	                    return loadByWriteScriptTag(url);
+	                default:
+	                    break;
+	            }
+	        }
+	    };
+
+	}());
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*global module, require*/
+	(function () {
+	    'use strict';
+
+	    var Promise = __webpack_require__(5),
+	        Ajax = __webpack_require__(10);
 
 	    function request(params) {
 	        return new Promise(function (resolve, reject) {
@@ -17445,7 +17628,7 @@
 	     * @module $http
 	     * @memberof NR
 	     */
-	    $http = module.exports = {
+	    module.exports = {
 
 	        /**
 	         * <p>Available options to create a request</p>
@@ -17552,20 +17735,15 @@
 	        }
 	    };
 
-
-	    // Define this module on Dependecy Injector
-	    $moduleProvider.define('$http', function () {
-	        return $http;
-	    });
 	}());
 
 
 /***/ },
-/* 8 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var EventEmitter = __webpack_require__(9).EventEmitter,
-	    queryString = __webpack_require__(10);
+	var EventEmitter = __webpack_require__(11).EventEmitter,
+	    queryString = __webpack_require__(12);
 
 	function tryParseJson(data){
 	    try{
@@ -17706,7 +17884,7 @@
 
 
 /***/ },
-/* 9 */
+/* 11 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -18010,7 +18188,7 @@
 
 
 /***/ },
-/* 10 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -18082,68 +18260,56 @@
 
 
 /***/ },
-/* 11 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*global module, require*/
 	(function () {
 	    'use strict';
 
-	    var $moduleProvider = __webpack_require__(3),
-
-	        $confs,
-
-	        // Defaults
-	        configs = {
-	            enviroment: 'dev',
-
-	            appFolder: 'app/',
-	            modulesFolder: 'app/modules/',
-	            controllersFolder: 'app/controllers',
-	            templatesFolder: 'app/templates',
-	            componentsFolder: 'app/components',
-	            assetsFolder: 'assets',
-	            cssFolder: 'assets/css',
-	            imagesFolder: 'assets/images',
-
-	            routeFile: 'app/routes.js',
-	            helpersFile: 'app/helpers.js',
-	            constantsFile: 'app/constants.js'
-	        };
+	    var Promise = __webpack_require__(5);
 
 	    /**
-	     * <p>Handles configurations and conventions of the framework</p>
+	     * <p>Injectable wrapper for Promise class</p>
 	     *
-	     * @module $configs
+	     * @module $promises
 	     * @memberof NR
 	     */
-	    $confs = module.exports = {
+	    module.exports = {
+
 	        /**
-	         * <p>Return a registred configuration</p>
+	         * <p>Create a new Promise</p>
 	         *
-	         * @param   {string} configName The name of the configuration
-	         * @returns {*} The value of the configuration
+	         * @param {function} func Function that will execute something asynchronously and be
+	         *                        responsible for resolving or rejecting promise
+	         * @returns {NR.Promise}
+	         * @see {@link http://docs.ractivejs.org/latest/promises|Ractive Promises}
 	         */
-	        get: function (configName) {
-	            return configs[configName];
+	        create: function (callback) {
+	            return new Promise(callback);
 	        },
 
 	        /**
-	         * <p>Register a configuration</p>
+	         * <p>Returns a Promise that will be resolved when all of the promises passed as paramethers
+	         * has be resolved</p>
+	         * <pre>
+	         * $promises.all([
+	         *   ajax.get( 'list.json' ),       // loads our app data
+	         *   new Promise(someFunc)          // another async process
+	         * ]).then( function ( results ) {
+	         *   var ajaxData = results[0];
+	         *   //...
+	         * });
+	         * </pre>
 	         *
-	         * @param {string} configName The name of the configuration
-	         * @param {*} value The value of the configuration
+	         * @param   {Array|Object} promises Async tasks
+	         * @returns {Promise}
 	         */
-	        set: function (configName, value) {
-	            configs[configName] = value;
+	        all: function (promises) {
+	            return Promise.all(promises);
 	        }
 	    };
 
-
-	    // Define this module on Dependecy Injector
-	    $moduleProvider.define('$confs', function () {
-	        return $confs;
-	    });
 	}());
 
 

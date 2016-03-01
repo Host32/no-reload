@@ -11,9 +11,7 @@
 
         modules = {},
 
-        queues = {},
-
-        $moduleProvider;
+        queues = {};
 
     $confs.set('lazyLoadDeps', true);
 
@@ -162,7 +160,7 @@
      * @module $moduleProvider
      * @memberof NR
      */
-    $moduleProvider = module.exports = {
+    module.exports = {
 
         /**
          * <p></p>
@@ -248,9 +246,4 @@
             delete modules[name];
         }
     };
-
-    // Define this module on Dependecy Injector
-    $moduleProvider.define('$moduleProvider', [function () {
-        return $moduleProvider;
-    }]);
 }());

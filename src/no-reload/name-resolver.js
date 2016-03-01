@@ -2,11 +2,7 @@
 (function () {
     'use strict';
 
-    var $confs = require('./confs'),
-
-        $moduleProvider = require('./module-provider'),
-
-        $nameResolver;
+    var $confs = require('./confs');
 
     function safeFolderName(folder) {
         return folder.endsWith('/') ? folder : (folder + '/');
@@ -27,15 +23,10 @@
      * @module $nameResolver
      * @memberof NR
      */
-    $nameResolver = module.exports = {
+    module.exports = {
         modulePath: function (name) {
             return versione(safeFolderName($confs.get('modulesFolder')) + unpackName(name) + '.js');
         }
     };
 
-
-    // Define this module on Dependecy Injector
-    $moduleProvider.define('$nameResolver', function () {
-        return $nameResolver;
-    });
 }());

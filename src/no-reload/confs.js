@@ -2,27 +2,23 @@
 (function () {
     'use strict';
 
-    var $moduleProvider = require('./module-provider'),
+    // Defaults
+    var configs = {
+        enviroment: 'dev',
 
-        $confs,
+        appFolder: 'app/',
+        modulesFolder: 'app/modules/',
+        controllersFolder: 'app/controllers',
+        templatesFolder: 'app/templates',
+        componentsFolder: 'app/components',
+        assetsFolder: 'assets',
+        cssFolder: 'assets/css',
+        imagesFolder: 'assets/images',
 
-        // Defaults
-        configs = {
-            enviroment: 'dev',
-
-            appFolder: 'app/',
-            modulesFolder: 'app/modules/',
-            controllersFolder: 'app/controllers',
-            templatesFolder: 'app/templates',
-            componentsFolder: 'app/components',
-            assetsFolder: 'assets',
-            cssFolder: 'assets/css',
-            imagesFolder: 'assets/images',
-
-            routeFile: 'app/routes.js',
-            helpersFile: 'app/helpers.js',
-            constantsFile: 'app/constants.js'
-        };
+        routeFile: 'app/routes.js',
+        helpersFile: 'app/helpers.js',
+        constantsFile: 'app/constants.js'
+    };
 
     /**
      * <p>Handles configurations and conventions of the framework</p>
@@ -30,7 +26,7 @@
      * @module $configs
      * @memberof NR
      */
-    $confs = module.exports = {
+    module.exports = {
         /**
          * <p>Return a registred configuration</p>
          *
@@ -52,9 +48,4 @@
         }
     };
 
-
-    // Define this module on Dependecy Injector
-    $moduleProvider.define('$confs', function () {
-        return $confs;
-    });
 }());

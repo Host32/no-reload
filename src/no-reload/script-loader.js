@@ -8,10 +8,6 @@
 
         $confs = require('./confs'),
 
-        $moduleProvider = require('./module-provider'),
-
-        $scriptLoader,
-
         LOAD_TECHNIQUES = {
             XHR_EVAL: 'xhr_eval',
             XHR_INJECTION: 'xhr_injection',
@@ -63,7 +59,7 @@
      * @module $scriptLoader
      * @memberof NR
      */
-    $scriptLoader = module.exports = {
+    module.exports = {
 
         loadByXhrEval: loadByXhrEval,
 
@@ -77,21 +73,16 @@
             var thecnique = $confs.get('scriptLoadTechnique');
 
             switch (thecnique) {
-            case LOAD_TECHNIQUES.XHR_EVAL:
-                return loadByXhrEval(url);
-            case LOAD_TECHNIQUES.XHR_INJECTION:
-                return loadByXhrInjection(url);
-            case LOAD_TECHNIQUES.SCRIPT_DOM_ELEMENT:
-                return loadByScriptDomElement(url);
-            case LOAD_TECHNIQUES.WRITE_SCRIPT_TAG:
-                return loadByWriteScriptTag(url);
+                case LOAD_TECHNIQUES.XHR_EVAL:
+                    return loadByXhrEval(url);
+                case LOAD_TECHNIQUES.XHR_INJECTION:
+                    return loadByXhrInjection(url);
+                case LOAD_TECHNIQUES.SCRIPT_DOM_ELEMENT:
+                    return loadByScriptDomElement(url);
+                case LOAD_TECHNIQUES.WRITE_SCRIPT_TAG:
+                    return loadByWriteScriptTag(url);
             }
         }
     };
 
-
-    // Define this module on Dependecy Injector
-    $moduleProvider.define('$scriptLoader', function () {
-        return $scriptLoader;
-    });
 }());

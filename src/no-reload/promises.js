@@ -2,9 +2,7 @@
 (function () {
     'use strict';
 
-    var Promise = require('./promise'),
-        $promises,
-        $moduleProvider = require('./module-provider');
+    var Promise = require('./promise');
 
     /**
      * <p>Injectable wrapper for Promise class</p>
@@ -12,7 +10,7 @@
      * @module $promises
      * @memberof NR
      */
-    $promises = module.exports = {
+    module.exports = {
 
         /**
          * <p>Create a new Promise</p>
@@ -46,10 +44,5 @@
             return Promise.all(promises);
         }
     };
-
-    // Define this module on Dependecy Injector
-    $moduleProvider.define('$promises', function () {
-        return $promises;
-    });
 
 }());

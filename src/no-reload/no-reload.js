@@ -4,14 +4,41 @@
 
     var helpers = require('./helpers'),
 
-        $confs = require('./confs'),
-
         NR = helpers.clone(helpers),
 
-        $moduleProvider = require('./module-provider');
+        $confs = require('./confs'),
 
-    require('./promises');
-    require('./http');
+        $moduleProvider = require('./module-provider'),
+
+        $promises = require('./promises'),
+
+        $http = require('./http'),
+
+        $nameResolver = require('./name-resolver'),
+
+        $scriptLoader = require('./script-loader');
+
+
+    // Define the modules on Dependecy Injector
+    $moduleProvider.define('$confs', function () {
+        return $confs;
+    });
+    $moduleProvider.define('$promises', function () {
+        return $promises;
+    });
+    $moduleProvider.define('$http', function () {
+        return $http;
+    });
+    $moduleProvider.define('$nameResolver', function () {
+        return $nameResolver;
+    });
+    $moduleProvider.define('$scriptLoader', function () {
+        return $scriptLoader;
+    });
+    $moduleProvider.define('$moduleProvider', function () {
+        return $moduleProvider;
+    });
+
 
     NR.Promise = require('./promise');
 
