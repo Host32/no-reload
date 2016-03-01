@@ -48,23 +48,57 @@
 	(function () {
 	    'use strict';
 
-	    __webpack_require__(1);
+	    var helpers = __webpack_require__(1),
+
+	        NR = helpers.clone(helpers),
+
+	        $moduleProvider = __webpack_require__(2);
+
 	    __webpack_require__(5);
+	    __webpack_require__(6);
 
-	    var helpers = __webpack_require__(9),
-	        $moduleProvider = __webpack_require__(4),
-	        NR = helpers.clone(helpers);
+	    NR.Promise = __webpack_require__(3);
 
-	    NR.Promise = __webpack_require__(2);
-
+	    /**
+	     * <p>Execute the dependency injection for a function</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {function|Array} info Function that will be invoked, can be a function when the
+	     *                              deps is the arguments names or a array when the firsts
+	     *                              arguments are the deps and the last argument is the function
+	     * @param {Object} [scope] Scope where the function will be invoked
+	     * @returns {Promise} A Promisse that will be resolved when all the dependencies has be resolved
+	     *                    and the function returns will be passed to the resolve function
+	     */
 	    NR.run = function () {
 	        return $moduleProvider.invoke.apply(null, arguments);
 	    };
 
+	    /**
+	     * <p>Declare a module executing the dependency injection for it and saving
+	     * the module return as a new dependency that can be injected</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {String} name Module name
+	     * @param {function|Array} info Module declaration, can be a function when the
+	     *                              deps is the arguments names or a array when the firsts
+	     *                              arguments are the deps and the last argument is the function
+	     * @param {Object} [scope] Module scope
+	     */
 	    NR.defModule = function () {
 	        $moduleProvider.define.apply(null, arguments);
 	    };
 
+
+	    /**
+	     * <p>Removes a module previously registered.</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {string} name The module name
+	     */
 	    NR.undefModule = function (name) {
 	        $moduleProvider.remove(name);
 	    };
@@ -81,67 +115,566 @@
 
 /***/ },
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	/*global module, require*/
+	/*global module*/
 	(function () {
 	    'use strict';
 
-	    var Promise = __webpack_require__(2),
-	        $promises,
-	        $moduleProvider = __webpack_require__(4);
+	    /**
+	     * <p>Convets a string to integer</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {string} str Value to be converted
+	     * @returns {Number}
+	     */
+	    function toInt(str) {
+	        return parseInt(str, 10);
+	    }
 
 	    /**
-	     * <p>Injectable wrapper for Promise class</p>
+	     * <p>Convets a string to float</p>
 	     *
-	     * @module $promises
+	     * @function
 	     * @memberof NR
+	     * @param {string} str Value to be converted
+	     * @returns {Number}
 	     */
-	    $promises = module.exports = {
+	    function toFloat(str) {
+	        return parseFloat(str);
+	    }
 
-	        /**
-	         * <p>Create a new Promise</p>
-	         *
-	         * @param {function} func Function that will execute something asynchronously and be
-	         *                        responsible for resolving or rejecting promise
-	         * @returns {NR.Promise}
-	         * @see {@link http://docs.ractivejs.org/latest/promises|Ractive Promises}
-	         */
-	        create: function (callback) {
-	            return new Promise(callback);
-	        },
+	    /**
+	     * <p>Checks if the value is a string</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     */
+	    function isString(value) {
+	        return typeof value === 'string';
+	    }
 
-	        /**
-	         * <p>Returns a Promise that will be resolved when all of the promises passed as paramethers
-	         * has be resolved</p>
-	         * <pre>
-	         * $promises.all([
-	         *   ajax.get( 'list.json' ),       // loads our app data
-	         *   new Promise(someFunc)          // another async process
-	         * ]).then( function ( results ) {
-	         *   var ajaxData = results[0];
-	         *   //...
-	         * });
-	         * </pre>
-	         *
-	         * @param   {Array|Object} promises Async tasks
-	         * @returns {Promise}
-	         */
-	        all: function (promises) {
-	            return Promise.all(promises);
+	    /**
+	     * <p>Checks if the value is a number</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     */
+	    function isNumber(value) {
+	        return typeof value === 'number';
+	    }
+
+	    /**
+	     * <p>Checks if the value is defined</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     */
+	    function isDefined(value) {
+	        return typeof value !== 'undefined';
+	    }
+
+	    /**
+	     * <p>Checks if the value is undefined</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     */
+	    function isUndefined(value) {
+	        return typeof value === 'undefined';
+	    }
+
+	    /**
+	     * <p>Checks if the value is an object</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     */
+	    function isObject(value) {
+	        return value !== null && typeof value === 'object';
+	    }
+
+	    /**
+	     * <p>Checks if the value is null</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     */
+	    function isNull(value) {
+	        return value === null;
+	    }
+
+	    /**
+	     * <p>Checks if the value is not null</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     */
+	    function isNotNull(value) {
+	        return value !== null;
+	    }
+
+	    /**
+	     * <p>Checks if the value is a function</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     * @returns {Boolean}
+	     */
+	    function isFunction(value) {
+	        return typeof value === 'function';
+	    }
+
+	    /**
+	     * <p>Checks if the value is a boolean</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     */
+	    function isBoolean(value) {
+	        return typeof value === 'boolean';
+	    }
+
+	    /**
+	     * <p>Checks if the value is an array</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     */
+	    function isArray(value) {
+	        return Array.isArray(value);
+	    }
+
+	    /**
+	     * <p>Retrieve all the names of the object's own enumerable properties.</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {Object} obj Object to be retrieved the keys
+	     * @returns {string[]} obj keys
+	     */
+	    function keys(obj) {
+	        if (!isObject(obj)) {
+	            return [];
 	        }
-	    };
+	        if (Object.keys) {
+	            return Object.keys(obj);
+	        }
+	        var objKeys = [],
+	            key;
+	        for (key in obj) {
+	            /*jslint forin: true*/
+	            if (Object.hasOwnProperty.call(obj, key)) {
+	                objKeys.push(key);
+	            }
+	        }
+	        return objKeys;
+	    }
 
-	    // Define this module on Dependecy Injector
-	    $moduleProvider.define('$promises', function () {
-	        return $promises;
-	    });
+	    /**
+	     * <p>Retrieve all the names of object's own and inherited properties.</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {Object} obj Object to be retrieved the keys
+	     * @returns {string[]} obj keys
+	     */
+	    function allKeys(obj) {
+	        if (!isObject(obj) && !isFunction(obj)) {
+	            return [];
+	        }
+	        var keys = [],
+	            key;
+	        /*jslint forin: true*/
+	        for (key in obj) {
+	            keys.push(key);
+	        }
+	        return keys;
+	    }
+
+	    /**
+	     * <p>Copy all of the properties in the parents objects over to the child object,
+	     * and return the child object. It's in-order, so the last parents will override
+	     * properties of the same name in previous arguments.</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {Object} child Child object
+	     * @param {...Object} parents Parents objects
+	     * @returns {Object}
+	     */
+	    function extend(obj) {
+	        var length = arguments.length,
+	            index,
+	            source,
+	            i,
+	            key,
+	            keys;
+
+	        if (length < 2 || obj === null || isUndefined(obj)) {
+	            return obj;
+	        }
+	        for (index = 1; index < length; index += 1) {
+	            source = arguments[index];
+	            keys = allKeys(source);
+	            for (i = 0; i < keys.length; i += 1) {
+	                key = keys[i];
+	                obj[key] = source[key];
+	            }
+	        }
+	        return obj;
+	    }
+
+	    /**
+	     * <p>Makes a clone of an object</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {Object} obj Object to be cloned
+	     * @returns {Object}
+	     */
+	    function clone(obj) {
+	        var copy, attr, len, i;
+
+	        // Handle the 3 simple types, and null or undefined
+	        if (!isObject(obj)) {
+	            return obj;
+	        }
+
+	        // Handle Date
+	        if (obj instanceof Date) {
+	            copy = new Date();
+	            copy.setTime(obj.getTime());
+	            return copy;
+	        }
+
+	        // Handle Array
+	        if (isArray(obj)) {
+	            copy = [];
+	            for (i = 0, len = obj.length; i < len; i += 1) {
+	                copy[i] = clone(obj[i]);
+	            }
+	            return copy;
+	        }
+
+	        // Handle Object
+	        copy = {};
+	        for (attr in obj) {
+	            if (obj.hasOwnProperty(attr)) {
+	                copy[attr] = clone(obj[attr]);
+	            }
+	        }
+	        return copy;
+	    }
+
+	    module.exports = {
+	        toInt: toInt,
+	        toFloat: toFloat,
+	        isString: isString,
+	        isNumber: isNumber,
+	        isDefined: isDefined,
+	        isUndefined: isUndefined,
+	        isObject: isObject,
+	        isNull: isNull,
+	        isNotNull: isNotNull,
+	        isFunction: isFunction,
+	        isBoolean: isBoolean,
+	        isArray: isArray,
+	        keys: keys,
+	        allKeys: allKeys,
+	        extend: extend,
+	        clone: clone
+	    };
 
 	}());
 
 
 /***/ },
 /* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*global module, require*/
+	(function () {
+	    'use strict';
+	    var Promise = __webpack_require__(3),
+
+	        modules = {},
+
+	        queues = {},
+
+	        load = null,
+
+	        $moduleProvider;
+
+	    function forEach(arr, func) {
+	        var length = arr ? arr.length : 0,
+	            i;
+	        for (i = 0; i < length; i += 1) {
+	            func(arr[i], i);
+	        }
+	    }
+
+	    /**
+	     * Execute a asynchronous task
+	     *
+	     * @param {string} func
+	     */
+	    function task(func) {
+	        setTimeout(func, 0);
+	    }
+
+	    /**
+	     * Put a resolve callback on queue list
+	     *
+	     * @param {string} name Dependency name
+	     * @param {function} func Callback
+	     */
+	    function putOnQueue(name, func) {
+	        if (!queues[name]) {
+	            queues[name] = [];
+	        }
+	        queues[name].push(func);
+	    }
+
+	    /**
+	     * Execute all resolve functions in queue list for this dependency
+	     *
+	     * @param {string} name Dependency name
+	     */
+	    function runQueue(name) {
+	        forEach(queues[name], function (func) {
+	            func(modules[name].obj);
+	        });
+	        delete queues[name];
+	    }
+
+	    /**
+	     * Assynchronous dependency loading
+	     *
+	     * @param {string} name Dependency name
+	     * @returns {Promise} A promise that will be resolved when the dependency has been declared
+	     */
+	    function loadDependency(name) {
+	        return new Promise(function (resolve) {
+	            task(function () {
+	                if (!modules[name]) {
+	                    if (!load) {
+	                        throw "Module Loader has not defined";
+	                    }
+
+	                    modules[name] = {};
+
+	                    putOnQueue(name, resolve);
+
+	                    load(name, function (obj) {
+	                        if (obj) {
+	                            modules[name] = {
+	                                obj: obj
+	                            };
+	                            resolve(modules[name].obj);
+	                        }
+	                    });
+	                } else {
+	                    if (modules[name].obj !== undefined) {
+	                        resolve(modules[name].obj);
+	                    } else {
+	                        putOnQueue(name, resolve);
+	                    }
+	                }
+	            });
+	        });
+	    }
+
+	    /**
+	     * Extract arguments names of a function
+	     *
+	     * @param   {function} func
+	     * @returns {string[]} Arguments list
+	     */
+	    function getFuncArgs(func) {
+	        var args = /^function\s*[\w\d$_]*\(([\w\d,_$\s]*)\)/.exec(func.toString())[1];
+	        return args === '' ? [] : args.replace(/\s+/gm, '').split(",");
+	    }
+
+	    /**
+	     * Execute the dependency injection for a function
+	     *
+	     * @param   {function} func Function with dependencies
+	     * @param   {Array} deps The explicit dependencies
+	     * @param   {Object} [scope=null] The scope when the function is be called
+	     * @returns {Promise} A Promisse that will be resolved when all the dependencies has be resolved
+	     *                    and the function returns will be passed to the resolve function
+	     */
+	    function invoke(func, deps, scope) {
+	        return new Promise(function (resolve) {
+	            task(function () {
+	                var promises = deps.map(function (dep) {
+	                    return loadDependency(dep);
+	                });
+
+	                Promise.all(promises).then(function (loadedDependencies) {
+	                    resolve(func.apply(scope || null, loadedDependencies));
+	                });
+	            });
+	        });
+	    }
+
+	    /**
+	     * Use the function arguments to extract the module options
+	     *
+	     * @param   {Array} args Can be [name, function, scope] or [name, [dep1, dep2, ..., function], scope]
+	     *                       when the name and scope are optional
+	     * @returns {Module}
+	     */
+	    function createModule(args) {
+	        var info,
+	            obj = {},
+	            copy;
+
+	        if (typeof args[0] === 'string') {
+	            obj.name = args[0];
+	            info = args[1];
+	            obj.scope = args[2] || null;
+	        } else {
+	            info = args[0];
+	            obj.scope = args[1] || null;
+	        }
+
+	        if (typeof info === 'function') {
+	            obj.deps = getFuncArgs(info);
+	            obj.func = info;
+	        } else {
+	            copy = info.slice(0);
+	            obj.func = copy.pop();
+	            obj.deps = copy;
+	        }
+
+	        return obj;
+	    }
+
+	    /**
+	     * <p></p>
+	     *
+	     * @module $moduleProvider
+	     * @memberof NR
+	     */
+	    $moduleProvider = module.exports = {
+
+	        /**
+	         * <p></p>
+	         *
+	         * @typedef {Object} Module
+	         * @property {String} name Module name
+	         * @property {Object} scope Module scope
+	         * @property {String[]} deps Module dependencies
+	         * @property {function} func Module declaration function
+	         * @property {Object} obj Declared Module
+	         */
+
+	        /**
+	         * <p>Declare a module executing the dependency injection for it and saving
+	         * the module return in ModuleProvider as a new dependency that can be injected</p>
+	         *
+	         * @param {String} name Module name
+	         * @param {function|Array} info Module declaration, can be a function when the
+	         *                              deps is the arguments names or a array when the firsts
+	         *                              arguments are the deps and the last argument is the function
+	         * @param {Object} [scope] Module scope
+	         */
+	        define: function () {
+	            var moduleObj = createModule(arguments),
+	                target;
+
+	            if (moduleObj.name) {
+	                //We are checking whether module is requested or loaded.
+	                //if target object is available + dependencies, it means that we have duplicates
+	                //if we have only target but not dependencies, it means that module was requested by get call and module
+	                //has been downloaded and now the real module is registering it self.
+	                target = modules[moduleObj.name];
+	                if (target && target.deps) {
+	                    return;
+	                }
+	                modules[moduleObj.name] = moduleObj;
+	            }
+
+	            invoke(moduleObj.func, moduleObj.deps, moduleObj.scope).then(function (obj) {
+	                modules[moduleObj.name].obj = obj;
+	                runQueue(moduleObj.name);
+	            });
+	        },
+
+	        /**
+	         * <p>Execute the dependency injection for a function</p>
+	         *
+	         * @param {function|Array} info Function that will be invoked, can be a function when the
+	         *                              deps is the arguments names or a array when the firsts
+	         *                              arguments are the deps and the last argument is the function
+	         * @param {Object} [scope] Scope where the function will be invoked
+	         * @returns {Promise} A Promisse that will be resolved when all the dependencies has be resolved
+	         *                    and the function returns will be passed to the resolve function
+	         */
+	        invoke: function () {
+	            var moduleObj = createModule(arguments);
+	            return invoke(moduleObj.func, moduleObj.deps, moduleObj.scope);
+	        },
+
+	        /**
+	         * <p>Return a declared module by their name</p>
+	         *
+	         * @param {string} name Name of the module
+	         * @returns {Object}
+	         */
+	        getModule: function (name) {
+	            if (modules[name]) {
+	                return modules[name].obj;
+	            }
+	            return null;
+	        },
+
+	        /**
+	         * <p>Removes a module previously registered.</p>
+	         *
+	         * @param {string} name The module name
+	         */
+	        remove: function (name) {
+	            if (!modules[name]) {
+	                return;
+	            }
+
+	            delete modules[name];
+	        }
+	    };
+
+	    // Define this module on Dependecy Injector
+	    $moduleProvider.define('$moduleProvider', [function () {
+	        return $moduleProvider;
+	    }]);
+	}());
+
+
+/***/ },
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*global module, require*/
@@ -180,13 +713,13 @@
 	     * @class Promise
 	     * @see {@link http://docs.ractivejs.org/latest/promises|Ractive Promises}
 	     */
-	    module.exports = __webpack_require__(3).Promise;
+	    module.exports = __webpack_require__(4).Promise;
 
 	}());
 
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -16811,269 +17344,6 @@
 
 
 /***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*global module, require*/
-	(function () {
-	    'use strict';
-	    var Promise = __webpack_require__(2),
-
-	        modules = {},
-
-	        queues = {},
-
-	        load = null,
-
-	        $moduleProvider;
-
-	    function forEach(arr, func) {
-	        var length = arr ? arr.length : 0,
-	            i;
-	        for (i = 0; i < length; i += 1) {
-	            func(arr[i], i);
-	        }
-	    }
-
-	    /**
-	     * Execute a asynchronous task
-	     *
-	     * @param {string} func
-	     */
-	    function task(func) {
-	        setTimeout(func, 0);
-	    }
-
-	    /**
-	     * Put a resolve callback on queue list
-	     *
-	     * @param {string} name Dependency name
-	     * @param {function} func Callback
-	     */
-	    function putOnQueue(name, func) {
-	        if (!queues[name]) {
-	            queues[name] = [];
-	        }
-	        queues[name].push(func);
-	    }
-
-	    /**
-	     * Execute all resolve functions in queue list for this dependency
-	     *
-	     * @param {string} name Dependency name
-	     */
-	    function runQueue(name) {
-	        forEach(queues[name], function (func) {
-	            func(modules[name].obj);
-	        });
-	        delete queues[name];
-	    }
-
-	    /**
-	     * Assynchronous dependency loading
-	     *
-	     * @param {string} name Dependency name
-	     * @returns {Promise} A promise that will be resolved when the dependency has been declared
-	     */
-	    function loadDependency(name) {
-	        return new Promise(function (resolve) {
-	            task(function () {
-	                if (!modules[name]) {
-	                    if (!load) {
-	                        throw "Module Loader has not defined";
-	                    }
-
-	                    modules[name] = {};
-
-	                    putOnQueue(name, resolve);
-
-	                    load(name, function (obj) {
-	                        if (obj) {
-	                            modules[name] = {
-	                                obj: obj
-	                            };
-	                            resolve(modules[name].obj);
-	                        }
-	                    });
-	                } else {
-	                    if (modules[name].obj !== undefined) {
-	                        resolve(modules[name].obj);
-	                    } else {
-	                        putOnQueue(name, resolve);
-	                    }
-	                }
-	            });
-	        });
-	    }
-
-	    /**
-	     * Extract arguments names of a function
-	     *
-	     * @param   {function} func
-	     * @returns {string[]} Arguments list
-	     */
-	    function getFuncArgs(func) {
-	        var args = /^function\s*[\w\d$_]*\(([\w\d,_$\s]*)\)/.exec(func.toString())[1];
-	        return args === '' ? [] : args.replace(/\s+/gm, '').split(",");
-	    }
-
-	    /**
-	     * Execute the dependency injection for a function
-	     *
-	     * @param   {function} func Function with dependencies
-	     * @param   {Array} deps The explicit dependencies
-	     * @param   {Object} [scope=null] The scope when the function is be called
-	     * @returns {Promise} A Promisse that will be resolved when all the dependencies has be resolved
-	     *                    and the function returns will be passed to the resolve function
-	     */
-	    function invoke(func, deps, scope) {
-	        return new Promise(function (resolve) {
-	            task(function () {
-	                var promises = deps.map(function (dep) {
-	                    return loadDependency(dep);
-	                });
-
-	                Promise.all(promises).then(function (loadedDependencies) {
-	                    resolve(func.apply(scope || null, loadedDependencies));
-	                });
-	            });
-	        });
-	    }
-
-	    /**
-	     * Use the function arguments to extract the module options
-	     *
-	     * @param   {Array} args Can be [name, function, scope] or [name, [dep1, dep2, ..., function], scope]
-	     *                       when the name and scope are optional
-	     * @returns {Module}
-	     */
-	    function createModule(args) {
-	        var info,
-	            obj = {},
-	            copy;
-
-	        if (typeof args[0] === 'string') {
-	            obj.name = args[0];
-	            info = args[1];
-	            obj.scope = args[2] || null;
-	        } else {
-	            info = args[0];
-	            obj.scope = args[1] || null;
-	        }
-
-	        if (typeof info === 'function') {
-	            obj.deps = getFuncArgs(info);
-	            obj.func = info;
-	        } else {
-	            copy = info.slice(0);
-	            obj.func = copy.pop();
-	            obj.deps = copy;
-	        }
-
-	        return obj;
-	    }
-
-	    /**
-	     * <p></p>
-	     *
-	     * @module $moduleProvider
-	     * @memberof NR
-	     */
-	    $moduleProvider = module.exports = {
-
-	        /**
-	         * <p></p>
-	         *
-	         * @typedef {Object} Module
-	         * @property {String} name Module name
-	         * @property {Object} scope Module scope
-	         * @property {String[]} deps Module dependencies
-	         * @property {function} func Module declaration function
-	         * @property {Object} obj Declared Module
-	         */
-
-	        /**
-	         * <p>Declare a module executing the dependency injection for it and saving
-	         * the module return in ModuleProvider as a new dependency that can be injected</p>
-	         *
-	         * @param {String} name Module name
-	         * @param {function|Array} info Module declaration, can be a function when the
-	         *                              deps is the arguments names or a array when the firsts
-	         *                              arguments are the deps and the last argument is the function
-	         * @param {Object} [scope] Module scope
-	         */
-	        define: function () {
-	            var moduleObj = createModule(arguments),
-	                target;
-
-	            if (moduleObj.name) {
-	                //We are checking whether module is requested or loaded.
-	                //if target object is available + dependencies, it means that we have duplicates
-	                //if we have only target but not dependencies, it means that module was requested by get call and module
-	                //has been downloaded and now the real module is registering it self.
-	                target = modules[moduleObj.name];
-	                if (target && target.deps) {
-	                    return;
-	                }
-	                modules[moduleObj.name] = moduleObj;
-	            }
-
-	            invoke(moduleObj.func, moduleObj.deps, moduleObj.scope).then(function (obj) {
-	                modules[moduleObj.name].obj = obj;
-	                runQueue(moduleObj.name);
-	            });
-	        },
-
-	        /**
-	         * <p>Execute the dependency injection for a function</p>
-	         *
-	         * @param {function|Array} info Function that will be invoked, can be a function when the
-	         *                              deps is the arguments names or a array when the firsts
-	         *                              arguments are the deps and the last argument is the function
-	         * @param {Object} [scope] Scope where the function will be invoked
-	         * @returns {Promise} A Promisse that will be resolved when all the dependencies has be resolved
-	         *                    and the function returns will be passed to the resolve function
-	         */
-	        invoke: function () {
-	            var moduleObj = createModule(arguments);
-	            return invoke(moduleObj.func, moduleObj.deps, moduleObj.scope);
-	        },
-
-	        /**
-	         * <p>Return a declared module by their name</p>
-	         *
-	         * @param {string} name Name of the module
-	         * @returns {Object}
-	         */
-	        getModule: function (name) {
-	            if (modules[name]) {
-	                return modules[name].obj;
-	            }
-	            return null;
-	        },
-
-	        /**
-	         * <p>Removes a module previously registered.</p>
-	         *
-	         * @param {string} name The module name
-	         */
-	        remove: function (name) {
-	            if (!modules[name]) {
-	                return;
-	            }
-
-	            delete modules[name];
-	        }
-	    };
-
-	    // Define this module on Dependecy Injector
-	    $moduleProvider.define('$moduleProvider', [function () {
-	        return $moduleProvider;
-	    }]);
-	}());
-
-
-/***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -17081,9 +17351,70 @@
 	(function () {
 	    'use strict';
 
-	    var Promise = __webpack_require__(2),
-	        Ajax = __webpack_require__(6),
-	        $moduleProvider = __webpack_require__(4),
+	    var Promise = __webpack_require__(3),
+	        $promises,
+	        $moduleProvider = __webpack_require__(2);
+
+	    /**
+	     * <p>Injectable wrapper for Promise class</p>
+	     *
+	     * @module $promises
+	     * @memberof NR
+	     */
+	    $promises = module.exports = {
+
+	        /**
+	         * <p>Create a new Promise</p>
+	         *
+	         * @param {function} func Function that will execute something asynchronously and be
+	         *                        responsible for resolving or rejecting promise
+	         * @returns {NR.Promise}
+	         * @see {@link http://docs.ractivejs.org/latest/promises|Ractive Promises}
+	         */
+	        create: function (callback) {
+	            return new Promise(callback);
+	        },
+
+	        /**
+	         * <p>Returns a Promise that will be resolved when all of the promises passed as paramethers
+	         * has be resolved</p>
+	         * <pre>
+	         * $promises.all([
+	         *   ajax.get( 'list.json' ),       // loads our app data
+	         *   new Promise(someFunc)          // another async process
+	         * ]).then( function ( results ) {
+	         *   var ajaxData = results[0];
+	         *   //...
+	         * });
+	         * </pre>
+	         *
+	         * @param   {Array|Object} promises Async tasks
+	         * @returns {Promise}
+	         */
+	        all: function (promises) {
+	            return Promise.all(promises);
+	        }
+	    };
+
+	    // Define this module on Dependecy Injector
+	    $moduleProvider.define('$promises', function () {
+	        return $promises;
+	    });
+
+	}());
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*global module, require*/
+	(function () {
+	    'use strict';
+
+	    var Promise = __webpack_require__(3),
+	        Ajax = __webpack_require__(7),
+	        $moduleProvider = __webpack_require__(2),
 	        $http;
 
 	    function request(params) {
@@ -17223,11 +17554,11 @@
 
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var EventEmitter = __webpack_require__(7).EventEmitter,
-	    queryString = __webpack_require__(8);
+	var EventEmitter = __webpack_require__(8).EventEmitter,
+	    queryString = __webpack_require__(9);
 
 	function tryParseJson(data){
 	    try{
@@ -17368,7 +17699,7 @@
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -17672,7 +18003,7 @@
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -17741,303 +18072,6 @@
 			self.queryString = queryString;
 		}
 	})();
-
-
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	/*global module*/
-	(function () {
-	    'use strict';
-
-	    /**
-	     * <p>Convets a string to integer</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {string} str Value to be converted
-	     * @returns {Number}
-	     */
-	    function toInt(str) {
-	        return parseInt(str, 10);
-	    }
-
-	    /**
-	     * <p>Convets a string to float</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {string} str Value to be converted
-	     * @returns {Number}
-	     */
-	    function toFloat(str) {
-	        return parseFloat(str);
-	    }
-
-	    /**
-	     * <p>Checks if the value is a string</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     */
-	    function isString(value) {
-	        return typeof value === 'string';
-	    }
-
-	    /**
-	     * <p>Checks if the value is a number</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     */
-	    function isNumber(value) {
-	        return typeof value === 'number';
-	    }
-
-	    /**
-	     * <p>Checks if the value is defined</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     */
-	    function isDefined(value) {
-	        return typeof value !== 'undefined';
-	    }
-
-	    /**
-	     * <p>Checks if the value is undefined</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     */
-	    function isUndefined(value) {
-	        return typeof value === 'undefined';
-	    }
-
-	    /**
-	     * <p>Checks if the value is an object</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     */
-	    function isObject(value) {
-	        return value !== null && typeof value === 'object';
-	    }
-
-	    /**
-	     * <p>Checks if the value is null</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     */
-	    function isNull(value) {
-	        return value === null;
-	    }
-
-	    /**
-	     * <p>Checks if the value is not null</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     */
-	    function isNotNull(value) {
-	        return value !== null;
-	    }
-
-	    /**
-	     * <p>Checks if the value is a function</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     * @returns {Boolean}
-	     */
-	    function isFunction(value) {
-	        return typeof value === 'function';
-	    }
-
-	    /**
-	     * <p>Checks if the value is a boolean</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     */
-	    function isBoolean(value) {
-	        return typeof value === 'boolean';
-	    }
-
-	    /**
-	     * <p>Checks if the value is an array</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     */
-	    function isArray(value) {
-	        return Array.isArray(value);
-	    }
-
-	    /**
-	     * <p>Retrieve all the names of the object's own enumerable properties.</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {Object} obj Object to be retrieved the keys
-	     * @returns {string[]} obj keys
-	     */
-	    function keys(obj) {
-	        if (!isObject(obj)) {
-	            return [];
-	        }
-	        if (Object.keys) {
-	            return Object.keys(obj);
-	        }
-	        var objKeys = [],
-	            key;
-	        for (key in obj) {
-	            /*jslint forin: true*/
-	            if (Object.hasOwnProperty.call(obj, key)) {
-	                objKeys.push(key);
-	            }
-	        }
-	        return objKeys;
-	    }
-
-	    /**
-	     * <p>Retrieve all the names of object's own and inherited properties.</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {Object} obj Object to be retrieved the keys
-	     * @returns {string[]} obj keys
-	     */
-	    function allKeys(obj) {
-	        if (!isObject(obj) && !isFunction(obj)) {
-	            return [];
-	        }
-	        var keys = [],
-	            key;
-	        /*jslint forin: true*/
-	        for (key in obj) {
-	            keys.push(key);
-	        }
-	        return keys;
-	    }
-
-	    /**
-	     * <p>Copy all of the properties in the parents objects over to the child object,
-	     * and return the child object. It's in-order, so the last parents will override
-	     * properties of the same name in previous arguments.</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {Object} child Child object
-	     * @param {...Object} parents Parents objects
-	     * @returns {Object}
-	     */
-	    function extend(obj) {
-	        var length = arguments.length,
-	            index,
-	            source,
-	            i,
-	            key,
-	            keys;
-
-	        if (length < 2 || obj === null || isUndefined(obj)) {
-	            return obj;
-	        }
-	        for (index = 1; index < length; index += 1) {
-	            source = arguments[index];
-	            keys = allKeys(source);
-	            for (i = 0; i < keys.length; i += 1) {
-	                key = keys[i];
-	                obj[key] = source[key];
-	            }
-	        }
-	        return obj;
-	    }
-
-	    /**
-	     * <p>Makes a clone of an object</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {Object} obj Object to be cloned
-	     * @returns {Object}
-	     */
-	    function clone(obj) {
-	        var copy, attr, len, i;
-
-	        // Handle the 3 simple types, and null or undefined
-	        if (!isObject(obj)) {
-	            return obj;
-	        }
-
-	        // Handle Date
-	        if (obj instanceof Date) {
-	            copy = new Date();
-	            copy.setTime(obj.getTime());
-	            return copy;
-	        }
-
-	        // Handle Array
-	        if (isArray(obj)) {
-	            copy = [];
-	            for (i = 0, len = obj.length; i < len; i += 1) {
-	                copy[i] = clone(obj[i]);
-	            }
-	            return copy;
-	        }
-
-	        // Handle Object
-	        copy = {};
-	        for (attr in obj) {
-	            if (obj.hasOwnProperty(attr)) {
-	                copy[attr] = clone(obj[attr]);
-	            }
-	        }
-	        return copy;
-	    }
-
-	    module.exports = {
-	        toInt: toInt,
-	        toFloat: toFloat,
-	        isString: isString,
-	        isNumber: isNumber,
-	        isDefined: isDefined,
-	        isUndefined: isUndefined,
-	        isObject: isObject,
-	        isNull: isNull,
-	        isNotNull: isNotNull,
-	        isFunction: isFunction,
-	        isBoolean: isBoolean,
-	        isArray: isArray,
-	        keys: keys,
-	        allKeys: allKeys,
-	        extend: extend,
-	        clone: clone
-	    };
-
-	}());
 
 
 /***/ }

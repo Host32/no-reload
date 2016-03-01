@@ -72,7 +72,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="no-reload_main.js.html">no-reload/main.js</a>, <a href="no-reload_main.js.html#line26">line 26</a>
+        <a href="no-reload_main.js.html">no-reload/main.js</a>, <a href="no-reload_main.js.html#line60">line 60</a>
     </li></ul></dd>
     
 
@@ -407,6 +407,214 @@
 
     </dd>
 </dl>
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id=".defModule"><span class="type-signature">(static) </span>defModule<span class="signature">(name, info, scope<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+
+
+
+
+<div class="description">
+    <p>Declare a module executing the dependency injection for it and savingthe module return as a new dependency that can be injected</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>name</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">String</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Module name</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>info</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+|
+
+<span class="param-type">Array</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Module declaration, can be a function when the                             deps is the arguments names or a array when the firsts                             arguments are the deps and the last argument is the function</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>scope</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Module scope</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="no-reload_main.js.html">no-reload/main.js</a>, <a href="no-reload_main.js.html#line44">line 44</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2270,6 +2478,205 @@ properties of the same name in previous arguments.</p>
 
 
 
+    <h4 class="name" id=".run"><span class="type-signature">(static) </span>run<span class="signature">(info, scope<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+
+
+
+
+<div class="description">
+    <p>Execute the dependency injection for a function</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Attributes</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>info</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+|
+
+<span class="param-type">Array</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Function that will be invoked, can be a function when the                             deps is the arguments names or a array when the firsts                             arguments are the deps and the last argument is the function</td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>scope</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last">Scope where the function will be invoked</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="no-reload_main.js.html">no-reload/main.js</a>, <a href="no-reload_main.js.html#line28">line 28</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+<div class="param-desc">
+    A Promisse that will be resolved when all the dependencies has be resolved                   and the function returns will be passed to the resolve function
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
     <h4 class="name" id=".toFloat"><span class="type-signature">(static) </span>toFloat<span class="signature">(str)</span><span class="type-signature"> &rarr; {Number}</span></h4>
 
 
@@ -2563,6 +2970,137 @@ properties of the same name in previous arguments.</p>
 
 
 
+
+
+
+
+
+    <h4 class="name" id=".undefModule"><span class="type-signature">(static) </span>undefModule<span class="signature">(name)</span><span class="type-signature"></span></h4>
+
+
+
+
+
+<div class="description">
+    <p>Removes a module previously registered.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>name</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+            </td>
+
+
+
+
+
+            <td class="description last">The module name</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="no-reload_main.js.html">no-reload/main.js</a>, <a href="no-reload_main.js.html#line56">line 56</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
     
 
@@ -2585,7 +3123,7 @@ properties of the same name in previous arguments.</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Tue Mar 01 2016 00:21:46 GMT-0300 (Hora oficial do Brasil)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Tue Mar 01 2016 00:36:27 GMT-0300 (Hora oficial do Brasil)
 </footer>
 
 <script> prettyPrint(); </script>
