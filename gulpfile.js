@@ -3,9 +3,9 @@
     'use strict';
 
     var gulp = require('gulp'),
-        clean = require('gulp-clean'),
+        clean = require('gulp-rimraf'),
         concat = require('gulp-concat'),
-        webpack = require('gulp-webpack'),
+        webpack = require('webpack-stream'),
         named = require('vinyl-named'),
         jsdoc = require('gulp-jsdoc3'),
         uglifycss = require('gulp-uglifycss'),

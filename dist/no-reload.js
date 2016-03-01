@@ -112,7 +112,7 @@
 
 	    /**
 	     * @classdesc <p>No-Reload main namespace</p>
-	     * 
+	     *
 	     * @module NR
 	     * @namespace
 	     */
