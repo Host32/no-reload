@@ -17088,9 +17088,11 @@
 
 	    function request(params) {
 	        return new Promise(function (resolve, reject) {
+	            params.dataType = params.dataType || 'JSON';
+
 	            var ajax = new Ajax(params);
-	            ajax.on('success', function (event) {
-	                resolve(event);
+	            ajax.on('success', function (event, data) {
+	                resolve(data, event);
 	            });
 	            ajax.on('error', function (event) {
 	                reject(event);
