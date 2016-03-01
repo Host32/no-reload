@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Index</title>
+	<title>Documentation Module: $pathResolver</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -77,6 +77,23 @@
 		<div id="main">
 
 
+	<h1 class="page-title">Module: $pathResolver</h1>
+<section>
+
+<header>
+
+</header>
+
+
+<article>
+    <div class="container-overview">
+
+
+            <div class="description"><p>Resolver for locate the script path of some dependencies</p></div>
+
+
+
+<dl class="details">
 
 
 
@@ -97,34 +114,208 @@
 
 
 
-    <section class="readme-section">
-        <article><h1>No-Reload</h1><blockquote>
-<h3>Framework for single-page web applications focused on the code loading on demand</h3></blockquote>
-<p><a href="https://travis-ci.org/Host32/no-reload"><img src="https://travis-ci.org/Host32/no-reload.svg?branch=master" alt="Build Status"></a>
-<a href="http://inch-ci.org/github/Host32/no-reload"><img src="http://inch-ci.org/github/Host32/no-reload.svg?branch=master" alt="Inline docs"></a>
-<a href="https://gitter.im/Host32/no-reload?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge"><img src="https://badges.gitter.im/Host32/no-reload.svg" alt="Gitter"></a></p>
-<p><a href="https://waffle.io/Host32/no-reload"><img src="https://badge.waffle.io/Host32/no-reload.png?label=ready&amp;title=Ready" alt="Stories in Ready"></a>
-<a href="https://waffle.io/Host32/no-reload"><img src="https://badge.waffle.io/Host32/no-reload.png?label=in%20progress&amp;title=Progress" alt="Stories in Progress"></a></p>
-<h3>Getting start</h3><p>Coming soon</p>
-<h3>Documentation</h3><p>Coming soon</p>
-<h3>What to use No-Reload for and when to use it</h3><p>Coming soon</p>
-<h2>Contributing</h2><h3>Building</h3><ul>
-<li>Prepare the enviroment</li>
-</ul>
-<pre class="prettyprint source"><code>npm install gulp -g</code></pre><ul>
-<li>Install the dependencies</li>
-</ul>
-<pre class="prettyprint source"><code>npm install</code></pre><ul>
-<li>Build</li>
-</ul>
-<pre class="prettyprint source"><code>gulp build</code></pre><h3>Running tests</h3><p>To execute all unit tests, use:</p>
-<pre class="prettyprint source"><code>gulp test</code></pre><p>Or just run the test runner located at <code>no-reload/test/index.html</code></p>
-<h3>Generate the documentation</h3><p>Just run:</p>
-<pre class="prettyprint source"><code>gulp doc</code></pre></article>
-    </section>
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+
+<hr>
+<dt>
+    <h4 class="name" id=".resolveModulePath"><span class="type-signature">&lt;static> </span>resolveModulePath(name)</h4>
+
+
+</dt>
+<dd>
+
+
+    <div class="description">
+        <p>Resolve the path when the module is declared based on code conventions.
+By default, the modules are located on <code>app/modules</code></p>
+<p>A module called <code>myPackage.myModule</code> is resolved as
+<code>app/modules/myPackage/myModule.js?version=x.x.x</code>, the version flag is setted in
+accourd of appVersion config.</p>
+    </div>
+
+
+
+
+
+
+
+
+        <h5>Parameters:</h5>
+
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>name</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+
+            </td>
+
+
+
+
+
+            <td class="description last"><p>Module name</p></td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Returns:</h5>
+
+
+<div class="param-desc">
+    <p>The destination path to script that declare the module.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">string</span>
+
+
+
+    </dd>
+</dl>
+
+
+
+
+
+</dd>
+
+        </dl>
+
+
+
+
+
+</article>
+
+</section>
 
 
 

@@ -75,7 +75,7 @@
 
                     putOnQueue(name, resolve);
 
-                    $scriptLoader.load($pathResolver.modulePath(name));
+                    $scriptLoader.load($pathResolver.resolveModulePath(name));
                 } else {
                     if (modules[name].obj !== undefined) {
                         resolve(modules[name].obj);
