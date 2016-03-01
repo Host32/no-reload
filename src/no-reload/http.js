@@ -2,8 +2,10 @@
 (function () {
     'use strict';
 
-    var Promise = require('promise'),
-        Ajax = require('simple-ajax');
+    var Promise = require('./promise'),
+        Ajax = require('simple-ajax'),
+        $moduleProvider = require('./module-provider'),
+        $http;
 
     function request(params) {
         return new Promise(function (resolve, reject) {
@@ -24,7 +26,7 @@
      * @module $http
      * @memberof NR
      */
-    module.exports = {
+    $http = module.exports = {
 
         /**
          * <p>Available options to create a request</p>
@@ -130,4 +132,10 @@
             return request(params);
         }
     };
+
+
+    // Define this module on Dependecy Injector
+    $moduleProvider.define('$http', function () {
+        return $http;
+    });
 }());

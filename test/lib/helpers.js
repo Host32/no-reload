@@ -3,13 +3,17 @@
 
     NRT.module("Helpers");
 
-    NRT.test("toInt", function (assert) {
+    NRT.test("toInt", function () {
+        var assert = this;
+
         assert.strictEqual(NR.toInt("10"), 10, "a lonely number has be converted");
         assert.strictEqual(NR.toInt("10s"), 10, "a confused number has be converted");
         assert.ok(isNaN(NR.toInt("s")), "a non-number cannot be converted");
     });
 
-    NRT.test("toFloat", function (assert) {
+    NRT.test("toFloat", function () {
+        var assert = this;
+
         assert.strictEqual(NR.toFloat("10"), 10, "a lonely number has be converted");
         assert.strictEqual(NR.toFloat("10s"), 10, "a confused number has be converted");
         assert.strictEqual(NR.toFloat("10.5"), 10.5, "a decimal lonely number has be converted");
@@ -17,7 +21,9 @@
         assert.ok(isNaN(NR.toFloat("s")), "a non-number cannot be converted");
     });
 
-    NRT.test("isString", function (assert) {
+    NRT.test("isString", function () {
+        var assert = this;
+
         assert.ok(NR.isString("s"), "'s' is a String");
         assert.notOk(NR.isString(10), "10 is not a String");
         assert.notOk(NR.isString(10.5), "10.5 is not a String");
@@ -29,7 +35,9 @@
         assert.notOk(NR.isString([]), "array is not a String");
     });
 
-    NRT.test("isNumber", function (assert) {
+    NRT.test("isNumber", function () {
+        var assert = this;
+
         assert.notOk(NR.isNumber("s"), "'s' is not a number");
         assert.ok(NR.isNumber(10), "10 is a number");
         assert.ok(NR.isNumber(10.5), "10.5 is a number");
@@ -41,7 +49,9 @@
         assert.notOk(NR.isNumber([]), "array is not a number");
     });
 
-    NRT.test("isDefined", function (assert) {
+    NRT.test("isDefined", function () {
+        var assert = this;
+
         assert.ok(NR.isDefined("s"), "'s' is defined");
         assert.ok(NR.isDefined(10), "10 is defined");
         assert.ok(NR.isDefined(10.5), "10.5 is defined");
@@ -53,7 +63,9 @@
         assert.ok(NR.isDefined([]), "array is defined");
     });
 
-    NRT.test("isUndefined", function (assert) {
+    NRT.test("isUndefined", function () {
+        var assert = this;
+
         assert.notOk(NR.isUndefined("s"), "'s' is not undefined");
         assert.notOk(NR.isUndefined(10), "10 is not undefined");
         assert.notOk(NR.isUndefined(10.5), "10.5 is not undefined");
@@ -65,7 +77,9 @@
         assert.notOk(NR.isUndefined([]), "array is not undefined");
     });
 
-    NRT.test("isObject", function (assert) {
+    NRT.test("isObject", function () {
+        var assert = this;
+
         assert.notOk(NR.isObject("s"), "'s' is not an object");
         assert.notOk(NR.isObject(10), "10 is not an object");
         assert.notOk(NR.isObject(10.5), "10.5 is not an object");
@@ -77,7 +91,9 @@
         assert.ok(NR.isObject([]), "array is an object");
     });
 
-    NRT.test("isNull", function (assert) {
+    NRT.test("isNull", function () {
+        var assert = this;
+
         assert.notOk(NR.isNull("s"), "'s' is not null");
         assert.notOk(NR.isNull(10), "10 is not null");
         assert.notOk(NR.isNull(10.5), "10.5 is not null");
@@ -89,7 +105,9 @@
         assert.notOk(NR.isNull([]), "array is not null");
     });
 
-    NRT.test("isNotNull", function (assert) {
+    NRT.test("isNotNull", function () {
+        var assert = this;
+
         assert.ok(NR.isNotNull("s"), "'s' is not null");
         assert.ok(NR.isNotNull(10), "10 is not null");
         assert.ok(NR.isNotNull(10.5), "10.5 is not null");
@@ -101,7 +119,9 @@
         assert.ok(NR.isNotNull([]), "array is not null");
     });
 
-    NRT.test("isFunction", function (assert) {
+    NRT.test("isFunction", function () {
+        var assert = this;
+
         assert.notOk(NR.isFunction("s"), "'s' is not a function");
         assert.notOk(NR.isFunction(10), "10 is not a function");
         assert.notOk(NR.isFunction(10.5), "10.5 is not a function");
@@ -113,7 +133,9 @@
         assert.notOk(NR.isFunction([]), "array is not a function");
     });
 
-    NRT.test("isBoolean", function (assert) {
+    NRT.test("isBoolean", function () {
+        var assert = this;
+
         assert.notOk(NR.isBoolean("s"), "'s' is not a boolean");
         assert.notOk(NR.isBoolean(10), "10 is not a boolean");
         assert.notOk(NR.isBoolean(10.5), "10.5 is not a boolean");
@@ -125,7 +147,9 @@
         assert.notOk(NR.isBoolean([]), "array is not a boolean");
     });
 
-    NRT.test("isArray", function (assert) {
+    NRT.test("isArray", function () {
+        var assert = this;
+
         assert.notOk(NR.isArray("s"), "'s' is not an array");
         assert.notOk(NR.isArray(10), "10 is not an array");
         assert.notOk(NR.isArray(10.5), "10.5 is not an array");
@@ -138,8 +162,9 @@
     });
 
 
-    NRT.test("clone", function (assert) {
-        var number = 10,
+    NRT.test("clone", function () {
+        var assert = this,
+            number = 10,
             string = "str",
             float = 10.5,
             array = [10, 20, 5],
@@ -165,8 +190,11 @@
         assert.notEqual(objectClone, object, "array was cloned correctly");
     });
 
-    NRT.test('keys', function (assert) {
-        var a, trouble, troubleKeys;
+    NRT.test('keys', function () {
+        var assert = this,
+            a,
+            trouble,
+            troubleKeys;
 
         assert.deepEqual(NR.keys({
             one: 1,
@@ -201,8 +229,12 @@
         assert.deepEqual(NR.keys(trouble).sort(), troubleKeys, 'matches non-enumerable properties');
     });
 
-    NRT.test('allKeys', function (assert) {
-        var a, trouble, troubleKeys, b;
+    NRT.test('allKeys', function () {
+        var assert = this,
+            a,
+            trouble,
+            troubleKeys,
+            b;
 
         assert.deepEqual(NR.allKeys({
             one: 1,
@@ -245,8 +277,11 @@
         assert.deepEqual(NR.allKeys(y), ['x'], 'should get keys from constructor');
     });
 
-    NRT.test('extend', function (assert) {
-        var result, F, subObj;
+    NRT.test('extend', function () {
+        var assert = this,
+            result,
+            F,
+            subObj;
 
         assert.equal(NR.extend({}, {
             a: 'b'

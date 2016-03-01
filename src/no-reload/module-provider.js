@@ -7,7 +7,9 @@
 
         queues = {},
 
-        load = null;
+        load = null,
+
+        $moduleProvider;
 
     function forEach(arr, func) {
         var length = arr ? arr.length : 0,
@@ -161,7 +163,7 @@
      * @module $moduleProvider
      * @memberof NR
      */
-    module.exports = {
+    $moduleProvider = module.exports = {
 
         /**
          * <p></p>
@@ -232,6 +234,24 @@
                 return modules[name].obj;
             }
             return null;
+        },
+
+        /**
+         * <p>Removes a module previously registered.</p>
+         *
+         * @param {string} name The module name
+         */
+        remove: function (name) {
+            if (!modules[name]) {
+                return;
+            }
+
+            delete modules[name];
         }
     };
+
+    // Define this module on Dependecy Injector
+    $moduleProvider.define('$moduleProvider', [function () {
+        return $moduleProvider;
+    }]);
 }());

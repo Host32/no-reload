@@ -48,10 +48,26 @@
 	(function () {
 	    'use strict';
 
-	    var helpers = __webpack_require__(1),
+	    __webpack_require__(1);
+	    __webpack_require__(5);
+
+	    var helpers = __webpack_require__(9),
+	        $moduleProvider = __webpack_require__(4),
 	        NR = helpers.clone(helpers);
 
 	    NR.Promise = __webpack_require__(2);
+
+	    NR.run = function () {
+	        return $moduleProvider.invoke.apply(null, arguments);
+	    };
+
+	    NR.defModule = function () {
+	        $moduleProvider.define.apply(null, arguments);
+	    };
+
+	    NR.undefModule = function (name) {
+	        $moduleProvider.remove(name);
+	    };
 
 	    /**
 	     * @classdesc <p>No-Reload main namespace</p>
@@ -65,298 +81,61 @@
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	/*global module*/
+	/*global module, require*/
 	(function () {
 	    'use strict';
 
-	    /**
-	     * <p>Convets a string to integer</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {string} str Value to be converted
-	     * @returns {Number}
-	     */
-	    function toInt(str) {
-	        return parseInt(str, 10);
-	    }
+	    var Promise = __webpack_require__(2),
+	        $promises,
+	        $moduleProvider = __webpack_require__(4);
 
 	    /**
-	     * <p>Convets a string to float</p>
+	     * <p>Injectable wrapper for Promise class</p>
 	     *
-	     * @function
+	     * @module $promises
 	     * @memberof NR
-	     * @param {string} str Value to be converted
-	     * @returns {Number}
 	     */
-	    function toFloat(str) {
-	        return parseFloat(str);
-	    }
+	    $promises = module.exports = {
 
-	    /**
-	     * <p>Checks if the value is a string</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     */
-	    function isString(value) {
-	        return typeof value === 'string';
-	    }
+	        /**
+	         * <p>Create a new Promise</p>
+	         *
+	         * @param {function} func Function that will execute something asynchronously and be
+	         *                        responsible for resolving or rejecting promise
+	         * @returns {NR.Promise}
+	         * @see {@link http://docs.ractivejs.org/latest/promises|Ractive Promises}
+	         */
+	        create: function (callback) {
+	            return new Promise(callback);
+	        },
 
-	    /**
-	     * <p>Checks if the value is a number</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     */
-	    function isNumber(value) {
-	        return typeof value === 'number';
-	    }
-
-	    /**
-	     * <p>Checks if the value is defined</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     */
-	    function isDefined(value) {
-	        return typeof value !== 'undefined';
-	    }
-
-	    /**
-	     * <p>Checks if the value is undefined</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     */
-	    function isUndefined(value) {
-	        return typeof value === 'undefined';
-	    }
-
-	    /**
-	     * <p>Checks if the value is an object</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     */
-	    function isObject(value) {
-	        return value !== null && typeof value === 'object';
-	    }
-
-	    /**
-	     * <p>Checks if the value is null</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     */
-	    function isNull(value) {
-	        return value === null;
-	    }
-
-	    /**
-	     * <p>Checks if the value is not null</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     */
-	    function isNotNull(value) {
-	        return value !== null;
-	    }
-
-	    /**
-	     * <p>Checks if the value is a function</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     * @returns {Boolean}
-	     */
-	    function isFunction(value) {
-	        return typeof value === 'function';
-	    }
-
-	    /**
-	     * <p>Checks if the value is a boolean</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     */
-	    function isBoolean(value) {
-	        return typeof value === 'boolean';
-	    }
-
-	    /**
-	     * <p>Checks if the value is an array</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {*} value Value to be checked
-	     * @returns {Boolean}
-	     */
-	    function isArray(value) {
-	        return Array.isArray(value);
-	    }
-
-	    /**
-	     * <p>Retrieve all the names of the object's own enumerable properties.</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {Object} obj Object to be retrieved the keys
-	     * @returns {string[]} obj keys
-	     */
-	    function keys(obj) {
-	        if (!isObject(obj)) {
-	            return [];
+	        /**
+	         * <p>Returns a Promise that will be resolved when all of the promises passed as paramethers
+	         * has be resolved</p>
+	         * <pre>
+	         * $promises.all([
+	         *   ajax.get( 'list.json' ),       // loads our app data
+	         *   new Promise(someFunc)          // another async process
+	         * ]).then( function ( results ) {
+	         *   var ajaxData = results[0];
+	         *   //...
+	         * });
+	         * </pre>
+	         *
+	         * @param   {Array|Object} promises Async tasks
+	         * @returns {Promise}
+	         */
+	        all: function (promises) {
+	            return Promise.all(promises);
 	        }
-	        if (Object.keys) {
-	            return Object.keys(obj);
-	        }
-	        var objKeys = [],
-	            key;
-	        for (key in obj) {
-	            /*jslint forin: true*/
-	            if (Object.hasOwnProperty.call(obj, key)) {
-	                objKeys.push(key);
-	            }
-	        }
-	        return objKeys;
-	    }
-
-	    /**
-	     * <p>Retrieve all the names of object's own and inherited properties.</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {Object} obj Object to be retrieved the keys
-	     * @returns {string[]} obj keys
-	     */
-	    function allKeys(obj) {
-	        if (!isObject(obj) && !isFunction(obj)) {
-	            return [];
-	        }
-	        var keys = [],
-	            key;
-	        /*jslint forin: true*/
-	        for (key in obj) {
-	            keys.push(key);
-	        }
-	        return keys;
-	    }
-
-	    /**
-	     * <p>Copy all of the properties in the parents objects over to the child object,
-	     * and return the child object. It's in-order, so the last parents will override
-	     * properties of the same name in previous arguments.</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {Object} child Child object
-	     * @param {...Object} parents Parents objects
-	     * @returns {Object}
-	     */
-	    function extend(obj) {
-	        var length = arguments.length,
-	            index,
-	            source,
-	            i,
-	            key,
-	            keys;
-
-	        if (length < 2 || obj === null || isUndefined(obj)) {
-	            return obj;
-	        }
-	        for (index = 1; index < length; index += 1) {
-	            source = arguments[index];
-	            keys = allKeys(source);
-	            for (i = 0; i < keys.length; i += 1) {
-	                key = keys[i];
-	                obj[key] = source[key];
-	            }
-	        }
-	        return obj;
-	    }
-
-	    /**
-	     * <p>Makes a clone of an object</p>
-	     *
-	     * @function
-	     * @memberof NR
-	     * @param {Object} obj Object to be cloned
-	     * @returns {Object}
-	     */
-	    function clone(obj) {
-	        var copy, attr, len, i;
-
-	        // Handle the 3 simple types, and null or undefined
-	        if (!isObject(obj)) {
-	            return obj;
-	        }
-
-	        // Handle Date
-	        if (obj instanceof Date) {
-	            copy = new Date();
-	            copy.setTime(obj.getTime());
-	            return copy;
-	        }
-
-	        // Handle Array
-	        if (isArray(obj)) {
-	            copy = [];
-	            for (i = 0, len = obj.length; i < len; i += 1) {
-	                copy[i] = clone(obj[i]);
-	            }
-	            return copy;
-	        }
-
-	        // Handle Object
-	        copy = {};
-	        for (attr in obj) {
-	            if (obj.hasOwnProperty(attr)) {
-	                copy[attr] = clone(obj[attr]);
-	            }
-	        }
-	        return copy;
-	    }
-
-
-	    module.exports = {
-	        toInt: toInt,
-	        toFloat: toFloat,
-	        isString: isString,
-	        isNumber: isNumber,
-	        isDefined: isDefined,
-	        isUndefined: isUndefined,
-	        isObject: isObject,
-	        isNull: isNull,
-	        isNotNull: isNotNull,
-	        isFunction: isFunction,
-	        isBoolean: isBoolean,
-	        isArray: isArray,
-	        keys: keys,
-	        allKeys: allKeys,
-	        extend: extend,
-	        clone: clone
 	    };
+
+	    // Define this module on Dependecy Injector
+	    $moduleProvider.define('$promises', function () {
+	        return $promises;
+	    });
 
 	}());
 
@@ -17029,6 +16808,1234 @@
 
 	}));
 	//# sourceMappingURL=ractive.js.map
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*global module, require*/
+	(function () {
+	    'use strict';
+	    var Promise = __webpack_require__(2),
+
+	        modules = {},
+
+	        queues = {},
+
+	        load = null,
+
+	        $moduleProvider;
+
+	    function forEach(arr, func) {
+	        var length = arr ? arr.length : 0,
+	            i;
+	        for (i = 0; i < length; i += 1) {
+	            func(arr[i], i);
+	        }
+	    }
+
+	    /**
+	     * Execute a asynchronous task
+	     *
+	     * @param {string} func
+	     */
+	    function task(func) {
+	        setTimeout(func, 0);
+	    }
+
+	    /**
+	     * Put a resolve callback on queue list
+	     *
+	     * @param {string} name Dependency name
+	     * @param {function} func Callback
+	     */
+	    function putOnQueue(name, func) {
+	        if (!queues[name]) {
+	            queues[name] = [];
+	        }
+	        queues[name].push(func);
+	    }
+
+	    /**
+	     * Execute all resolve functions in queue list for this dependency
+	     *
+	     * @param {string} name Dependency name
+	     */
+	    function runQueue(name) {
+	        forEach(queues[name], function (func) {
+	            func(modules[name].obj);
+	        });
+	        delete queues[name];
+	    }
+
+	    /**
+	     * Assynchronous dependency loading
+	     *
+	     * @param {string} name Dependency name
+	     * @returns {Promise} A promise that will be resolved when the dependency has been declared
+	     */
+	    function loadDependency(name) {
+	        return new Promise(function (resolve) {
+	            task(function () {
+	                if (!modules[name]) {
+	                    if (!load) {
+	                        throw "Module Loader has not defined";
+	                    }
+
+	                    modules[name] = {};
+
+	                    putOnQueue(name, resolve);
+
+	                    load(name, function (obj) {
+	                        if (obj) {
+	                            modules[name] = {
+	                                obj: obj
+	                            };
+	                            resolve(modules[name].obj);
+	                        }
+	                    });
+	                } else {
+	                    if (modules[name].obj !== undefined) {
+	                        resolve(modules[name].obj);
+	                    } else {
+	                        putOnQueue(name, resolve);
+	                    }
+	                }
+	            });
+	        });
+	    }
+
+	    /**
+	     * Extract arguments names of a function
+	     *
+	     * @param   {function} func
+	     * @returns {string[]} Arguments list
+	     */
+	    function getFuncArgs(func) {
+	        var args = /^function\s*[\w\d$_]*\(([\w\d,_$\s]*)\)/.exec(func.toString())[1];
+	        return args === '' ? [] : args.replace(/\s+/gm, '').split(",");
+	    }
+
+	    /**
+	     * Execute the dependency injection for a function
+	     *
+	     * @param   {function} func Function with dependencies
+	     * @param   {Array} deps The explicit dependencies
+	     * @param   {Object} [scope=null] The scope when the function is be called
+	     * @returns {Promise} A Promisse that will be resolved when all the dependencies has be resolved
+	     *                    and the function returns will be passed to the resolve function
+	     */
+	    function invoke(func, deps, scope) {
+	        return new Promise(function (resolve) {
+	            task(function () {
+	                var promises = deps.map(function (dep) {
+	                    return loadDependency(dep);
+	                });
+
+	                Promise.all(promises).then(function (loadedDependencies) {
+	                    resolve(func.apply(scope || null, loadedDependencies));
+	                });
+	            });
+	        });
+	    }
+
+	    /**
+	     * Use the function arguments to extract the module options
+	     *
+	     * @param   {Array} args Can be [name, function, scope] or [name, [dep1, dep2, ..., function], scope]
+	     *                       when the name and scope are optional
+	     * @returns {Module}
+	     */
+	    function createModule(args) {
+	        var info,
+	            obj = {},
+	            copy;
+
+	        if (typeof args[0] === 'string') {
+	            obj.name = args[0];
+	            info = args[1];
+	            obj.scope = args[2] || null;
+	        } else {
+	            info = args[0];
+	            obj.scope = args[1] || null;
+	        }
+
+	        if (typeof info === 'function') {
+	            obj.deps = getFuncArgs(info);
+	            obj.func = info;
+	        } else {
+	            copy = info.slice(0);
+	            obj.func = copy.pop();
+	            obj.deps = copy;
+	        }
+
+	        return obj;
+	    }
+
+	    /**
+	     * <p></p>
+	     *
+	     * @module $moduleProvider
+	     * @memberof NR
+	     */
+	    $moduleProvider = module.exports = {
+
+	        /**
+	         * <p></p>
+	         *
+	         * @typedef {Object} Module
+	         * @property {String} name Module name
+	         * @property {Object} scope Module scope
+	         * @property {String[]} deps Module dependencies
+	         * @property {function} func Module declaration function
+	         * @property {Object} obj Declared Module
+	         */
+
+	        /**
+	         * <p>Declare a module executing the dependency injection for it and saving
+	         * the module return in ModuleProvider as a new dependency that can be injected</p>
+	         *
+	         * @param {String} name Module name
+	         * @param {function|Array} info Module declaration, can be a function when the
+	         *                              deps is the arguments names or a array when the firsts
+	         *                              arguments are the deps and the last argument is the function
+	         * @param {Object} [scope] Module scope
+	         */
+	        define: function () {
+	            var moduleObj = createModule(arguments),
+	                target;
+
+	            if (moduleObj.name) {
+	                //We are checking whether module is requested or loaded.
+	                //if target object is available + dependencies, it means that we have duplicates
+	                //if we have only target but not dependencies, it means that module was requested by get call and module
+	                //has been downloaded and now the real module is registering it self.
+	                target = modules[moduleObj.name];
+	                if (target && target.deps) {
+	                    return;
+	                }
+	                modules[moduleObj.name] = moduleObj;
+	            }
+
+	            invoke(moduleObj.func, moduleObj.deps, moduleObj.scope).then(function (obj) {
+	                modules[moduleObj.name].obj = obj;
+	                runQueue(moduleObj.name);
+	            });
+	        },
+
+	        /**
+	         * <p>Execute the dependency injection for a function</p>
+	         *
+	         * @param {function|Array} info Function that will be invoked, can be a function when the
+	         *                              deps is the arguments names or a array when the firsts
+	         *                              arguments are the deps and the last argument is the function
+	         * @param {Object} [scope] Scope where the function will be invoked
+	         * @returns {Promise} A Promisse that will be resolved when all the dependencies has be resolved
+	         *                    and the function returns will be passed to the resolve function
+	         */
+	        invoke: function () {
+	            var moduleObj = createModule(arguments);
+	            return invoke(moduleObj.func, moduleObj.deps, moduleObj.scope);
+	        },
+
+	        /**
+	         * <p>Return a declared module by their name</p>
+	         *
+	         * @param {string} name Name of the module
+	         * @returns {Object}
+	         */
+	        getModule: function (name) {
+	            if (modules[name]) {
+	                return modules[name].obj;
+	            }
+	            return null;
+	        },
+
+	        /**
+	         * <p>Removes a module previously registered.</p>
+	         *
+	         * @param {string} name The module name
+	         */
+	        remove: function (name) {
+	            if (!modules[name]) {
+	                return;
+	            }
+
+	            delete modules[name];
+	        }
+	    };
+
+	    // Define this module on Dependecy Injector
+	    $moduleProvider.define('$moduleProvider', [function () {
+	        return $moduleProvider;
+	    }]);
+	}());
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*global module, require*/
+	(function () {
+	    'use strict';
+
+	    var Promise = __webpack_require__(2),
+	        Ajax = __webpack_require__(6),
+	        $moduleProvider = __webpack_require__(4),
+	        $http;
+
+	    function request(params) {
+	        return new Promise(function (resolve, reject) {
+	            var ajax = new Ajax(params);
+	            ajax.on('success', function (event) {
+	                resolve(event);
+	            });
+	            ajax.on('error', function (event) {
+	                reject(event);
+	            });
+	            ajax.send();
+	        });
+	    }
+
+	    /**
+	     * <p>Generate HTTP requests.</p>
+	     *
+	     * @module $http
+	     * @memberof NR
+	     */
+	    $http = module.exports = {
+
+	        /**
+	         * <p>Available options to create a request</p>
+	         *
+	         * @typedef {Object} HTTPParams
+	         * @property {String} url Url to request
+	         * @property {String} [method=get] Method to request with
+	         * @property {Boolean} [cors=false] Is CORS request (only needed for IE)
+	         * @property {Boolean} [cache=true] Set to false to explicitly break cache
+	         * @property {*} [data] Data to be sent with request
+	         * @property {String} [dataType=json] Type of expected response
+	         * @property {String} [contentType=application/json; charset=utf-8] If JSON will try to parse response data
+	         * @property {String} [requestedWith=XMLHttpRequest] Defaults to XMLHttpRequest
+	         * @property {String} [auth] Used to set the Authorization header
+	         * @property {String} [headers] Custom headers object
+	         */
+
+	        /**
+	         * <p>Takes a single argument — a configuration object — that is used to generate an
+	         * HTTP request and returns a promise.</p>
+	         *
+	         * @param {HTTPParams} params Request settings
+	         * @returns {NR.Promise}
+	         */
+	        request: request,
+
+	        /**
+	         * <p>Shortcut method to perform GET request.</p>
+	         *
+	         * @param {string} url Relative or absolute URL specifying the destination of the request
+	         * @param {HTTPParams} [config] Optional configuration object
+	         * @returns {NR.Promise}
+	         */
+	        get: function (url, params) {
+	            params = params || {};
+	            params.url = url;
+	            params.method = 'get';
+
+	            return request(params);
+	        },
+
+	        /**
+	         * <p>Shortcut method to perform POST request.</p>
+	         *
+	         * @param {string} url Relative or absolute URL specifying the destination of the request
+	         * @param {*} data Request content
+	         * @param {HTTPParams} [config] Optional configuration object
+	         * @returns {NR.Promise}
+	         */
+	        post: function (url, data, params) {
+	            params = params || {};
+	            params.url = url;
+	            params.method = 'post';
+	            params.data = data;
+
+	            return request(params);
+	        },
+
+	        /**
+	         * <p>Shortcut method to perform PUT request.</p>
+	         *
+	         * @param {string} url Relative or absolute URL specifying the destination of the request
+	         * @param {*} data Request content
+	         * @param {HTTPParams} [config] Optional configuration object
+	         * @returns {NR.Promise}
+	         */
+	        put: function (url, data, params) {
+	            params = params || {};
+	            params.url = url;
+	            params.method = 'put';
+	            params.data = data;
+
+	            return request(params);
+	        },
+
+	        /**
+	         * <p>Shortcut method to perform HEAD request.</p>
+	         *
+	         * @param {string} url Relative or absolute URL specifying the destination of the request
+	         * @param {HTTPParams=} config Optional configuration object
+	         * @returns {NR.Promise}
+	         */
+	        head: function (url, params) {
+	            params = params || {};
+	            params.url = url;
+	            params.method = 'head';
+
+	            return request(params);
+	        },
+
+	        /**
+	         * <p>Shortcut method to perform DELETE request.</p>
+	         *
+	         * @param {string} url Relative or absolute URL specifying the destination of the request
+	         * @param {HTTPParams} [config] Optional configuration object
+	         * @returns {NR.Promise}
+	         */
+	        'delete': function (url, params) {
+	            params = params || {};
+	            params.url = url;
+	            params.method = 'delete';
+
+	            return request(params);
+	        }
+	    };
+
+
+	    // Define this module on Dependecy Injector
+	    $moduleProvider.define('$http', function () {
+	        return $http;
+	    });
+	}());
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var EventEmitter = __webpack_require__(7).EventEmitter,
+	    queryString = __webpack_require__(8);
+
+	function tryParseJson(data){
+	    try{
+	        return JSON.parse(data);
+	    }catch(error){
+	        return error;
+	    }
+	}
+
+	function timeout(){
+	   this.request.abort();
+	   this.emit('timeout');
+	}
+
+	function Ajax(settings){
+	    var queryStringData,
+	        ajax = this;
+
+	    if(typeof settings === 'string'){
+	        settings = {
+	            url: settings
+	        };
+	    }
+
+	    if(typeof settings !== 'object'){
+	        settings = {};
+	    }
+
+	    ajax.settings = settings;
+	    ajax.request = new window.XMLHttpRequest();
+	    ajax.settings.method = ajax.settings.method || 'get';
+
+	    if(ajax.settings.cors){
+	        if ('withCredentials' in ajax.request) {
+	            ajax.request.withCredentials = !!settings.withCredentials;
+	        } else if (typeof XDomainRequest !== 'undefined') {
+	            // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+	            ajax.request = new window.XDomainRequest();
+	        } else {
+	            // Otherwise, CORS is not supported by the browser.
+	            ajax.emit('error', new Error('Cors is not supported by this browser'));
+	        }
+	    }
+
+	    if(ajax.settings.cache === false){
+	        ajax.settings.data = ajax.settings.data || {};
+	        ajax.settings.data._ = new Date().getTime();
+	    }
+
+	    if(ajax.settings.method.toLowerCase() === 'get' && typeof ajax.settings.data === 'object'){
+	        var urlParts = ajax.settings.url.split('?');
+
+	        queryStringData = queryString.parse(urlParts[1]);
+
+	        for(var key in ajax.settings.data){
+	            queryStringData[key] = ajax.settings.data[key];
+	        }
+
+	        ajax.settings.url = urlParts[0] + '?' + queryString.stringify(queryStringData);
+	        ajax.settings.data = null;
+	    }
+
+	    ajax.request.addEventListener('progress', function(event){
+	        ajax.emit('progress', event);
+	    }, false);
+
+	    ajax.request.addEventListener('load', function(event){
+	        var data = event.target.responseText;
+
+	        if(ajax.settings.dataType && ajax.settings.dataType.toLowerCase() === 'json'){
+	            if(data === ''){
+	                data = undefined;
+	            }else{
+	                data = tryParseJson(data);
+	                if(data instanceof Error){
+	                    ajax.emit('error', event, data);
+	                    return;
+	                }
+	            }
+	        }
+
+	        if(event.target.status >= 400){
+	            ajax.emit('error', event, data);
+	        } else {
+	            ajax.emit('success', event, data);
+	        }
+
+	    }, false);
+
+	    ajax.request.addEventListener('error', function(event){
+	        ajax.emit('error', event);
+	    }, false);
+
+	    ajax.request.addEventListener('abort', function(event){
+	        ajax.emit('error', event, new Error('Connection Aborted'));
+	        ajax.emit('abort', event);
+	    }, false);
+
+	    ajax.request.addEventListener('loadend', function(event){
+	        clearTimeout(this._requestTimeout);
+	        ajax.emit('complete', event);
+	    }, false);
+
+	    ajax.request.open(ajax.settings.method || 'get', ajax.settings.url, true);
+
+	    // Set default headers
+	    if(ajax.settings.contentType !== false){
+	        ajax.request.setRequestHeader('Content-Type', ajax.settings.contentType || 'application/json; charset=utf-8');
+	    }
+	    if(ajax.settings.requestedWith !== false) {
+	        ajax.request.setRequestHeader('X-Requested-With', ajax.settings.requestedWith || 'XMLHttpRequest');
+	    }
+	    if(ajax.settings.auth){
+	        ajax.request.setRequestHeader('Authorization', ajax.settings.auth);
+	    }
+
+	    // Set custom headers
+	    for(var headerKey in ajax.settings.headers){
+	        ajax.request.setRequestHeader(headerKey, ajax.settings.headers[headerKey]);
+	    }
+
+	    if(ajax.settings.processData !== false && ajax.settings.dataType === 'json'){
+	        ajax.settings.data = JSON.stringify(ajax.settings.data);
+	    }
+	}
+
+	Ajax.prototype = Object.create(EventEmitter.prototype);
+
+	Ajax.prototype.send = function(){
+	    this._requestTimeout = setTimeout(
+	        timeout.bind(this),
+	        this.settings.timeout || 120000
+	    );
+	    this.request.send(this.settings.data && this.settings.data);
+	};
+
+	module.exports = Ajax;
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	// Copyright Joyent, Inc. and other Node contributors.
+	//
+	// Permission is hereby granted, free of charge, to any person obtaining a
+	// copy of this software and associated documentation files (the
+	// "Software"), to deal in the Software without restriction, including
+	// without limitation the rights to use, copy, modify, merge, publish,
+	// distribute, sublicense, and/or sell copies of the Software, and to permit
+	// persons to whom the Software is furnished to do so, subject to the
+	// following conditions:
+	//
+	// The above copyright notice and this permission notice shall be included
+	// in all copies or substantial portions of the Software.
+	//
+	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+	// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+	// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+	// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+	// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+	function EventEmitter() {
+	  this._events = this._events || {};
+	  this._maxListeners = this._maxListeners || undefined;
+	}
+	module.exports = EventEmitter;
+
+	// Backwards-compat with node 0.10.x
+	EventEmitter.EventEmitter = EventEmitter;
+
+	EventEmitter.prototype._events = undefined;
+	EventEmitter.prototype._maxListeners = undefined;
+
+	// By default EventEmitters will print a warning if more than 10 listeners are
+	// added to it. This is a useful default which helps finding memory leaks.
+	EventEmitter.defaultMaxListeners = 10;
+
+	// Obviously not all Emitters should be limited to 10. This function allows
+	// that to be increased. Set to zero for unlimited.
+	EventEmitter.prototype.setMaxListeners = function(n) {
+	  if (!isNumber(n) || n < 0 || isNaN(n))
+	    throw TypeError('n must be a positive number');
+	  this._maxListeners = n;
+	  return this;
+	};
+
+	EventEmitter.prototype.emit = function(type) {
+	  var er, handler, len, args, i, listeners;
+
+	  if (!this._events)
+	    this._events = {};
+
+	  // If there is no 'error' event listener then throw.
+	  if (type === 'error') {
+	    if (!this._events.error ||
+	        (isObject(this._events.error) && !this._events.error.length)) {
+	      er = arguments[1];
+	      if (er instanceof Error) {
+	        throw er; // Unhandled 'error' event
+	      }
+	      throw TypeError('Uncaught, unspecified "error" event.');
+	    }
+	  }
+
+	  handler = this._events[type];
+
+	  if (isUndefined(handler))
+	    return false;
+
+	  if (isFunction(handler)) {
+	    switch (arguments.length) {
+	      // fast cases
+	      case 1:
+	        handler.call(this);
+	        break;
+	      case 2:
+	        handler.call(this, arguments[1]);
+	        break;
+	      case 3:
+	        handler.call(this, arguments[1], arguments[2]);
+	        break;
+	      // slower
+	      default:
+	        args = Array.prototype.slice.call(arguments, 1);
+	        handler.apply(this, args);
+	    }
+	  } else if (isObject(handler)) {
+	    args = Array.prototype.slice.call(arguments, 1);
+	    listeners = handler.slice();
+	    len = listeners.length;
+	    for (i = 0; i < len; i++)
+	      listeners[i].apply(this, args);
+	  }
+
+	  return true;
+	};
+
+	EventEmitter.prototype.addListener = function(type, listener) {
+	  var m;
+
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  if (!this._events)
+	    this._events = {};
+
+	  // To avoid recursion in the case that type === "newListener"! Before
+	  // adding it to the listeners, first emit "newListener".
+	  if (this._events.newListener)
+	    this.emit('newListener', type,
+	              isFunction(listener.listener) ?
+	              listener.listener : listener);
+
+	  if (!this._events[type])
+	    // Optimize the case of one listener. Don't need the extra array object.
+	    this._events[type] = listener;
+	  else if (isObject(this._events[type]))
+	    // If we've already got an array, just append.
+	    this._events[type].push(listener);
+	  else
+	    // Adding the second element, need to change to array.
+	    this._events[type] = [this._events[type], listener];
+
+	  // Check for listener leak
+	  if (isObject(this._events[type]) && !this._events[type].warned) {
+	    if (!isUndefined(this._maxListeners)) {
+	      m = this._maxListeners;
+	    } else {
+	      m = EventEmitter.defaultMaxListeners;
+	    }
+
+	    if (m && m > 0 && this._events[type].length > m) {
+	      this._events[type].warned = true;
+	      console.error('(node) warning: possible EventEmitter memory ' +
+	                    'leak detected. %d listeners added. ' +
+	                    'Use emitter.setMaxListeners() to increase limit.',
+	                    this._events[type].length);
+	      if (typeof console.trace === 'function') {
+	        // not supported in IE 10
+	        console.trace();
+	      }
+	    }
+	  }
+
+	  return this;
+	};
+
+	EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+	EventEmitter.prototype.once = function(type, listener) {
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  var fired = false;
+
+	  function g() {
+	    this.removeListener(type, g);
+
+	    if (!fired) {
+	      fired = true;
+	      listener.apply(this, arguments);
+	    }
+	  }
+
+	  g.listener = listener;
+	  this.on(type, g);
+
+	  return this;
+	};
+
+	// emits a 'removeListener' event iff the listener was removed
+	EventEmitter.prototype.removeListener = function(type, listener) {
+	  var list, position, length, i;
+
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  if (!this._events || !this._events[type])
+	    return this;
+
+	  list = this._events[type];
+	  length = list.length;
+	  position = -1;
+
+	  if (list === listener ||
+	      (isFunction(list.listener) && list.listener === listener)) {
+	    delete this._events[type];
+	    if (this._events.removeListener)
+	      this.emit('removeListener', type, listener);
+
+	  } else if (isObject(list)) {
+	    for (i = length; i-- > 0;) {
+	      if (list[i] === listener ||
+	          (list[i].listener && list[i].listener === listener)) {
+	        position = i;
+	        break;
+	      }
+	    }
+
+	    if (position < 0)
+	      return this;
+
+	    if (list.length === 1) {
+	      list.length = 0;
+	      delete this._events[type];
+	    } else {
+	      list.splice(position, 1);
+	    }
+
+	    if (this._events.removeListener)
+	      this.emit('removeListener', type, listener);
+	  }
+
+	  return this;
+	};
+
+	EventEmitter.prototype.removeAllListeners = function(type) {
+	  var key, listeners;
+
+	  if (!this._events)
+	    return this;
+
+	  // not listening for removeListener, no need to emit
+	  if (!this._events.removeListener) {
+	    if (arguments.length === 0)
+	      this._events = {};
+	    else if (this._events[type])
+	      delete this._events[type];
+	    return this;
+	  }
+
+	  // emit removeListener for all listeners on all events
+	  if (arguments.length === 0) {
+	    for (key in this._events) {
+	      if (key === 'removeListener') continue;
+	      this.removeAllListeners(key);
+	    }
+	    this.removeAllListeners('removeListener');
+	    this._events = {};
+	    return this;
+	  }
+
+	  listeners = this._events[type];
+
+	  if (isFunction(listeners)) {
+	    this.removeListener(type, listeners);
+	  } else if (listeners) {
+	    // LIFO order
+	    while (listeners.length)
+	      this.removeListener(type, listeners[listeners.length - 1]);
+	  }
+	  delete this._events[type];
+
+	  return this;
+	};
+
+	EventEmitter.prototype.listeners = function(type) {
+	  var ret;
+	  if (!this._events || !this._events[type])
+	    ret = [];
+	  else if (isFunction(this._events[type]))
+	    ret = [this._events[type]];
+	  else
+	    ret = this._events[type].slice();
+	  return ret;
+	};
+
+	EventEmitter.prototype.listenerCount = function(type) {
+	  if (this._events) {
+	    var evlistener = this._events[type];
+
+	    if (isFunction(evlistener))
+	      return 1;
+	    else if (evlistener)
+	      return evlistener.length;
+	  }
+	  return 0;
+	};
+
+	EventEmitter.listenerCount = function(emitter, type) {
+	  return emitter.listenerCount(type);
+	};
+
+	function isFunction(arg) {
+	  return typeof arg === 'function';
+	}
+
+	function isNumber(arg) {
+	  return typeof arg === 'number';
+	}
+
+	function isObject(arg) {
+	  return typeof arg === 'object' && arg !== null;
+	}
+
+	function isUndefined(arg) {
+	  return arg === void 0;
+	}
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
+		query-string
+		Parse and stringify URL query strings
+		https://github.com/sindresorhus/query-string
+		by Sindre Sorhus
+		MIT License
+	*/
+	(function () {
+		'use strict';
+		var queryString = {};
+
+		queryString.parse = function (str) {
+			if (typeof str !== 'string') {
+				return {};
+			}
+
+			str = str.trim().replace(/^(\?|#)/, '');
+
+			if (!str) {
+				return {};
+			}
+
+			return str.trim().split('&').reduce(function (ret, param) {
+				var parts = param.replace(/\+/g, ' ').split('=');
+				var key = parts[0];
+				var val = parts[1];
+
+				key = decodeURIComponent(key);
+				// missing `=` should be `null`:
+				// http://w3.org/TR/2012/WD-url-20120524/#collect-url-parameters
+				val = val === undefined ? null : decodeURIComponent(val);
+
+				if (!ret.hasOwnProperty(key)) {
+					ret[key] = val;
+				} else if (Array.isArray(ret[key])) {
+					ret[key].push(val);
+				} else {
+					ret[key] = [ret[key], val];
+				}
+
+				return ret;
+			}, {});
+		};
+
+		queryString.stringify = function (obj) {
+			return obj ? Object.keys(obj).map(function (key) {
+				var val = obj[key];
+
+				if (Array.isArray(val)) {
+					return val.map(function (val2) {
+						return encodeURIComponent(key) + '=' + encodeURIComponent(val2);
+					}).join('&');
+				}
+
+				return encodeURIComponent(key) + '=' + encodeURIComponent(val);
+			}).join('&') : '';
+		};
+
+		if (true) {
+			!(__WEBPACK_AMD_DEFINE_RESULT__ = function() { return queryString; }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else if (typeof module !== 'undefined' && module.exports) {
+			module.exports = queryString;
+		} else {
+			self.queryString = queryString;
+		}
+	})();
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	/*global module*/
+	(function () {
+	    'use strict';
+
+	    /**
+	     * <p>Convets a string to integer</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {string} str Value to be converted
+	     * @returns {Number}
+	     */
+	    function toInt(str) {
+	        return parseInt(str, 10);
+	    }
+
+	    /**
+	     * <p>Convets a string to float</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {string} str Value to be converted
+	     * @returns {Number}
+	     */
+	    function toFloat(str) {
+	        return parseFloat(str);
+	    }
+
+	    /**
+	     * <p>Checks if the value is a string</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     */
+	    function isString(value) {
+	        return typeof value === 'string';
+	    }
+
+	    /**
+	     * <p>Checks if the value is a number</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     */
+	    function isNumber(value) {
+	        return typeof value === 'number';
+	    }
+
+	    /**
+	     * <p>Checks if the value is defined</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     */
+	    function isDefined(value) {
+	        return typeof value !== 'undefined';
+	    }
+
+	    /**
+	     * <p>Checks if the value is undefined</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     */
+	    function isUndefined(value) {
+	        return typeof value === 'undefined';
+	    }
+
+	    /**
+	     * <p>Checks if the value is an object</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     */
+	    function isObject(value) {
+	        return value !== null && typeof value === 'object';
+	    }
+
+	    /**
+	     * <p>Checks if the value is null</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     */
+	    function isNull(value) {
+	        return value === null;
+	    }
+
+	    /**
+	     * <p>Checks if the value is not null</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     */
+	    function isNotNull(value) {
+	        return value !== null;
+	    }
+
+	    /**
+	     * <p>Checks if the value is a function</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     * @returns {Boolean}
+	     */
+	    function isFunction(value) {
+	        return typeof value === 'function';
+	    }
+
+	    /**
+	     * <p>Checks if the value is a boolean</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     */
+	    function isBoolean(value) {
+	        return typeof value === 'boolean';
+	    }
+
+	    /**
+	     * <p>Checks if the value is an array</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {*} value Value to be checked
+	     * @returns {Boolean}
+	     */
+	    function isArray(value) {
+	        return Array.isArray(value);
+	    }
+
+	    /**
+	     * <p>Retrieve all the names of the object's own enumerable properties.</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {Object} obj Object to be retrieved the keys
+	     * @returns {string[]} obj keys
+	     */
+	    function keys(obj) {
+	        if (!isObject(obj)) {
+	            return [];
+	        }
+	        if (Object.keys) {
+	            return Object.keys(obj);
+	        }
+	        var objKeys = [],
+	            key;
+	        for (key in obj) {
+	            /*jslint forin: true*/
+	            if (Object.hasOwnProperty.call(obj, key)) {
+	                objKeys.push(key);
+	            }
+	        }
+	        return objKeys;
+	    }
+
+	    /**
+	     * <p>Retrieve all the names of object's own and inherited properties.</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {Object} obj Object to be retrieved the keys
+	     * @returns {string[]} obj keys
+	     */
+	    function allKeys(obj) {
+	        if (!isObject(obj) && !isFunction(obj)) {
+	            return [];
+	        }
+	        var keys = [],
+	            key;
+	        /*jslint forin: true*/
+	        for (key in obj) {
+	            keys.push(key);
+	        }
+	        return keys;
+	    }
+
+	    /**
+	     * <p>Copy all of the properties in the parents objects over to the child object,
+	     * and return the child object. It's in-order, so the last parents will override
+	     * properties of the same name in previous arguments.</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {Object} child Child object
+	     * @param {...Object} parents Parents objects
+	     * @returns {Object}
+	     */
+	    function extend(obj) {
+	        var length = arguments.length,
+	            index,
+	            source,
+	            i,
+	            key,
+	            keys;
+
+	        if (length < 2 || obj === null || isUndefined(obj)) {
+	            return obj;
+	        }
+	        for (index = 1; index < length; index += 1) {
+	            source = arguments[index];
+	            keys = allKeys(source);
+	            for (i = 0; i < keys.length; i += 1) {
+	                key = keys[i];
+	                obj[key] = source[key];
+	            }
+	        }
+	        return obj;
+	    }
+
+	    /**
+	     * <p>Makes a clone of an object</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @param {Object} obj Object to be cloned
+	     * @returns {Object}
+	     */
+	    function clone(obj) {
+	        var copy, attr, len, i;
+
+	        // Handle the 3 simple types, and null or undefined
+	        if (!isObject(obj)) {
+	            return obj;
+	        }
+
+	        // Handle Date
+	        if (obj instanceof Date) {
+	            copy = new Date();
+	            copy.setTime(obj.getTime());
+	            return copy;
+	        }
+
+	        // Handle Array
+	        if (isArray(obj)) {
+	            copy = [];
+	            for (i = 0, len = obj.length; i < len; i += 1) {
+	                copy[i] = clone(obj[i]);
+	            }
+	            return copy;
+	        }
+
+	        // Handle Object
+	        copy = {};
+	        for (attr in obj) {
+	            if (obj.hasOwnProperty(attr)) {
+	                copy[attr] = clone(obj[attr]);
+	            }
+	        }
+	        return copy;
+	    }
+
+	    module.exports = {
+	        toInt: toInt,
+	        toFloat: toFloat,
+	        isString: isString,
+	        isNumber: isNumber,
+	        isDefined: isDefined,
+	        isUndefined: isUndefined,
+	        isObject: isObject,
+	        isNull: isNull,
+	        isNotNull: isNotNull,
+	        isFunction: isFunction,
+	        isBoolean: isBoolean,
+	        isArray: isArray,
+	        keys: keys,
+	        allKeys: allKeys,
+	        extend: extend,
+	        clone: clone
+	    };
+
+	}());
 
 
 /***/ }

@@ -269,7 +269,6 @@
         return copy;
     }
 
-
     module.exports = {
         toInt: toInt,
         toFloat: toFloat,

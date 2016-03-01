@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: $promises</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Module: $promises</h1>
+
+
+
+
+
+
+<section>
+
+<header>
+
+</header>
+
+<article>
+    <div class="container-overview">
+
+
+            <div class="description"><p>Injectable wrapper for Promise class</p></div>
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="no-reload_promises.js.html">no-reload/promises.js</a>, <a href="no-reload_promises.js.html#line9">line 9</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <h3 class="subsection-title">Methods</h3>
+
+
+
+
+
+
+    <h4 class="name" id=".all"><span class="type-signature">(static) </span>all<span class="signature">(promises)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+
+
+
+
+<div class="description">
+    <p>Returns a Promise that will be resolved when all of the promises passed as paramethershas be resolved</p><pre>$promises.all([  ajax.get( 'list.json' ),       // loads our app data  new Promise(someFunc)          // another async process]).then( function ( results ) {  var ajaxData = results[0];  //...});</pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>promises</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">Array</span>
+|
+
+<span class="param-type">Object</span>
+
+
+
+            </td>
+
+
+
+
+
+            <td class="description last">Async tasks</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="no-reload_promises.js.html">no-reload/promises.js</a>, <a href="no-reload_promises.js.html#line45">line 45</a>
+    </li></ul></dd>
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+    <h4 class="name" id=".create"><span class="type-signature">(static) </span>create<span class="signature">(func)</span><span class="type-signature"> &rarr; {<a href="NR.Promise.html">NR.Promise</a>}</span></h4>
+
+
+
+
+
+<div class="description">
+    <p>Create a new Promise</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+
+
+<table class="params">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>func</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">function</span>
+
+
+
+            </td>
+
+
+
+
+
+            <td class="description last">Function that will execute something asynchronously and be                       responsible for resolving or rejecting promise</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="no-reload_promises.js.html">no-reload/promises.js</a>, <a href="no-reload_promises.js.html#line25">line 25</a>
+    </li></ul></dd>
+
+
+
+
+
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="http://docs.ractivejs.org/latest/promises">Ractive Promises</a></li>
+        </ul>
+    </dd>
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type"><a href="NR.Promise.html">NR.Promise</a></span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="NR.module_$http.html">$http</a></li><li><a href="NR.module_$moduleProvider.html">$moduleProvider</a></li><li><a href="NR.module_$promises.html">$promises</a></li></ul><h3>Classes</h3><ul><li><a href="NR.Promise.html">Promise</a></li></ul><h3>Namespaces</h3><ul><li><a href="NR.html">NR</a></li><li><a href="NRT.html">NRT</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Tue Mar 01 2016 00:03:35 GMT-0300 (Hora oficial do Brasil)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
