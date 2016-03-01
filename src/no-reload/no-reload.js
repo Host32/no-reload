@@ -33,6 +33,23 @@
     };
 
     /**
+     * <p>Define and return the current enviroment</p>
+     *
+     * @function
+     * @memberof NR
+     * @param   {string} [version] App enviroment to set
+     * @returns {string} Current app enviroment
+     */
+    NR.enviroment = function (env) {
+        if (helpers.isDefined(env)) {
+            $confs.set('enviroment', env);
+            return env;
+        } else {
+            return $confs.get('enviroment');
+        }
+    };
+
+    /**
      * <p>Execute the dependency injection for a function</p>
      *
      * @function
