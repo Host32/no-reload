@@ -3,13 +3,19 @@
     'use strict';
     var Promise = require('./promise'),
 
+        $confs = require('./confs'),
+
+        $nameResolver = require('./name-resolver'),
+
+        $scriptLoader = require('./script-loader'),
+
         modules = {},
 
         queues = {},
 
-        load = null,
-
         $moduleProvider;
+
+    $confs.set('lazyLoadDeps', true);
 
     function forEach(arr, func) {
         var length = arr ? arr.length : 0,
@@ -63,22 +69,15 @@
         return new Promise(function (resolve) {
             task(function () {
                 if (!modules[name]) {
-                    if (!load) {
-                        throw "Module Loader has not defined";
+                    if (!$confs.get('lazyLoadDeps')) {
+                        throw "The dependency" + name + " has not defined";
                     }
 
                     modules[name] = {};
 
                     putOnQueue(name, resolve);
 
-                    load(name, function (obj) {
-                        if (obj) {
-                            modules[name] = {
-                                obj: obj
-                            };
-                            resolve(modules[name].obj);
-                        }
-                    });
+                    $scriptLoader.load($nameResolver.modulePath(name));
                 } else {
                     if (modules[name].obj !== undefined) {
                         resolve(modules[name].obj);

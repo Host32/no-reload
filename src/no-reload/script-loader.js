@@ -48,9 +48,7 @@
 
     function loadByScriptDomElement(url) {
         var scriptElement = document.createElement('script');
-
         scriptElement.src = url;
-
         document.getElementsByTagName('head')[0].appendChild(scriptElement);
     }
 
