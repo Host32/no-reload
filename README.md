@@ -1,4 +1,4 @@
-![Logo](http://i.imgur.com/EP1uddQ.png)
+<img alt="Logo" src="http://i.imgur.com/EP1uddQ.png" width="70%">
 
 > ### Framework for single-page web applications focused on the code loading on demand
 
