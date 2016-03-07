@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Module: $scriptLoader</title>
+	<title>Documentation Class: ModuleError</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -77,10 +77,37 @@
 		<div id="main">
 
 
-	<h1 class="page-title">Module: $scriptLoader</h1>
+	<h1 class="page-title">Class: ModuleError</h1>
 <section>
 
 <header>
+
+        <h2>
+            <span class="ancestors"><a href="NR.html">NR</a>.</span>
+
+        ModuleError
+        </h2>
+
+            <div class="class-description"><p><p>Formats the error messages to be displayed properly</p></p>
+<p><p>These are all acceptable forms of instantiation:</p></p>
+<pre>
+var err = new ModuleError('test', {
+ message: 'something broke'
+});
+
+var err = new ModuleError({
+  module: 'test',
+  message: 'something broke'
+});
+
+var err = new ModuleError('test', 'something broke');
+
+var err = new ModuleError('test', 'something broke', {showStack: true});
+
+var existingError = new Error('OMG');
+var err = new ModuleError('test', existingError, {showStack: true});
+</pre></div>
+
 
 </header>
 
@@ -89,73 +116,9 @@
     <div class="container-overview">
 
 
-            <div class="description"><p>Responsible for dynamic load of script files.</p></div>
-
-
-
-<dl class="details">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</dl>
-
-
-
-
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <h3 class="subsection-title">Methods</h3>
-
-        <dl>
-
 <hr>
 <dt>
-    <h4 class="name" id=".load"><span class="type-signature">&lt;static> </span>load(url)</h4>
+    <h4 class="name" id="ModuleError"><span class="type-signature"></span>new ModuleError(module, message, <span class="optional">options</span>)</h4>
 
 
 </dt>
@@ -163,8 +126,13 @@
 
 
     <div class="description">
-        <p>Load a remote script using the thecnique defined in <code>scriptLoadTechnique</code> config.</p>
-<p>The default thecnique is <code>xhr_injection</code></p>
+        <p>By default the stack will not be shown. Set <code>options.showStack</code> to true if you
+think the stack is important for your error.</p>
+<p>If you pass an error in as the message the stack will be pulled from that,
+otherwise one will be created.</p>
+<p>Note that if you pass in a custom stack string you need to include the message along with that.</p>
+<p>Error properties will be included in <code>err.toString()</code>.
+Can be omitted by including <code>{showProperties: false}</code> in the options.</p>
     </div>
 
 
@@ -187,6 +155,8 @@
         <th>Type</th>
 
 
+        <th>Argument</th>
+
 
 
 
@@ -199,13 +169,13 @@
 
         <tr>
 
-                <td class="name"><code>url</code></td>
+                <td class="name"><code>module</code></td>
 
 
             <td class="type">
 
 
-<span class="param-type">string</span>
+<span class="param-type">String</span>
 
 
 
@@ -213,10 +183,87 @@
             </td>
 
 
+                <td class="attributes">
 
 
 
-            <td class="description last"><p>Script url</p></td>
+
+
+                </td>
+
+
+
+
+            <td class="description last"><p>Module name</p></td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>message</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Error</span>
+
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last"><p>Can be a string or an existing error</p></td>
+        </tr>
+
+
+
+        <tr>
+
+                <td class="name"><code>options</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">object</span>
+
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last"><p>showStack and showProperties options</p></td>
         </tr>
 
 
@@ -281,19 +328,6 @@
 </dd>
 
 
-
-<hr>
-<dt>
-    <h4 class="name" id=".loadByScriptDomElement"><span class="type-signature">&lt;static> </span>loadByScriptDomElement(url)</h4>
-
-
-</dt>
-<dd>
-
-
-    <div class="description">
-        <p>Load a script using <code>script_dom_element</code> thecnique</p>
-<p>This thecnique create a <code>script</code> tag and set they <code>src</code> attribute as the url required.</p>
     </div>
 
 
@@ -303,500 +337,11 @@
 
 
 
-        <h5>Parameters:</h5>
 
 
-<table class="params table table-striped">
-    <thead>
-    <tr>
 
-        <th>Name</th>
 
 
-        <th>Type</th>
-
-
-
-
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-
-
-        <tr>
-
-                <td class="name"><code>url</code></td>
-
-
-            <td class="type">
-
-
-<span class="param-type">string</span>
-
-
-
-
-            </td>
-
-
-
-
-
-            <td class="description last"><p>Script url</p></td>
-        </tr>
-
-
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-<hr>
-<dt>
-    <h4 class="name" id=".loadByWriteScriptTag"><span class="type-signature">&lt;static> </span>loadByWriteScriptTag(url)</h4>
-
-
-</dt>
-<dd>
-
-
-    <div class="description">
-        <p>Load a script using <code>write_script_tag</code> thecnique</p>
-<p>This thecnique use <code>document.write()</code> with the script content</p>
-    </div>
-
-
-
-
-
-
-
-
-        <h5>Parameters:</h5>
-
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-
-        <th>Name</th>
-
-
-        <th>Type</th>
-
-
-
-
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-
-
-        <tr>
-
-                <td class="name"><code>url</code></td>
-
-
-            <td class="type">
-
-
-<span class="param-type">string</span>
-
-
-
-
-            </td>
-
-
-
-
-
-            <td class="description last"><p>Script url</p></td>
-        </tr>
-
-
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-<hr>
-<dt>
-    <h4 class="name" id=".loadByXhrEval"><span class="type-signature">&lt;static> </span>loadByXhrEval(url)</h4>
-
-
-</dt>
-<dd>
-
-
-    <div class="description">
-        <p>Load a script using <code>xhr_eval</code> thecnique</p>
-<p>This thecnique oly run an <code>eval</code> call on the script content</p>
-    </div>
-
-
-
-
-
-
-
-
-        <h5>Parameters:</h5>
-
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-
-        <th>Name</th>
-
-
-        <th>Type</th>
-
-
-
-
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-
-
-        <tr>
-
-                <td class="name"><code>url</code></td>
-
-
-            <td class="type">
-
-
-<span class="param-type">string</span>
-
-
-
-
-            </td>
-
-
-
-
-
-            <td class="description last"><p>Script url</p></td>
-        </tr>
-
-
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-<hr>
-<dt>
-    <h4 class="name" id=".loadByXhrInjection"><span class="type-signature">&lt;static> </span>loadByXhrInjection(url)</h4>
-
-
-</dt>
-<dd>
-
-
-    <div class="description">
-        <p>Load a script using <code>xhr_injection</code> thecnique</p>
-<p>This thecnique create a <code>script</code> tag and insert the script content inside it</p>
-    </div>
-
-
-
-
-
-
-
-
-        <h5>Parameters:</h5>
-
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-
-        <th>Name</th>
-
-
-        <th>Type</th>
-
-
-
-
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-
-
-        <tr>
-
-                <td class="name"><code>url</code></td>
-
-
-            <td class="type">
-
-
-<span class="param-type">string</span>
-
-
-
-
-            </td>
-
-
-
-
-
-            <td class="description last"><p>Script url</p></td>
-        </tr>
-
-
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</dd>
-
-        </dl>
 
 
 
