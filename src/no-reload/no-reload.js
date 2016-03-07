@@ -41,6 +41,7 @@
 
 
     NR.Promise = require('./promise');
+    NR.ModuleError = require('./module-error');
 
     /**
      * <p>Define and return the app version</p>
