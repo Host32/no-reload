@@ -45,19 +45,19 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(17);
+	module.exports = __webpack_require__(15);
 
 
 /***/ },
 
-/***/ 17:
+/***/ 15:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*global window, module, require*/
 	(function (NR) {
 	    'use strict';
 
-	    var QUnit = __webpack_require__(18);
+	    var QUnit = __webpack_require__(16);
 
 	    /**
 	     * @classdesc <p>No-Reload test namespace</p>
@@ -132,7 +132,7 @@
 
 /***/ },
 
-/***/ 18:
+/***/ 16:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, module) {/*!
@@ -4340,11 +4340,11 @@
 
 	})();
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19), __webpack_require__(20)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17), __webpack_require__(18)(module)))
 
 /***/ },
 
-/***/ 19:
+/***/ 17:
 /***/ function(module, exports) {
 
 	// shim for using process in browser
@@ -4442,7 +4442,7 @@
 
 /***/ },
 
-/***/ 20:
+/***/ 18:
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
