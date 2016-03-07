@@ -97,36 +97,50 @@
 	    NR.ModuleError = __webpack_require__(13);
 
 	    /**
-	     * <p>Define and return the app version</p>
+	     * <p>Return the current app version</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @returns {string} Current app version
+	     */
+	    NR.getAppVersion = function () {
+	        return $config.get('appVersion');
+	    };
+
+	    /**
+	     * <p>Define the app version</p>
 	     *
 	     * @function
 	     * @memberof NR
 	     * @param   {string} [version] App version to set
-	     * @returns {string} Current app version
 	     */
-	    NR.appVersion = function (version) {
+	    NR.setAppVersion = function (version) {
 	        if (helpers.isDefined(version)) {
 	            $config.set('appVersion', version);
-	            return version;
-	        } else {
-	            return $config.get('appVersion');
 	        }
 	    };
 
 	    /**
-	     * <p>Define and return the current enviroment</p>
+	     * <p>Return the current app enviroment</p>
+	     *
+	     * @function
+	     * @memberof NR
+	     * @returns {string} Current app enviroment
+	     */
+	    NR.getEnviroment = function () {
+	        return $config.get('enviroment');
+	    };
+
+	    /**
+	     * <p>Define the app enviroment</p>
 	     *
 	     * @function
 	     * @memberof NR
 	     * @param   {string} [version] App enviroment to set
-	     * @returns {string} Current app enviroment
 	     */
-	    NR.enviroment = function (env) {
+	    NR.setEnviroment = function (env) {
 	        if (helpers.isDefined(env)) {
 	            $config.set('enviroment', env);
-	            return env;
-	        } else {
-	            return $config.get('enviroment');
 	        }
 	    };
 
