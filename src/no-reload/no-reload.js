@@ -16,7 +16,9 @@
 
         $pathResolver = require('./path-resolver'),
 
-        $scriptLoader = require('./script-loader');
+        $scriptLoader = require('./script-loader'),
+
+        $log = require('./log');
 
 
     // Define the modules on Dependecy Injector
@@ -37,6 +39,9 @@
     });
     $moduleProvider.define('$moduleProvider', function () {
         return $moduleProvider;
+    });
+    $moduleProvider.define('$log', function () {
+        return $log;
     });
 
 

@@ -269,6 +269,16 @@
         return copy;
     }
 
+    /**
+     * <p>Do nothing</p>
+     *
+     * @function
+     * @memberof NR
+     */
+    function noop() {
+
+    }
+
     module.exports = {
         toInt: toInt,
         toFloat: toFloat,
@@ -285,7 +295,8 @@
         keys: keys,
         allKeys: allKeys,
         extend: extend,
-        clone: clone
+        clone: clone,
+        noop: noop
     };
 
 }());
