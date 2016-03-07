@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Namespace: NRT</title>
+	<title>Documentation Module: $log</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -77,24 +77,93 @@
 		<div id="main">
 
 
-	<h1 class="page-title">Namespace: NRT</h1>
+	<h1 class="page-title">Module: $log</h1>
 <section>
 
 <header>
-
-        <h2>
-        NRT
-        </h2>
-
-            <div class="class-description"><p>No-Reload test namespace</p>
-<p>No-Reload uses <a href="http://qunitjs.com/">QUnit</a> as default test suite.</p></div>
-
 
 </header>
 
 
 <article>
     <div class="container-overview">
+
+
+            <div class="description"><p>Simple service for logging. Default implementation safely writes the message
+into the browser's console (if present).</p></div>
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+        <h3 class="subsection-title">Members</h3>
+
+        <dl>
+
+<hr>
+<dt class="name" id=".debug">
+    <h4><span class="type-signature">&lt;static> </span>debug<span class="type-signature"></span></h4>
+
+
+</dt>
+<dd>
+
+    <div class="description">
+        <p>Write a debug message</p>
+    </div>
+
 
 
 
@@ -133,12 +202,65 @@
 
 
 
-	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
-	<dd class="tag-see">
-		<ul>
-			<li><a href="http://qunitjs.com/">QUnit</a></li>
-			</ul>
-	</dd>
+
+
+</dl>
+
+
+
+</dd>
+
+
+
+<hr>
+<dt class="name" id=".error">
+    <h4><span class="type-signature">&lt;static> </span>error<span class="type-signature"></span></h4>
+
+
+</dt>
+<dd>
+
+    <div class="description">
+        <p>Write an error message</p>
+    </div>
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -146,19 +268,189 @@
 
 
 
+</dd>
 
+
+
+<hr>
+<dt class="name" id=".info">
+    <h4><span class="type-signature">&lt;static> </span>info<span class="type-signature"></span></h4>
+
+
+</dt>
+<dd>
+
+    <div class="description">
+        <p><p>Write an information message</P></p>
     </div>
 
 
 
 
 
+<dl class="details">
 
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dl>
+
+
+
+</dd>
+
+
+
+<hr>
+<dt class="name" id=".log">
+    <h4><span class="type-signature">&lt;static> </span>log<span class="type-signature"></span></h4>
+
+
+</dt>
+<dd>
+
+    <div class="description">
+        <p>Write a log message</p>
+    </div>
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dl>
+
+
+
+</dd>
+
+
+
+<hr>
+<dt class="name" id=".warn">
+    <h4><span class="type-signature">&lt;static> </span>warn<span class="type-signature"></span></h4>
+
+
+</dt>
+<dd>
+
+    <div class="description">
+        <p>Write a warning message</p>
+    </div>
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dl>
+
+
+
+</dd>
+
+        </dl>
 
 
 
@@ -168,7 +460,7 @@
 
 <hr>
 <dt>
-    <h4 class="name" id=".module"><span class="type-signature">&lt;static> </span>module(name)</h4>
+    <h4 class="name" id=".debugEnabled"><span class="type-signature">&lt;static> </span>debugEnabled(<span class="optional">flag</span>)</h4>
 
 
 </dt>
@@ -176,7 +468,7 @@
 
 
     <div class="description">
-        <p>Used for agroup test cases</p>
+        <p>Enable and disable debug messages</p>
     </div>
 
 
@@ -199,6 +491,8 @@
         <th>Type</th>
 
 
+        <th>Argument</th>
+
 
 
 
@@ -211,13 +505,13 @@
 
         <tr>
 
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>flag</code></td>
 
 
             <td class="type">
 
 
-<span class="param-type">String</span>
+<span class="param-type">boolean</span>
 
 
 
@@ -225,10 +519,20 @@
             </td>
 
 
+                <td class="attributes">
+
+                    &lt;optional><br>
 
 
 
-            <td class="description last"><p>Module name</p></td>
+
+
+                </td>
+
+
+
+
+            <td class="description last"><p>Enable or disable debug level messages</p></td>
         </tr>
 
 
@@ -288,255 +592,27 @@
 
 
 
+    <h5>Returns:</h5>
 
 
-</dd>
-
-
-
-<hr>
-<dt>
-    <h4 class="name" id=".start"><span class="type-signature">&lt;static> </span>start()</h4>
-
-
-</dt>
-<dd>
-
-
-    <div class="description">
-        <p>Start the tests</p>
-    </div>
+<div class="param-desc">
+    <p>Current value if used as getter or itself (chaining) if used as setter</p>
+</div>
 
 
 
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">*</span>
 
 
 
-
-
-
-
-<dl class="details">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    </dd>
 </dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-<hr>
-<dt>
-    <h4 class="name" id=".test"><span class="type-signature">&lt;static> </span>test(name, info)</h4>
-
-
-</dt>
-<dd>
-
-
-    <div class="description">
-        <p>Allows the usage of dependency injection for test cases</p>
-
-<p><p>The assert object is the function scope</p></p>
-<pre>
- NRT.test("A sample test case", ['dep1', '$http', function(dep1, $http){
-     var assert = this,
-         done = assert.async();
-
-     assert.ok(dep1.getTrue(), 'dep1 need return true');
-
-     $http.get('someUrl').then(function(data){
-         assert.equals(data, 'expected', 'Data need be expected');
-
-         done();
-     });
- }]);
-</pre>
-    </div>
-
-
-
-
-
-
-
-
-        <h5>Parameters:</h5>
-
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-
-        <th>Name</th>
-
-
-        <th>Type</th>
-
-
-
-
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-
-
-        <tr>
-
-                <td class="name"><code>name</code></td>
-
-
-            <td class="type">
-
-
-<span class="param-type">string</span>
-
-
-
-
-            </td>
-
-
-
-
-
-            <td class="description last"><p>Test case name</p></td>
-        </tr>
-
-
-
-        <tr>
-
-                <td class="name"><code>info</code></td>
-
-
-            <td class="type">
-
-
-<span class="param-type">function</span>
-|
-
-<span class="param-type">Array</span>
-
-
-
-
-            </td>
-
-
-
-
-
-            <td class="description last"><p>Function that will be invoked by the dependecy injection system,
-                             can be a function when the deps is the arguments names or a array
-                             when the firsts arguments are the deps and the last argument is the
-                             function</p></td>
-        </tr>
-
-
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</dl>
-
-
-
-
-
-
-
-
-
-
 
 
 
