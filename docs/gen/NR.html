@@ -40,7 +40,7 @@
 			<li class="dropdown">
 				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="NR.module_$configs.html">NR.$configs</a></li><li><a href="NR.module_$http.html">NR.$http</a></li><li><a href="NR.module_$moduleProvider.html">NR.$moduleProvider</a></li><li><a href="NR.module_$pathResolver.html">NR.$pathResolver</a></li><li><a href="NR.module_$promises.html">NR.$promises</a></li><li><a href="NR.module_$scriptLoader.html">NR.$scriptLoader</a></li>
+					<li><a href="NR.module_$config.html">NR.$config</a></li><li><a href="NR.module_$http.html">NR.$http</a></li><li><a href="NR.module_$moduleProvider.html">NR.$moduleProvider</a></li><li><a href="NR.module_$pathResolver.html">NR.$pathResolver</a></li><li><a href="NR.module_$promises.html">NR.$promises</a></li><li><a href="NR.module_$scriptLoader.html">NR.$scriptLoader</a></li>
 				</ul>
 			</li>
 
@@ -306,170 +306,6 @@
     <dd>
 
 <span class="param-type">Array.&lt;string></span>
-
-
-
-    </dd>
-</dl>
-
-
-
-
-
-</dd>
-
-
-
-<hr>
-<dt>
-    <h4 class="name" id=".appVersion"><span class="type-signature">&lt;static> </span>appVersion(<span class="optional">version</span>)</h4>
-
-
-</dt>
-<dd>
-
-
-    <div class="description">
-        <p>Define and return the app version</p>
-    </div>
-
-
-
-
-
-
-
-
-        <h5>Parameters:</h5>
-
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-
-        <th>Name</th>
-
-
-        <th>Type</th>
-
-
-        <th>Argument</th>
-
-
-
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-
-
-        <tr>
-
-                <td class="name"><code>version</code></td>
-
-
-            <td class="type">
-
-
-<span class="param-type">string</span>
-
-
-
-
-            </td>
-
-
-                <td class="attributes">
-
-                    &lt;optional><br>
-
-
-
-
-
-                </td>
-
-
-
-
-            <td class="description last"><p>App version to set</p></td>
-        </tr>
-
-
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Returns:</h5>
-
-
-<div class="param-desc">
-    <p>Current app version</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-
-<span class="param-type">string</span>
 
 
 
@@ -844,170 +680,6 @@ the module return as a new dependency that can be injected</p>
 
 <hr>
 <dt>
-    <h4 class="name" id=".enviroment"><span class="type-signature">&lt;static> </span>enviroment(<span class="optional">version</span>)</h4>
-
-
-</dt>
-<dd>
-
-
-    <div class="description">
-        <p>Define and return the current enviroment</p>
-    </div>
-
-
-
-
-
-
-
-
-        <h5>Parameters:</h5>
-
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-
-        <th>Name</th>
-
-
-        <th>Type</th>
-
-
-        <th>Argument</th>
-
-
-
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-
-
-        <tr>
-
-                <td class="name"><code>version</code></td>
-
-
-            <td class="type">
-
-
-<span class="param-type">string</span>
-
-
-
-
-            </td>
-
-
-                <td class="attributes">
-
-                    &lt;optional><br>
-
-
-
-
-
-                </td>
-
-
-
-
-            <td class="description last"><p>App enviroment to set</p></td>
-        </tr>
-
-
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Returns:</h5>
-
-
-<div class="param-desc">
-    <p>Current app enviroment</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-
-<span class="param-type">string</span>
-
-
-
-    </dd>
-</dl>
-
-
-
-
-
-</dd>
-
-
-
-<hr>
-<dt>
     <h4 class="name" id=".extend"><span class="type-signature">&lt;static> </span>extend(child, parents)</h4>
 
 
@@ -1186,6 +858,210 @@ properties of the same name in previous arguments.</p>
     <dd>
 
 <span class="param-type">Object</span>
+
+
+
+    </dd>
+</dl>
+
+
+
+
+
+</dd>
+
+
+
+<hr>
+<dt>
+    <h4 class="name" id=".getAppVersion"><span class="type-signature">&lt;static> </span>getAppVersion()</h4>
+
+
+</dt>
+<dd>
+
+
+    <div class="description">
+        <p>Return the current app version</p>
+    </div>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Returns:</h5>
+
+
+<div class="param-desc">
+    <p>Current app version</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">string</span>
+
+
+
+    </dd>
+</dl>
+
+
+
+
+
+</dd>
+
+
+
+<hr>
+<dt>
+    <h4 class="name" id=".getEnviroment"><span class="type-signature">&lt;static> </span>getEnviroment()</h4>
+
+
+</dt>
+<dd>
+
+
+    <div class="description">
+        <p>Return the current app enviroment</p>
+    </div>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Returns:</h5>
+
+
+<div class="param-desc">
+    <p>Current app enviroment</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+
+<span class="param-type">string</span>
 
 
 
@@ -3054,6 +2930,286 @@ properties of the same name in previous arguments.</p>
 
 <hr>
 <dt>
+    <h4 class="name" id=".setAppVersion"><span class="type-signature">&lt;static> </span>setAppVersion(<span class="optional">version</span>)</h4>
+
+
+</dt>
+<dd>
+
+
+    <div class="description">
+        <p>Define the app version</p>
+    </div>
+
+
+
+
+
+
+
+
+        <h5>Parameters:</h5>
+
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Argument</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>version</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last"><p>App version to set</p></td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+<hr>
+<dt>
+    <h4 class="name" id=".setEnviroment"><span class="type-signature">&lt;static> </span>setEnviroment(<span class="optional">version</span>)</h4>
+
+
+</dt>
+<dd>
+
+
+    <div class="description">
+        <p>Define the app enviroment</p>
+    </div>
+
+
+
+
+
+
+
+
+        <h5>Parameters:</h5>
+
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+
+        <th>Name</th>
+
+
+        <th>Type</th>
+
+
+        <th>Argument</th>
+
+
+
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr>
+
+                <td class="name"><code>version</code></td>
+
+
+            <td class="type">
+
+
+<span class="param-type">string</span>
+
+
+
+
+            </td>
+
+
+                <td class="attributes">
+
+                    &lt;optional><br>
+
+
+
+
+
+                </td>
+
+
+
+
+            <td class="description last"><p>App enviroment to set</p></td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+<hr>
+<dt>
     <h4 class="name" id=".toFloat"><span class="type-signature">&lt;static> </span>toFloat(str)</h4>
 
 
@@ -3522,7 +3678,7 @@ properties of the same name in previous arguments.</p>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a>
 
-		on March 6th 2016, 10:32:38 pm
+		on March 6th 2016, 10:42:17 pm
 
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
