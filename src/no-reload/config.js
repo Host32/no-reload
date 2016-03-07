@@ -23,7 +23,7 @@
     /**
      * <p>Handles configurations and conventions of the framework</p>
      *
-     * @module $configs
+     * @module $config
      * @memberof NR
      */
     module.exports = {

@@ -2,7 +2,7 @@
 (function () {
     'use strict';
 
-    var $confs = require('./confs');
+    var $config = require('./config');
 
     /**
      * Adds a `/` to the end of the folder name
@@ -35,7 +35,7 @@
      * @returns {string} Versioned url
      */
     function versione(url) {
-        var appVersion = $confs.get('appVersion');
+        var appVersion = $config.get('appVersion');
         return url + (appVersion ? ('?version=' + appVersion) : '');
     }
 
@@ -57,7 +57,7 @@
          * @returns {string} The destination path to script that declare the module.
          */
         resolveModulePath: function (name) {
-            return versione(safeFolderName($confs.get('modulesFolder')) + packageToFile(name));
+            return versione(safeFolderName($config.get('modulesFolder')) + packageToFile(name));
         }
     };
 

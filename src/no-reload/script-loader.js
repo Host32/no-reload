@@ -6,7 +6,7 @@
 
         $http = require('./http'),
 
-        $confs = require('./confs'),
+        $config = require('./config'),
 
         LOAD_TECHNIQUES = {
             XHR_EVAL: 'xhr_eval',
@@ -15,7 +15,7 @@
             WRITE_SCRIPT_TAG: 'write_script_tag'
         };
 
-    $confs.set('scriptLoadTechnique', LOAD_TECHNIQUES.XHR_INJECTION);
+    $config.set('scriptLoadTechnique', LOAD_TECHNIQUES.XHR_INJECTION);
 
     /**
      * Use eval
@@ -125,7 +125,7 @@
          * @param {string} url Script url
          */
         load: function (url) {
-            var thecnique = $confs.get('scriptLoadTechnique');
+            var thecnique = $config.get('scriptLoadTechnique');
 
             switch (thecnique) {
                 case LOAD_TECHNIQUES.XHR_EVAL:

@@ -59,7 +59,7 @@
 
 	        NR = helpers.clone(helpers),
 
-	        $confs = __webpack_require__(3),
+	        $config = __webpack_require__(3),
 
 	        $moduleProvider = __webpack_require__(4),
 
@@ -73,8 +73,8 @@
 
 
 	    // Define the modules on Dependecy Injector
-	    $moduleProvider.define('$confs', function () {
-	        return $confs;
+	    $moduleProvider.define('$config', function () {
+	        return $config;
 	    });
 	    $moduleProvider.define('$promises', function () {
 	        return $promises;
@@ -94,6 +94,7 @@
 
 
 	    NR.Promise = __webpack_require__(5);
+	    NR.ModuleError = __webpack_require__(13);
 
 	    /**
 	     * <p>Define and return the app version</p>
@@ -105,10 +106,10 @@
 	     */
 	    NR.appVersion = function (version) {
 	        if (helpers.isDefined(version)) {
-	            $confs.set('appVersion', version);
+	            $config.set('appVersion', version);
 	            return version;
 	        } else {
-	            return $confs.get('appVersion');
+	            return $config.get('appVersion');
 	        }
 	    };
 
@@ -122,10 +123,10 @@
 	     */
 	    NR.enviroment = function (env) {
 	        if (helpers.isDefined(env)) {
-	            $confs.set('enviroment', env);
+	            $config.set('enviroment', env);
 	            return env;
 	        } else {
-	            return $confs.get('enviroment');
+	            return $config.get('enviroment');
 	        }
 	    };
 
@@ -509,7 +510,7 @@
 	    /**
 	     * <p>Handles configurations and conventions of the framework</p>
 	     *
-	     * @module $configs
+	     * @module $config
 	     * @memberof NR
 	     */
 	    module.exports = {
@@ -546,7 +547,7 @@
 	    'use strict';
 	    var Promise = __webpack_require__(5),
 
-	        $confs = __webpack_require__(3),
+	        $config = __webpack_require__(3),
 
 	        $pathResolver = __webpack_require__(7),
 
@@ -558,7 +559,7 @@
 
 	        queues = {};
 
-	    $confs.set('lazyLoadDeps', true);
+	    $config.set('lazyLoadDeps', true);
 
 	    function forEach(arr, func) {
 	        var length = arr ? arr.length : 0,
@@ -612,7 +613,7 @@
 	        return new Promise(function (resolve, reject) {
 	            task(function () {
 	                if (!modules[name]) {
-	                    if (!$confs.get('lazyLoadDeps')) {
+	                    if (!$config.get('lazyLoadDeps')) {
 	                        reject(new ModuleError('$moduleProvider', 'The dependency' + name + ' has not defined and the system is not configured to load dependencies lazily'));
 	                    }
 
@@ -17476,7 +17477,7 @@
 	(function () {
 	    'use strict';
 
-	    var $confs = __webpack_require__(3);
+	    var $config = __webpack_require__(3);
 
 	    /**
 	     * Adds a `/` to the end of the folder name
@@ -17509,7 +17510,7 @@
 	     * @returns {string} Versioned url
 	     */
 	    function versione(url) {
-	        var appVersion = $confs.get('appVersion');
+	        var appVersion = $config.get('appVersion');
 	        return url + (appVersion ? ('?version=' + appVersion) : '');
 	    }
 
@@ -17531,7 +17532,7 @@
 	         * @returns {string} The destination path to script that declare the module.
 	         */
 	        resolveModulePath: function (name) {
-	            return versione(safeFolderName($confs.get('modulesFolder')) + packageToFile(name));
+	            return versione(safeFolderName($config.get('modulesFolder')) + packageToFile(name));
 	        }
 	    };
 
@@ -17550,7 +17551,7 @@
 
 	        $http = __webpack_require__(9),
 
-	        $confs = __webpack_require__(3),
+	        $config = __webpack_require__(3),
 
 	        LOAD_TECHNIQUES = {
 	            XHR_EVAL: 'xhr_eval',
@@ -17559,7 +17560,7 @@
 	            WRITE_SCRIPT_TAG: 'write_script_tag'
 	        };
 
-	    $confs.set('scriptLoadTechnique', LOAD_TECHNIQUES.XHR_INJECTION);
+	    $config.set('scriptLoadTechnique', LOAD_TECHNIQUES.XHR_INJECTION);
 
 	    /**
 	     * Use eval
@@ -17669,7 +17670,7 @@
 	         * @param {string} url Script url
 	         */
 	        load: function (url) {
-	            var thecnique = $confs.get('scriptLoadTechnique');
+	            var thecnique = $config.get('scriptLoadTechnique');
 
 	            switch (thecnique) {
 	                case LOAD_TECHNIQUES.XHR_EVAL:
@@ -18367,10 +18368,37 @@
 	        propertiesNotToDisplay = nonEnumberableProperties.concat(['module', 'showStack', 'showProperties', '__safety', '_stack']);
 
 	    /**
-	     * <p></p>
+	     * <p>By default the stack will not be shown. Set `options.showStack` to true if you
+	     * think the stack is important for your error.</p>
+	     * <p>If you pass an error in as the message the stack will be pulled from that,
+	     * otherwise one will be created.</p>
+	     * <p>Note that if you pass in a custom stack string you need to include the message along with that.</p>
+	     * <p>Error properties will be included in `err.toString()`.
+	     * Can be omitted by including `{showProperties: false}` in the options.</p>
 	     *
-	     * @classdesc <p></p>
+	     * @classdesc <p>Formats the error messages to be displayed properly</p>
+	     * <p>These are all acceptable forms of instantiation:</p>
+	     * <pre>
+	     * var err = new ModuleError('test', {
+	     *  message: 'something broke'
+	     * });
 	     *
+	     * var err = new ModuleError({
+	     *   module: 'test',
+	     *   message: 'something broke'
+	     * });
+	     *
+	     * var err = new ModuleError('test', 'something broke');
+	     *
+	     * var err = new ModuleError('test', 'something broke', {showStack: true});
+	     *
+	     * var existingError = new Error('OMG');
+	     * var err = new ModuleError('test', existingError, {showStack: true});
+	     * </pre>
+	     *
+	     * @param {String} module Module name
+	     * @param {String|Error} message Can be a string or an existing error
+	     * @param {object} [options] showStack and showProperties options
 	     * @memberof NR
 	     * @class ModuleError
 	     */

@@ -6,7 +6,7 @@
 
         NR = helpers.clone(helpers),
 
-        $confs = require('./confs'),
+        $config = require('./config'),
 
         $moduleProvider = require('./module-provider'),
 
@@ -20,8 +20,8 @@
 
 
     // Define the modules on Dependecy Injector
-    $moduleProvider.define('$confs', function () {
-        return $confs;
+    $moduleProvider.define('$config', function () {
+        return $config;
     });
     $moduleProvider.define('$promises', function () {
         return $promises;
@@ -53,10 +53,10 @@
      */
     NR.appVersion = function (version) {
         if (helpers.isDefined(version)) {
-            $confs.set('appVersion', version);
+            $config.set('appVersion', version);
             return version;
         } else {
-            return $confs.get('appVersion');
+            return $config.get('appVersion');
         }
     };
 
@@ -70,10 +70,10 @@
      */
     NR.enviroment = function (env) {
         if (helpers.isDefined(env)) {
-            $confs.set('enviroment', env);
+            $config.set('enviroment', env);
             return env;
         } else {
-            return $confs.get('enviroment');
+            return $config.get('enviroment');
         }
     };
 

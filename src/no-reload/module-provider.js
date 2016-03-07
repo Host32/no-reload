@@ -3,7 +3,7 @@
     'use strict';
     var Promise = require('./promise'),
 
-        $confs = require('./confs'),
+        $config = require('./config'),
 
         $pathResolver = require('./path-resolver'),
 
@@ -15,7 +15,7 @@
 
         queues = {};
 
-    $confs.set('lazyLoadDeps', true);
+    $config.set('lazyLoadDeps', true);
 
     function forEach(arr, func) {
         var length = arr ? arr.length : 0,
@@ -69,7 +69,7 @@
         return new Promise(function (resolve, reject) {
             task(function () {
                 if (!modules[name]) {
-                    if (!$confs.get('lazyLoadDeps')) {
+                    if (!$config.get('lazyLoadDeps')) {
                         reject(new ModuleError('$moduleProvider', 'The dependency' + name + ' has not defined and the system is not configured to load dependencies lazily'));
                     }
 
