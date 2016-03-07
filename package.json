@@ -23,7 +23,8 @@
     "require-dir": "^0.3.0",
     "simple-ajax": "~2.3.2",
     "vinyl-named": "~1.1.0",
-    "webpack-stream": "~3.1.0"
+    "webpack-stream": "~3.1.0",
+    "array-differ": "~1.0.0"
   },
   "main": "gulpfile.js",
   "author": "Ivan Miranda",

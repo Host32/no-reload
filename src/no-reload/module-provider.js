@@ -9,6 +9,8 @@
 
         $scriptLoader = require('./script-loader'),
 
+        ModuleError = require('./module-error'),
+
         modules = {},
 
         queues = {};
@@ -64,11 +66,11 @@
      * @returns {Promise} A promise that will be resolved when the dependency has been declared
      */
     function loadDependency(name) {
-        return new Promise(function (resolve) {
+        return new Promise(function (resolve, reject) {
             task(function () {
                 if (!modules[name]) {
                     if (!$confs.get('lazyLoadDeps')) {
-                        throw "The dependency" + name + " has not defined";
+                        reject(new ModuleError('$moduleProvider', 'The dependency' + name + ' has not defined and the system is not configured to load dependencies lazily'));
                     }
 
                     modules[name] = {};
@@ -108,7 +110,7 @@
      *                    and the function returns will be passed to the resolve function
      */
     function invoke(func, deps, scope) {
-        return new Promise(function (resolve) {
+        return new Promise(function (resolve, reject) {
             task(function () {
                 var promises = deps.map(function (dep) {
                     return loadDependency(dep);
@@ -116,6 +118,8 @@
 
                 Promise.all(promises).then(function (loadedDependencies) {
                     resolve(func.apply(scope || null, loadedDependencies));
+                }, function (error) {
+                    reject(error);
                 });
             });
         });
@@ -202,6 +206,8 @@
             invoke(moduleObj.func, moduleObj.deps, moduleObj.scope).then(function (obj) {
                 modules[moduleObj.name].obj = obj;
                 runQueue(moduleObj.name);
+            }, function (error) {
+                throw error;
             });
         },
 

@@ -4,17 +4,44 @@
 
     var $h = require('./helpers'),
 
-        arrayDiffer = require('.'),
+        arrayDiffer = require('array-differ'),
 
         nonEnumberableProperties = ['name', 'message', 'stack'],
 
         propertiesNotToDisplay = nonEnumberableProperties.concat(['module', 'showStack', 'showProperties', '__safety', '_stack']);
 
     /**
-     * <p></p>
+     * <p>By default the stack will not be shown. Set `options.showStack` to true if you
+     * think the stack is important for your error.</p>
+     * <p>If you pass an error in as the message the stack will be pulled from that,
+     * otherwise one will be created.</p>
+     * <p>Note that if you pass in a custom stack string you need to include the message along with that.</p>
+     * <p>Error properties will be included in `err.toString()`.
+     * Can be omitted by including `{showProperties: false}` in the options.</p>
      *
-     * @classdesc <p></p>
+     * @classdesc <p>Formats the error messages to be displayed properly</p>
+     * <p>These are all acceptable forms of instantiation:</p>
+     * <pre>
+     * var err = new ModuleError('test', {
+     *  message: 'something broke'
+     * });
      *
+     * var err = new ModuleError({
+     *   module: 'test',
+     *   message: 'something broke'
+     * });
+     *
+     * var err = new ModuleError('test', 'something broke');
+     *
+     * var err = new ModuleError('test', 'something broke', {showStack: true});
+     *
+     * var existingError = new Error('OMG');
+     * var err = new ModuleError('test', existingError, {showStack: true});
+     * </pre>
+     *
+     * @param {String} module Module name
+     * @param {String|Error} message Can be a string or an existing error
+     * @param {object} [options] showStack and showProperties options
      * @memberof NR
      * @class ModuleError
      */
