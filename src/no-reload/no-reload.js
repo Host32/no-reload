@@ -2,51 +2,34 @@
 (function () {
     'use strict';
 
-    var helpers = require('./helpers'),
+    var helpers = require('./core/helpers'),
 
         NR = helpers.clone(helpers),
 
-        $config = require('./config'),
+        $config = require('./core/config'),
 
-        $moduleProvider = require('./module-provider'),
+        $moduleProvider = require('./core/module-provider'),
 
-        $promises = require('./promises'),
-
-        $http = require('./http'),
-
-        $pathResolver = require('./path-resolver'),
-
-        $scriptLoader = require('./script-loader'),
-
-        $log = require('./log');
+        $http = require('./core/http');
 
 
-    // Define the modules on Dependecy Injector
+    // Define the core modules on Dependecy Injector
+    $moduleProvider.define('$moduleProvider', function () {
+        return $moduleProvider;
+    });
     $moduleProvider.define('$config', function () {
         return $config;
-    });
-    $moduleProvider.define('$promises', function () {
-        return $promises;
     });
     $moduleProvider.define('$http', function () {
         return $http;
     });
-    $moduleProvider.define('$pathResolver', function () {
-        return $pathResolver;
-    });
-    $moduleProvider.define('$scriptLoader', function () {
-        return $scriptLoader;
-    });
-    $moduleProvider.define('$moduleProvider', function () {
-        return $moduleProvider;
-    });
-    $moduleProvider.define('$log', function () {
-        return $log;
-    });
 
+    NR.Promise = require('./core/promise');
+    NR.ModuleError = require('./core/module-error');
 
-    NR.Promise = require('./promise');
-    NR.ModuleError = require('./module-error');
+    // Define another modules
+    require('./modules/promises');
+    require('./modules/log');
 
     /**
      * <p>Return the current app version</p>

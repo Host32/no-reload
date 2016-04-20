@@ -5,17 +5,150 @@
 
         $config = require('./config'),
 
-        $pathResolver = require('./path-resolver'),
-
-        $scriptLoader = require('./script-loader'),
+        $http = require('./http'),
 
         ModuleError = require('./module-error'),
 
         modules = {},
 
-        queues = {};
+        queues = {},
+
+        LOAD_TECHNIQUES = {
+            XHR_EVAL: 'xhr_eval',
+            XHR_INJECTION: 'xhr_injection',
+            SCRIPT_DOM_ELEMENT: 'script_dom_element',
+            WRITE_SCRIPT_TAG: 'write_script_tag'
+        };
 
     $config.set('lazyLoadDeps', true);
+    $config.set('scriptLoadTechnique', LOAD_TECHNIQUES.XHR_INJECTION);
+
+    /**
+     * Adds a `/` to the end of the folder name
+     *
+     * @param   {string}   folder Folder name
+     * @returns {string}
+     */
+    function safeFolderName(folder) {
+        return folder.endsWith('/') ? folder : (folder + '/');
+    }
+
+    /**
+     * Convert the characters `.` and `_` to `/` to locate the dependency in folder system
+     *
+     * Ex:
+     * package.subpackage.dep -> package/subpackage/dep
+     * packate_subpackage_dep -> package/subpackage/dep
+     *
+     * @param   {string}   name Dependency name
+     * @returns {string}
+     */
+    function packageToFile(name) {
+        return name.replace('.', '/').replace('_', '/') + '.js';
+    }
+
+    /**
+     * Adds a version query param to end of the file name if the current app is versioned.
+     *
+     * @param   {string} url
+     * @returns {string} Versioned url
+     */
+    function versione(url) {
+        var appVersion = $config.get('appVersion');
+        return url + (appVersion ? ('?version=' + appVersion) : '');
+    }
+
+    /**
+     * <p>Resolve the path when the module is declared based on code conventions.
+     * By default, the modules are located on `app/modules`</p>
+     * <p>A module called `myPackage.myModule` is resolved as
+     * `app/modules/myPackage/myModule.js?version=x.x.x`, the version flag is setted in
+     * accourd of appVersion config.</p>
+     *
+     * @param   {string} name Module name
+     * @returns {string} The destination path to script that declare the module.
+     */
+    function resolveModulePath(name) {
+        return versione(safeFolderName($config.get('modulesFolder')) + packageToFile(name));
+    }
+
+    /**
+     * Use eval
+     *
+     * @param {string} url
+     */
+    function loadByXhrEval(url) {
+        $http.request({
+            url: url,
+            dataType: 'text/javascript'
+        }).then(function (response) {
+            /*jslint evil: true */
+            eval(response);
+        }, function () {
+            // TODO
+        });
+    }
+
+    /**
+     * Create a script element and insert the script content inside it
+     *
+     * @param {string} url
+     */
+    function loadByXhrInjection(url) {
+        $http.request({
+            url: url,
+            dataType: 'text/javascript'
+        }).then(function (response) {
+            var scriptElement = document.createElement('script');
+            document.getElementsByTagName('head')[0].appendChild(scriptElement);
+            scriptElement.text = response;
+        }, function () {
+            // TODO
+        });
+    }
+
+    /**
+     * Create a script element and set the src attribute as the url
+     *
+     * @param {string} url
+     */
+    function loadByScriptDomElement(url) {
+        var scriptElement = document.createElement('script');
+        scriptElement.src = url;
+        document.getElementsByTagName('head')[0].appendChild(scriptElement);
+    }
+
+    /**
+     * Use document.write()
+     *
+     * @param {string} url
+     */
+    function loadByWriteScriptTag(url) {
+        /*jslint evil: true */
+        document.write('<script type="text/javascript" src="' + url + '"></script>');
+    }
+
+    /**
+     * <p>Load a remote script using the thecnique defined in `scriptLoadTechnique` config.</p>
+     * <p>The default thecnique is `xhr_injection`</p>
+     *
+     * @method
+     * @param {string} url Script url
+     */
+    function loadScript(url) {
+        var thecnique = $config.get('scriptLoadTechnique');
+
+        switch (thecnique) {
+        case LOAD_TECHNIQUES.XHR_EVAL:
+            return loadByXhrEval(url);
+        case LOAD_TECHNIQUES.XHR_INJECTION:
+            return loadByXhrInjection(url);
+        case LOAD_TECHNIQUES.SCRIPT_DOM_ELEMENT:
+            return loadByScriptDomElement(url);
+        case LOAD_TECHNIQUES.WRITE_SCRIPT_TAG:
+            return loadByWriteScriptTag(url);
+        }
+    }
 
     function forEach(arr, func) {
         var length = arr ? arr.length : 0,
@@ -77,7 +210,7 @@
 
                     putOnQueue(name, resolve);
 
-                    $scriptLoader.load($pathResolver.resolveModulePath(name));
+                    loadScript(resolveModulePath(name));
                 } else {
                     if (modules[name].obj !== undefined) {
                         resolve(modules[name].obj);

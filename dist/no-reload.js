@@ -63,43 +63,26 @@
 
 	        $moduleProvider = __webpack_require__(4),
 
-	        $promises = __webpack_require__(15),
-
-	        $http = __webpack_require__(9),
-
-	        $pathResolver = __webpack_require__(7),
-
-	        $scriptLoader = __webpack_require__(8),
-
-	        $log = __webpack_require__(16);
+	        $http = __webpack_require__(7);
 
 
-	    // Define the modules on Dependecy Injector
+	    // Define the core modules on Dependecy Injector
+	    $moduleProvider.define('$moduleProvider', function () {
+	        return $moduleProvider;
+	    });
 	    $moduleProvider.define('$config', function () {
 	        return $config;
-	    });
-	    $moduleProvider.define('$promises', function () {
-	        return $promises;
 	    });
 	    $moduleProvider.define('$http', function () {
 	        return $http;
 	    });
-	    $moduleProvider.define('$pathResolver', function () {
-	        return $pathResolver;
-	    });
-	    $moduleProvider.define('$scriptLoader', function () {
-	        return $scriptLoader;
-	    });
-	    $moduleProvider.define('$moduleProvider', function () {
-	        return $moduleProvider;
-	    });
-	    $moduleProvider.define('$log', function () {
-	        return $log;
-	    });
-
 
 	    NR.Promise = __webpack_require__(5);
-	    NR.ModuleError = __webpack_require__(13);
+	    NR.ModuleError = __webpack_require__(11);
+
+	    // Define another modules
+	    __webpack_require__(13);
+	    __webpack_require__(14);
 
 	    /**
 	     * <p>Return the current app version</p>
@@ -201,7 +184,6 @@
 	     */
 	    window.NR = module.exports = NR;
 	}());
-
 
 /***/ },
 /* 2 */
@@ -579,17 +561,150 @@
 
 	        $config = __webpack_require__(3),
 
-	        $pathResolver = __webpack_require__(7),
+	        $http = __webpack_require__(7),
 
-	        $scriptLoader = __webpack_require__(8),
-
-	        ModuleError = __webpack_require__(13),
+	        ModuleError = __webpack_require__(11),
 
 	        modules = {},
 
-	        queues = {};
+	        queues = {},
+
+	        LOAD_TECHNIQUES = {
+	            XHR_EVAL: 'xhr_eval',
+	            XHR_INJECTION: 'xhr_injection',
+	            SCRIPT_DOM_ELEMENT: 'script_dom_element',
+	            WRITE_SCRIPT_TAG: 'write_script_tag'
+	        };
 
 	    $config.set('lazyLoadDeps', true);
+	    $config.set('scriptLoadTechnique', LOAD_TECHNIQUES.XHR_INJECTION);
+
+	    /**
+	     * Adds a `/` to the end of the folder name
+	     *
+	     * @param   {string}   folder Folder name
+	     * @returns {string}
+	     */
+	    function safeFolderName(folder) {
+	        return folder.endsWith('/') ? folder : (folder + '/');
+	    }
+
+	    /**
+	     * Convert the characters `.` and `_` to `/` to locate the dependency in folder system
+	     *
+	     * Ex:
+	     * package.subpackage.dep -> package/subpackage/dep
+	     * packate_subpackage_dep -> package/subpackage/dep
+	     *
+	     * @param   {string}   name Dependency name
+	     * @returns {string}
+	     */
+	    function packageToFile(name) {
+	        return name.replace('.', '/').replace('_', '/') + '.js';
+	    }
+
+	    /**
+	     * Adds a version query param to end of the file name if the current app is versioned.
+	     *
+	     * @param   {string} url
+	     * @returns {string} Versioned url
+	     */
+	    function versione(url) {
+	        var appVersion = $config.get('appVersion');
+	        return url + (appVersion ? ('?version=' + appVersion) : '');
+	    }
+
+	    /**
+	     * <p>Resolve the path when the module is declared based on code conventions.
+	     * By default, the modules are located on `app/modules`</p>
+	     * <p>A module called `myPackage.myModule` is resolved as
+	     * `app/modules/myPackage/myModule.js?version=x.x.x`, the version flag is setted in
+	     * accourd of appVersion config.</p>
+	     *
+	     * @param   {string} name Module name
+	     * @returns {string} The destination path to script that declare the module.
+	     */
+	    function resolveModulePath(name) {
+	        return versione(safeFolderName($config.get('modulesFolder')) + packageToFile(name));
+	    }
+
+	    /**
+	     * Use eval
+	     *
+	     * @param {string} url
+	     */
+	    function loadByXhrEval(url) {
+	        $http.request({
+	            url: url,
+	            dataType: 'text/javascript'
+	        }).then(function (response) {
+	            /*jslint evil: true */
+	            eval(response);
+	        }, function () {
+	            // TODO
+	        });
+	    }
+
+	    /**
+	     * Create a script element and insert the script content inside it
+	     *
+	     * @param {string} url
+	     */
+	    function loadByXhrInjection(url) {
+	        $http.request({
+	            url: url,
+	            dataType: 'text/javascript'
+	        }).then(function (response) {
+	            var scriptElement = document.createElement('script');
+	            document.getElementsByTagName('head')[0].appendChild(scriptElement);
+	            scriptElement.text = response;
+	        }, function () {
+	            // TODO
+	        });
+	    }
+
+	    /**
+	     * Create a script element and set the src attribute as the url
+	     *
+	     * @param {string} url
+	     */
+	    function loadByScriptDomElement(url) {
+	        var scriptElement = document.createElement('script');
+	        scriptElement.src = url;
+	        document.getElementsByTagName('head')[0].appendChild(scriptElement);
+	    }
+
+	    /**
+	     * Use document.write()
+	     *
+	     * @param {string} url
+	     */
+	    function loadByWriteScriptTag(url) {
+	        /*jslint evil: true */
+	        document.write('<script type="text/javascript" src="' + url + '"></script>');
+	    }
+
+	    /**
+	     * <p>Load a remote script using the thecnique defined in `scriptLoadTechnique` config.</p>
+	     * <p>The default thecnique is `xhr_injection`</p>
+	     *
+	     * @method
+	     * @param {string} url Script url
+	     */
+	    function loadScript(url) {
+	        var thecnique = $config.get('scriptLoadTechnique');
+
+	        switch (thecnique) {
+	        case LOAD_TECHNIQUES.XHR_EVAL:
+	            return loadByXhrEval(url);
+	        case LOAD_TECHNIQUES.XHR_INJECTION:
+	            return loadByXhrInjection(url);
+	        case LOAD_TECHNIQUES.SCRIPT_DOM_ELEMENT:
+	            return loadByScriptDomElement(url);
+	        case LOAD_TECHNIQUES.WRITE_SCRIPT_TAG:
+	            return loadByWriteScriptTag(url);
+	        }
+	    }
 
 	    function forEach(arr, func) {
 	        var length = arr ? arr.length : 0,
@@ -651,7 +766,7 @@
 
 	                    putOnQueue(name, resolve);
 
-	                    $scriptLoader.load($pathResolver.resolveModulePath(name));
+	                    loadScript(resolveModulePath(name));
 	                } else {
 	                    if (modules[name].obj !== undefined) {
 	                        resolve(modules[name].obj);
@@ -827,7 +942,6 @@
 	        }
 	    };
 	}());
-
 
 /***/ },
 /* 5 */
@@ -17507,227 +17621,8 @@
 	(function () {
 	    'use strict';
 
-	    var $config = __webpack_require__(3);
-
-	    /**
-	     * Adds a `/` to the end of the folder name
-	     *
-	     * @param   {string}   folder Folder name
-	     * @returns {string}
-	     */
-	    function safeFolderName(folder) {
-	        return folder.endsWith('/') ? folder : (folder + '/');
-	    }
-
-	    /**
-	     * Convert the characters `.` and `_` to `/` to locate the dependency in folder system
-	     *
-	     * Ex:
-	     * package.subpackage.dep -> package/subpackage/dep
-	     * packate_subpackage_dep -> package/subpackage/dep
-	     *
-	     * @param   {string}   name Dependency name
-	     * @returns {string}
-	     */
-	    function packageToFile(name) {
-	        return name.replace('.', '/').replace('_', '/') + '.js';
-	    }
-
-	    /**
-	     * Adds a version query param to end of the file name if the current app is versioned.
-	     *
-	     * @param   {string} url
-	     * @returns {string} Versioned url
-	     */
-	    function versione(url) {
-	        var appVersion = $config.get('appVersion');
-	        return url + (appVersion ? ('?version=' + appVersion) : '');
-	    }
-
-	    /**
-	     * <p>Resolver for locate the script path of some dependencies</p>
-	     *
-	     * @module $pathResolver
-	     * @memberof NR
-	     */
-	    module.exports = {
-	        /**
-	         * <p>Resolve the path when the module is declared based on code conventions.
-	         * By default, the modules are located on `app/modules`</p>
-	         * <p>A module called `myPackage.myModule` is resolved as
-	         * `app/modules/myPackage/myModule.js?version=x.x.x`, the version flag is setted in
-	         * accourd of appVersion config.</p>
-	         *
-	         * @param   {string} name Module name
-	         * @returns {string} The destination path to script that declare the module.
-	         */
-	        resolveModulePath: function (name) {
-	            return versione(safeFolderName($config.get('modulesFolder')) + packageToFile(name));
-	        }
-	    };
-
-	}());
-
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*global module, require*/
-	(function () {
-	    'use strict';
-
 	    var Promise = __webpack_require__(5),
-
-	        $http = __webpack_require__(9),
-
-	        $config = __webpack_require__(3),
-
-	        LOAD_TECHNIQUES = {
-	            XHR_EVAL: 'xhr_eval',
-	            XHR_INJECTION: 'xhr_injection',
-	            SCRIPT_DOM_ELEMENT: 'script_dom_element',
-	            WRITE_SCRIPT_TAG: 'write_script_tag'
-	        };
-
-	    $config.set('scriptLoadTechnique', LOAD_TECHNIQUES.XHR_INJECTION);
-
-	    /**
-	     * Use eval
-	     *
-	     * @param {string} url
-	     */
-	    function loadByXhrEval(url) {
-	        $http.request({
-	            url: url,
-	            dataType: 'text/javascript'
-	        }).then(function (response) {
-	            /*jslint evil: true */
-	            eval(response);
-	        }, function () {
-	            // TODO
-	        });
-	    }
-
-	    /**
-	     * Create a script element and insert the script content inside it
-	     *
-	     * @param {string} url
-	     */
-	    function loadByXhrInjection(url) {
-	        $http.request({
-	            url: url,
-	            dataType: 'text/javascript'
-	        }).then(function (response) {
-	            var scriptElement = document.createElement('script');
-	            document.getElementsByTagName('head')[0].appendChild(scriptElement);
-	            scriptElement.text = response;
-	        }, function () {
-	            // TODO
-	        });
-	    }
-
-	    /**
-	     * Create a script element and set the src attribute as the url
-	     *
-	     * @param {string} url
-	     */
-	    function loadByScriptDomElement(url) {
-	        var scriptElement = document.createElement('script');
-	        scriptElement.src = url;
-	        document.getElementsByTagName('head')[0].appendChild(scriptElement);
-	    }
-
-	    /**
-	     * Use document.write()
-	     *
-	     * @param {string} url
-	     */
-	    function loadByWriteScriptTag(url) {
-	        /*jslint evil: true */
-	        document.write('<script type="text/javascript" src="' + url + '"></script>');
-	    }
-
-	    /**
-	     * <p>Responsible for dynamic load of script files.</p>
-	     *
-	     * @module $scriptLoader
-	     * @memberof NR
-	     */
-	    module.exports = {
-
-	        /**
-	         * <p>Load a script using `xhr_eval` thecnique</p>
-	         * <p>This thecnique oly run an `eval` call on the script content</p>
-	         *
-	         * @method
-	         * @param {string} url Script url
-	         */
-	        loadByXhrEval: loadByXhrEval,
-
-	        /**
-	         * <p>Load a script using `xhr_injection` thecnique</p>
-	         * <p>This thecnique create a `script` tag and insert the script content inside it</p>
-	         *
-	         * @method
-	         * @param {string} url Script url
-	         */
-	        loadByXhrInjection: loadByXhrInjection,
-
-	        /**
-	         * <p>Load a script using `script_dom_element` thecnique</p>
-	         * <p>This thecnique create a `script` tag and set they `src` attribute as the url required.</p>
-	         *
-	         * @method
-	         * @param {string} url Script url
-	         */
-	        loadByScriptDomElement: loadByScriptDomElement,
-
-	        /**
-	         * <p>Load a script using `write_script_tag` thecnique</p>
-	         * <p>This thecnique use `document.write()` with the script content</p>
-	         *
-	         * @method
-	         * @param {string} url Script url
-	         */
-	        loadByWriteScriptTag: loadByWriteScriptTag,
-
-	        /**
-	         * <p>Load a remote script using the thecnique defined in `scriptLoadTechnique` config.</p>
-	         * <p>The default thecnique is `xhr_injection`</p>
-	         *
-	         * @method
-	         * @param {string} url Script url
-	         */
-	        load: function (url) {
-	            var thecnique = $config.get('scriptLoadTechnique');
-
-	            switch (thecnique) {
-	                case LOAD_TECHNIQUES.XHR_EVAL:
-	                    return loadByXhrEval(url);
-	                case LOAD_TECHNIQUES.XHR_INJECTION:
-	                    return loadByXhrInjection(url);
-	                case LOAD_TECHNIQUES.SCRIPT_DOM_ELEMENT:
-	                    return loadByScriptDomElement(url);
-	                case LOAD_TECHNIQUES.WRITE_SCRIPT_TAG:
-	                    return loadByWriteScriptTag(url);
-	            }
-	        }
-	    };
-
-	}());
-
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*global module, require*/
-	(function () {
-	    'use strict';
-
-	    var Promise = __webpack_require__(5),
-	        Ajax = __webpack_require__(10);
+	        Ajax = __webpack_require__(8);
 
 	    function request(params) {
 	        return new Promise(function (resolve, reject) {
@@ -17859,13 +17754,12 @@
 
 	}());
 
-
 /***/ },
-/* 10 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var EventEmitter = __webpack_require__(11).EventEmitter,
-	    queryString = __webpack_require__(12);
+	var EventEmitter = __webpack_require__(9).EventEmitter,
+	    queryString = __webpack_require__(10);
 
 	function tryParseJson(data){
 	    try{
@@ -18006,7 +17900,7 @@
 
 
 /***/ },
-/* 11 */
+/* 9 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -18310,7 +18204,7 @@
 
 
 /***/ },
-/* 12 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -18382,7 +18276,7 @@
 
 
 /***/ },
-/* 13 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*global module, require*/
@@ -18391,7 +18285,7 @@
 
 	    var $h = __webpack_require__(2),
 
-	        arrayDiffer = __webpack_require__(14),
+	        arrayDiffer = __webpack_require__(12),
 
 	        nonEnumberableProperties = ['name', 'message', 'stack'],
 
@@ -18569,7 +18463,7 @@
 
 
 /***/ },
-/* 14 */
+/* 12 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -18582,171 +18476,178 @@
 
 
 /***/ },
-/* 15 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/*global module, require*/
+	/*global module, require, NR*/
 	(function () {
 	    'use strict';
 
-	    var Promise = __webpack_require__(5);
+	    var $moduleProvider = __webpack_require__(4);
 
-	    /**
-	     * <p>Injectable wrapper for Promise class</p>
-	     *
-	     * @module $promises
-	     * @memberof NR
-	     */
-	    module.exports = {
+	    $moduleProvider.define('$promises', [function () {
 
 	        /**
-	         * <p>Create a new Promise</p>
+	         * <p>Injectable wrapper for Promise class</p>
 	         *
-	         * @param {function} func Function that will execute something asynchronously and be
-	         *                        responsible for resolving or rejecting promise
-	         * @returns {NR.Promise}
-	         * @see {@link http://docs.ractivejs.org/latest/promises|Ractive Promises}
+	         * @module $promises
+	         * @memberof NR
 	         */
-	        create: function (callback) {
-	            return new Promise(callback);
-	        },
+	        return {
 
-	        /**
-	         * <p>Returns a Promise that will be resolved when all of the promises passed as paramethers
-	         * has be resolved</p>
-	         * <pre>
-	         * $promises.all([
-	         *   ajax.get( 'list.json' ),       // loads our app data
-	         *   new Promise(someFunc)          // another async process
-	         * ]).then( function ( results ) {
-	         *   var ajaxData = results[0];
-	         *   //...
-	         * });
-	         * </pre>
-	         *
-	         * @param   {Array|Object} promises Async tasks
-	         * @returns {Promise}
-	         */
-	        all: function (promises) {
-	            return Promise.all(promises);
-	        }
-	    };
+	            /**
+	             * <p>Create a new Promise</p>
+	             *
+	             * @param {function} func Function that will execute something asynchronously and be
+	             *                        responsible for resolving or rejecting promise
+	             * @returns {NR.Promise}
+	             * @see {@link http://docs.ractivejs.org/latest/promises|Ractive Promises}
+	             */
+	            create: function (callback) {
+	                return new NR.Promise(callback);
+	            },
+
+	            /**
+	             * <p>Returns a Promise that will be resolved when all of the promises passed as paramethers
+	             * has be resolved</p>
+	             * <pre>
+	             * $promises.all([
+	             *   ajax.get( 'list.json' ),       // loads our app data
+	             *   new Promise(someFunc)          // another async process
+	             * ]).then( function ( results ) {
+	             *   var ajaxData = results[0];
+	             *   //...
+	             * });
+	             * </pre>
+	             *
+	             * @param   {Array|Object} promises Async tasks
+	             * @returns {Promise}
+	             */
+	            all: function (promises) {
+	                return NR.Promise.all(promises);
+	            }
+	        };
+	    }]);
 
 	}());
-
 
 /***/ },
-/* 16 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/*global module, require*/
+	/*global module, require, NR*/
 	(function () {
 	    'use strict';
 
-	    var $h = __webpack_require__(2),
-	        debug = true;
+	    var $moduleProvider = __webpack_require__(4);
 
-	    function formatError(arg) {
-	        if (arg instanceof Error) {
-	            if (arg.stack) {
-	                arg = (arg.message && arg.stack.indexOf(arg.message) === -1) ? 'Error: ' + arg.message + '\n' + arg.stack : arg.stack;
-	            } else if (arg.sourceURL) {
-	                arg = arg.message + '\n' + arg.sourceURL + ':' + arg.line;
+	    $moduleProvider.define('$log', [function () {
+
+	        function formatError(arg) {
+	            if (arg instanceof Error) {
+	                if (arg.stack) {
+	                    arg = (arg.message && arg.stack.indexOf(arg.message) === -1) ? 'Error: ' + arg.message + '\n' + arg.stack : arg.stack;
+	                } else if (arg.sourceURL) {
+	                    arg = arg.message + '\n' + arg.sourceURL + ':' + arg.line;
+	                }
 	            }
+	            return arg;
 	        }
-	        return arg;
-	    }
 
-	    function consoleLog(type) {
-	        var console = window.console || {},
-	            logFn = console[type] || console.log || $h.noop,
-	            hasApply = false;
+	        function consoleLog(type) {
+	            var console = window.console || {},
+	                logFn = console[type] || console.log || NR.noop,
+	                hasApply = false;
 
-	        // Note: reading logFn.apply throws an error in IE11 in IE8 document mode.
-	        // The reason behind this is that console.log has type "object" in IE8...
-	        try {
-	            hasApply = !!logFn.apply;
-	        } catch (e) {}
+	            // Note: reading logFn.apply throws an error in IE11 in IE8 document mode.
+	            // The reason behind this is that console.log has type "object" in IE8...
+	            try {
+	                hasApply = !!logFn.apply;
+	            } catch (e) {}
 
-	        if (hasApply) {
-	            return function () {
-	                var args = [],
-	                    key;
-	                for (key in arguments) {
-	                    if (arguments.hasOwnProperty(key)) {
-	                        args.push(formatError(arguments[key]));
+	            if (hasApply) {
+	                return function () {
+	                    var args = [],
+	                        key;
+	                    for (key in arguments) {
+	                        if (arguments.hasOwnProperty(key)) {
+	                            args.push(formatError(arguments[key]));
+	                        }
 	                    }
-	                }
-	                return logFn.apply(console, args);
+	                    return logFn.apply(console, args);
+	                };
+	            }
+
+	            // we are IE which either doesn't have window.console => this is noop and we do nothing,
+	            // or we are IE where console.log doesn't have apply so we log at least first 2 args
+	            return function (arg1, arg2) {
+	                logFn(arg1, arg2 === null ? '' : arg2);
 	            };
 	        }
 
-	        // we are IE which either doesn't have window.console => this is noop and we do nothing,
-	        // or we are IE where console.log doesn't have apply so we log at least first 2 args
-	        return function (arg1, arg2) {
-	            logFn(arg1, arg2 === null ? '' : arg2);
-	        };
-	    }
+	        var debug = true;
 
-	    /**
-	     * <p>Simple service for logging. Default implementation safely writes the message
-	     * into the browser's console (if present).</p>
-	     *
-	     * @memberof NR
-	     * @module $log
-	     */
-	    module.exports = {
 	        /**
-	         * <p>Enable and disable debug messages</p>
+	         * <p>Simple service for logging. Default implementation safely writes the message
+	         * into the browser's console (if present).</p>
 	         *
-	         * @param   {boolean=} flag Enable or disable debug level messages
-	         * @returns {*} Current value if used as getter or itself (chaining) if used as setter
+	         * @memberof NR
+	         * @module $log
 	         */
-	        debugEnabled: function (flag) {
-	            if ($h.isDefined(flag)) {
-	                debug = flag;
-	                return this;
-	            } else {
-	                return debug;
-	            }
-	        },
-	        /**
-	         * <p>Write a log message</p>
-	         */
-	        log: consoleLog('log'),
-
-	        /**
-	         * <p>Write an information message</P>
-	         */
-	        info: consoleLog('info'),
-
-	        /**
-	         * <p>Write a warning message</p>
-	         */
-	        warn: consoleLog('warn'),
-
-	        /**
-	         * <p>Write an error message</p>
-	         */
-	        error: consoleLog('error'),
-
-	        /**
-	         * <p>Write a debug message</p>
-	         */
-	        debug: (function () {
-	            var fn = consoleLog('debug'),
-	                self = this;
-
-	            return function () {
-	                if (debug) {
-	                    fn.apply(self, arguments);
+	        return {
+	            /**
+	             * <p>Enable and disable debug messages</p>
+	             *
+	             * @function
+	             * @param   {boolean=} flag Enable or disable debug level messages
+	             * @returns {*} Current value if used as getter or itself (chaining) if used as setter
+	             */
+	            debugEnabled: function (flag) {
+	                if (NR.isDefined(flag)) {
+	                    debug = flag;
+	                    return this;
+	                } else {
+	                    return debug;
 	                }
-	            };
-	        }())
-	    };
+	            },
+	            /**
+	             * <p>Write a log message</p>
+	             */
+	            log: consoleLog('log'),
+
+	            /**
+	             * <p>Write an information message</P>
+	             */
+	            info: consoleLog('info'),
+
+	            /**
+	             * <p>Write a warning message</p>
+	             */
+	            warn: consoleLog('warn'),
+
+	            /**
+	             * <p>Write an error message</p>
+	             */
+	            error: consoleLog('error'),
+
+	            /**
+	             * <p>Write a debug message</p>
+	             */
+	            debug: (function () {
+	                var fn = consoleLog('debug'),
+	                    self = this;
+
+	                return function () {
+	                    if (debug) {
+	                        fn.apply(self, arguments);
+	                    }
+	                };
+	            }())
+	        };
+
+	    }]);
 
 	}());
-
 
 /***/ }
 /******/ ]);
