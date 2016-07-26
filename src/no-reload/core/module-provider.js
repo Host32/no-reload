@@ -85,7 +85,9 @@
             /*jslint evil: true */
             eval(response);
         }, function () {
-            // TODO
+            throw new ModuleError('module-provider', 'error when trying to inject a script by XHR Eval', {
+                showStack: true
+            });
         });
     }
 
@@ -103,7 +105,9 @@
             document.getElementsByTagName('head')[0].appendChild(scriptElement);
             scriptElement.text = response;
         }, function () {
-            // TODO
+            throw new ModuleError('module-provider', 'error when trying to inject a script by XHR Injection', {
+                showStack: true
+            });
         });
     }
 
@@ -139,14 +143,14 @@
         var thecnique = $config.get('scriptLoadTechnique');
 
         switch (thecnique) {
-        case LOAD_TECHNIQUES.XHR_EVAL:
-            return loadByXhrEval(url);
-        case LOAD_TECHNIQUES.XHR_INJECTION:
-            return loadByXhrInjection(url);
-        case LOAD_TECHNIQUES.SCRIPT_DOM_ELEMENT:
-            return loadByScriptDomElement(url);
-        case LOAD_TECHNIQUES.WRITE_SCRIPT_TAG:
-            return loadByWriteScriptTag(url);
+            case LOAD_TECHNIQUES.XHR_EVAL:
+                return loadByXhrEval(url);
+            case LOAD_TECHNIQUES.XHR_INJECTION:
+                return loadByXhrInjection(url);
+            case LOAD_TECHNIQUES.SCRIPT_DOM_ELEMENT:
+                return loadByScriptDomElement(url);
+            case LOAD_TECHNIQUES.WRITE_SCRIPT_TAG:
+                return loadByWriteScriptTag(url);
         }
     }
 
