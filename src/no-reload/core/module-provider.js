@@ -16,8 +16,7 @@
         LOAD_TECHNIQUES = {
             XHR_EVAL: 'xhr_eval',
             XHR_INJECTION: 'xhr_injection',
-            SCRIPT_DOM_ELEMENT: 'script_dom_element',
-            WRITE_SCRIPT_TAG: 'write_script_tag'
+            SCRIPT_DOM_ELEMENT: 'script_dom_element'
         };
 
     $config.set('lazyLoadDeps', true);
@@ -30,7 +29,7 @@
      * @returns {string}
      */
     function safeFolderName(folder) {
-        return folder.endsWith('/') ? folder : (folder + '/');
+        return (folder.substr(folder.length - 1, 1) === '/') ? folder : (folder + '/');
     }
 
     /**
@@ -44,7 +43,7 @@
      * @returns {string}
      */
     function packageToFile(name) {
-        return name.replace('.', '/').replace('_', '/') + '.js';
+        return name.replace('.', '/') + '.js';
     }
 
     /**
@@ -123,16 +122,6 @@
     }
 
     /**
-     * Use document.write()
-     *
-     * @param {string} url
-     */
-    function loadByWriteScriptTag(url) {
-        /*jslint evil: true */
-        document.write('<script type="text/javascript" src="' + url + '"></script>');
-    }
-
-    /**
      * <p>Load a remote script using the thecnique defined in `scriptLoadTechnique` config.</p>
      * <p>The default thecnique is `xhr_injection`</p>
      *
@@ -149,8 +138,6 @@
                 return loadByXhrInjection(url);
             case LOAD_TECHNIQUES.SCRIPT_DOM_ELEMENT:
                 return loadByScriptDomElement(url);
-            case LOAD_TECHNIQUES.WRITE_SCRIPT_TAG:
-                return loadByWriteScriptTag(url);
         }
     }
 
